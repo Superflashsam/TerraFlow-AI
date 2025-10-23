@@ -91,6 +91,6 @@ export const PipelineStage = ({ stage, leads, onLeadMove, onLeadClick, metrics }
             <Plus size={16} className="mr-2" /> Add Lead
         </Button>
       </CardFooter>
-    </div>
+    </Card>
   );
 };
