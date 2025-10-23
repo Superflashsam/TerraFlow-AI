@@ -19,10 +19,10 @@ const AiLeadQualificationInputSchema = z.object({
 export type AiLeadQualificationInput = z.infer<typeof AiLeadQualificationInputSchema>;
 
 const AiLeadQualificationOutputSchema = z.object({
-  budget: z.string().describe('The budget of the lead.'),
-  location: z.string().describe('The preferred location of the lead.'),
-  timeline: z.string().describe('The timeline of the lead.'),
-  siteVisitBooking: z.string().describe('Confirmation and details of the site visit booking, if applicable.'),
+  budget: z.string().describe('The budget of the lead. Default to "Not specified" if not found.'),
+  location: z.string().describe('The preferred location of the lead. Default to "Not specified" if not found.'),
+  timeline: z.string().describe('The timeline of the lead. Default to "Not specified" if not found.'),
+  siteVisitBooking: z.string().optional().describe('Confirmation and details of the site visit booking, if applicable.'),
   qualified: z.boolean().describe('Whether the lead is qualified or not.'),
   summary: z.string().describe('A summary of the conversation with the lead.'),
 });
@@ -59,9 +59,16 @@ const prompt = ai.definePrompt({
   tools: [bookSiteVisit],
   prompt: `You are an AI chat assistant specializing in qualifying real estate leads. Your goal is to determine the lead's budget, preferred location, and timeline for purchasing a property.  You will also attempt to book a site visit for qualified leads.
 
-  Based on the following conversation with the user, extract the budget, location, and timeline.  If the lead is serious (clear budget, location and timeline identified), use the bookSiteVisit tool to book a site visit.  Once you have collected all the information, determine if the lead is qualified, provide a summary of the conversation, and output all the information in JSON format.
+  Based on the following conversation with the user, extract the budget, location, and timeline. If any of these are not mentioned, default them to "Not specified".
+  
+  If the lead seems serious and provides clear information (budget, location, timeline), use the bookSiteVisit tool to schedule a site visit.
 
-  Conversation: {{{userDetails}}}`,
+  After analyzing the conversation, determine if the lead is qualified. A lead is qualified if they have provided a clear budget, location, and timeline.
+  
+  Finally, provide a concise summary of the conversation and output all the gathered information in the required JSON format.
+
+  Conversation:
+  {{{userDetails}}}`,
 });
 
 const aiLeadQualificationFlow = ai.defineFlow(
@@ -72,6 +79,9 @@ const aiLeadQualificationFlow = ai.defineFlow(
   },
   async input => {
     const {output} = await prompt(input);
-    return output!;
+    if (!output) {
+      throw new Error("The AI model failed to return a valid response.");
+    }
+    return output;
   }
 );
