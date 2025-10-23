@@ -20,16 +20,18 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className={cn("font-body antialiased")}>
-        <SidebarProvider>
-          <MainSidebar />
-          <SidebarInset>
-            <MainHeader />
-            <main className="min-h-[calc(100vh-4rem)] p-4 md:p-8">
-              {children}
-            </main>
-            <ChatAssistant />
-          </SidebarInset>
-        </SidebarProvider>
+        <div className="flex h-screen w-full overflow-hidden">
+          <SidebarProvider>
+            <MainSidebar />
+            <div className="flex flex-1 flex-col overflow-y-auto">
+              <MainHeader />
+              <main className="flex-1 p-4 md:p-8">
+                {children}
+              </main>
+              <ChatAssistant />
+            </div>
+          </SidebarProvider>
+        </div>
         <Toaster />
       </body>
     </html>

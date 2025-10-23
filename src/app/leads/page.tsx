@@ -20,7 +20,7 @@ import { cn } from '@/lib/utils';
 
 export default function LeadsPage() {
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-8 h-full">
       <PageHeader
         title="Leads"
         description="Track, manage, and analyze your real estate leads with AI-powered insights."
@@ -37,7 +37,7 @@ export default function LeadsPage() {
         </div>
       </PageHeader>
 
-      <Tabs defaultValue="management" className="w-full">
+      <Tabs defaultValue="management" className="w-full flex-1 flex flex-col">
         <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 bg-transparent p-0 h-auto gap-2">
           <TabsTrigger value="management" className={cn(
               "flex items-center justify-center gap-2 rounded-lg p-4 font-semibold text-foreground/80 transition-all",
@@ -64,17 +64,15 @@ export default function LeadsPage() {
             Lead Analytics
           </TabsTrigger>
         </TabsList>
-        <TabsContent value="management" className="mt-4 bg-card border-t-0 rounded-b-lg shadow-md">
+        <TabsContent value="management" className="mt-4 bg-card border-t-0 rounded-b-lg shadow-md flex-1 overflow-y-auto">
           <div className="p-6">
             <LeadsManagement />
           </div>
         </TabsContent>
-        <TabsContent value="pipeline" className="mt-4 bg-card border-t-0 rounded-b-lg shadow-md h-[calc(100vh-22rem)] overflow-hidden">
-           <div className="overflow-auto h-full">
+        <TabsContent value="pipeline" className="mt-4 bg-card border-t-0 rounded-b-lg shadow-md flex-1 overflow-hidden">
             <LeadPipelineManager />
-          </div>
         </TabsContent>
-        <TabsContent value="analytics" className="mt-4 bg-card border-t-0 rounded-b-lg shadow-md">
+        <TabsContent value="analytics" className="mt-4 bg-card border-t-0 rounded-b-lg shadow-md flex-1 overflow-y-auto">
           <div className="p-6">
             <LeadAnalyticsHub />
           </div>

@@ -36,8 +36,8 @@ export const LeadCalendarView = ({ leads, onLeadClick }: { leads: any[], onLeadC
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-6 h-full">
-      <Card className="md:col-span-2 flex flex-col h-full">
+    <div className="grid grid-cols-1 md:grid-cols-12 gap-6 p-6 h-full">
+      <Card className="md:col-span-7 flex flex-col h-full">
         <CardHeader>
           <CardTitle>Leads Calendar</CardTitle>
         </CardHeader>
@@ -85,7 +85,7 @@ export const LeadCalendarView = ({ leads, onLeadClick }: { leads: any[], onLeadC
           />
         </CardContent>
       </Card>
-      <Card className="flex flex-col h-full">
+      <Card className="md:col-span-5 flex flex-col h-full">
         <CardHeader>
           <CardTitle>
             Activities for {date ? date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }) : 'Select a date'}
