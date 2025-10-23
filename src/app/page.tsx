@@ -18,9 +18,10 @@ import { QuickActions } from "@/components/dashboard/quick-actions";
 import { PageHeader } from "@/components/shared/page-header";
 
 const Dashboard = () => {
-  const [currentTime, setCurrentTime] = useState(new Date());
+  const [currentTime, setCurrentTime] = useState<Date | null>(null);
 
   useEffect(() => {
+    setCurrentTime(new Date());
     const timer = setInterval(() => {
       setCurrentTime(new Date());
     }, 60000); // Update every minute
@@ -79,7 +80,7 @@ const Dashboard = () => {
     <div className="flex flex-col gap-8">
       <PageHeader
         title="Welcome back, Sarah! 👋"
-        description={formatDateTime(currentTime)}
+        description={currentTime ? formatDateTime(currentTime) : "Loading..."}
       >
         <div className="flex items-center space-x-3">
           <div className="flex items-center space-x-2 px-3 py-2 bg-green-500/10 text-green-500 rounded-lg">
