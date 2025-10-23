@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useState } from "react";
 import {
@@ -16,6 +15,8 @@ import {
   PieChart,
   Pie,
   Cell,
+  Legend,
+  ComposedChart,
 } from "recharts";
 import {
   TrendingUp,
@@ -23,6 +24,8 @@ import {
   Building,
   Download,
   MoreHorizontal,
+  DollarSign,
+  LineChart as LineChartIcon
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -36,7 +39,7 @@ import {
 } from "../ui/card";
 
 export const PerformanceChart = () => {
-  const [chartType, setChartType] = useState("sales");
+  const [chartType, setChartType] = useState("revenue");
   const [timeRange, setTimeRange] = useState("6months");
 
   const salesData = [
@@ -63,8 +66,23 @@ export const PerformanceChart = () => {
     { name: "Industrial", value: 20, color: "hsl(var(--chart-3))" },
     { name: "Land", value: 10, color: "hsl(var(--chart-4))" },
   ];
+  
+  const revenueMarketData = [
+    { month: 'Jan', revenue: 2500000, marketPerformance: 80 },
+    { month: 'Feb', revenue: 2900000, marketPerformance: 85 },
+    { month: 'Mar', revenue: 3200000, marketPerformance: 90 },
+    { month: 'Apr', revenue: 2950000, marketPerformance: 82 },
+    { month: 'May', revenue: 3500000, marketPerformance: 92 },
+    { month: 'Jun', revenue: 4100000, marketPerformance: 95 },
+    { month: 'Jul', revenue: 3800000, marketPerformance: 93 },
+    { month: 'Aug', revenue: 4200000, marketPerformance: 91 },
+    { month: 'Sep', revenue: 4000000, marketPerformance: 88 },
+    { month: 'Oct', revenue: 4500000, marketPerformance: 94 },
+  ];
+
 
   const chartOptions = [
+    { id: "revenue", label: "Revenue", icon: DollarSign },
     { id: "sales", label: "Sales Performance", icon: TrendingUp },
     { id: "leads", label: "Lead Conversion", icon: Users },
     { id: "properties", label: "Property Types", icon: Building },
@@ -78,13 +96,24 @@ export const PerformanceChart = () => {
   ];
 
   const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat("en-US", {
+    return new Intl.NumberFormat("en-IN", {
       style: "currency",
-      currency: "USD",
+      currency: "INR",
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
-    }).format(value);
+    }).format(value).replace('₹', '₹');
   };
+
+  const formatYAxisCurrency = (value: number) => {
+    if (value >= 1000000) {
+      return `₹${(value / 1000000).toFixed(1)}M`;
+    }
+    if (value >= 1000) {
+      return `₹${(value / 1000).toFixed(0)}K`;
+    }
+    return `₹${value}`;
+  }
+
 
   const formatPercentage = (value: number) => {
     return `${value.toFixed(1)}%`;
@@ -105,8 +134,12 @@ export const PerformanceChart = () => {
               ></div>
               <span className="text-muted-foreground">{entry.name}:</span>
               <span className="font-medium text-popover-foreground">
-                {entry.name === "Sales"
+                 {entry.name === "Revenue"
                   ? formatCurrency(entry.value)
+                  : entry.name === "Sales"
+                  ? formatCurrency(entry.value)
+                  : entry.name === "Market Performance"
+                  ? `${entry.value}%`
                   : entry.name === "Conversion Rate"
                   ? formatPercentage(entry.value)
                   : entry.value}
@@ -121,6 +154,40 @@ export const PerformanceChart = () => {
 
   const renderChart = () => {
     switch (chartType) {
+      case "revenue":
+        return (
+           <ResponsiveContainer width="100%" height={300}>
+            <ComposedChart data={revenueMarketData}>
+              <CartesianGrid
+                strokeDasharray="3 3"
+                stroke="hsl(var(--border))"
+              />
+              <XAxis
+                dataKey="month"
+                stroke="hsl(var(--muted-foreground))"
+                fontSize={12}
+              />
+              <YAxis
+                yAxisId="left"
+                stroke="hsl(var(--muted-foreground))"
+                fontSize={12}
+                tickFormatter={formatYAxisCurrency}
+              />
+               <YAxis
+                yAxisId="right"
+                orientation="right"
+                stroke="hsl(var(--muted-foreground))"
+                fontSize={12}
+                domain={[0, 100]}
+                tickFormatter={(value) => `${value}`}
+              />
+              <Tooltip content={<CustomTooltip />} />
+               <Legend />
+              <Bar yAxisId="left" dataKey="revenue" name="Revenue" fill="hsl(var(--primary))" barSize={30} />
+              <Line yAxisId="right" type="monotone" dataKey="marketPerformance" name="Market Performance" stroke="hsl(var(--chart-2))" strokeWidth={2} />
+            </ComposedChart>
+          </ResponsiveContainer>
+        );
       case "sales":
         return (
           <ResponsiveContainer width="100%" height={300}>
@@ -328,6 +395,23 @@ export const PerformanceChart = () => {
 
       <CardFooter className="border-t pt-4">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full">
+          {chartType === "revenue" && (
+            <>
+              <div className="text-center">
+                <p className="text-2xl font-bold text-foreground">₹3.45Cr</p>
+                <p className="text-sm text-muted-foreground">Total Revenue</p>
+              </div>
+              <div className="text-center">
+                <p className="text-2xl font-bold text-green-500">+15.2%</p>
+                <p className="text-sm text-muted-foreground">Y-o-Y Growth</p>
+              </div>
+               <div className="text-center">
+                <p className="text-2xl font-bold text-foreground">89%</p>
+                <p className="text-sm text-muted-foreground">Avg. Market Perf.</p>
+              </div>
+            </>
+          )}
+
           {chartType === "sales" && (
             <>
               <div className="text-center">

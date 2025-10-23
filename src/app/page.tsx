@@ -12,6 +12,7 @@ import { KPICard } from "@/components/dashboard/new-kpi-card";
 import { ActivityFeed } from "@/components/dashboard/activity-feed";
 import { QuickAccessWidget } from "@/components/dashboard/quick-access-widget";
 import { PerformanceChart } from "@/components/dashboard/performance-chart";
+import { MarketIntelligenceCard } from "@/components/dashboard/market-intelligence-card";
 import { QuickActions } from "@/components/dashboard/quick-actions";
 import { PageHeader } from "@/components/shared/page-header";
 import { Button } from "@/components/ui/button";
@@ -140,8 +141,13 @@ const Dashboard = () => {
         </div>
       </div>
 
-      <div className="mb-8">
-        <PerformanceChart />
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+        <div className="lg:col-span-2">
+          <PerformanceChart />
+        </div>
+        <div className="lg:col-span-1">
+          <MarketIntelligenceCard />
+        </div>
       </div>
 
       <QuickActions />
