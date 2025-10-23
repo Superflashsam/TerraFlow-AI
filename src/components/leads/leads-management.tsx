@@ -195,7 +195,7 @@ export const LeadsManagement = () => {
           />
         </aside>
 
-        <div className="flex-1 flex flex-col overflow-hidden">
+        <div className="flex-1 flex flex-col overflow-x-auto">
             <div className="flex-shrink-0 px-6 py-4 border-b border-border">
                 <div className="flex items-center justify-between">
                 <h2 className="text-xl font-semibold">All Leads ({mockLeads.length})</h2>
