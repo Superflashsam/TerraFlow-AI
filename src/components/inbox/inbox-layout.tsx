@@ -15,6 +15,7 @@ import {
   Phone,
 } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { getImagePlaceholder } from "@/lib/placeholder-images";
 
 function ConversationItem({ conv, active }: { conv: any, active: boolean }) {
   return (
