@@ -48,10 +48,28 @@ import {
 } from "@/components/ui/select";
 import { useIsMobile } from "@/hooks/use-mobile";
 
+const useIsTablet = () => {
+    const [isTablet, setIsTablet] = React.useState<boolean | undefined>(undefined);
+    
+    React.useEffect(() => {
+        const mql = window.matchMedia(`(min-width: 768px) and (max-width: 1024px)`);
+        const onChange = () => {
+            setIsTablet(mql.matches);
+        };
+        mql.addEventListener("change", onChange);
+        setIsTablet(mql.matches);
+        return () => mql.removeEventListener("change", onChange);
+    }, []);
+
+    return isTablet;
+}
+
+
 export const PerformanceChart = () => {
   const [chartType, setChartType] = useState("revenue");
   const [timeRange, setTimeRange] = useState("6months");
   const isMobile = useIsMobile();
+  const isTablet = useIsTablet();
 
   const salesData = [
     { month: "Jul", sales: 850000, deals: 12, leads: 45 },
@@ -343,10 +361,10 @@ export const PerformanceChart = () => {
           </div>
         </div>
 
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mt-4">
-          {isMobile ? (
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mt-4">
+          {isMobile || isTablet ? (
             <Select value={chartType} onValueChange={setChartType}>
-              <SelectTrigger className="w-full">
+              <SelectTrigger className="w-full md:w-auto">
                 <SelectValue placeholder="Select chart type" />
               </SelectTrigger>
               <SelectContent>
@@ -374,14 +392,14 @@ export const PerformanceChart = () => {
                   )}
                 >
                   <option.icon size={16} />
-                  <span className="hidden md:inline">{option.label}</span>
+                  <span className="hidden lg:inline">{option.label}</span>
                 </button>
               ))}
             </div>
           )}
 
           {chartType !== "properties" && (
-            <div className="flex space-x-1 bg-muted rounded-lg p-1 self-end sm:self-center">
+            <div className="flex space-x-1 bg-muted rounded-lg p-1 self-end md:self-center">
               {timeRanges.map((range) => (
                 <button
                   key={range.id}
