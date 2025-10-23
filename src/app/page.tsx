@@ -18,6 +18,7 @@ import { ActivityFeed } from "@/components/dashboard/activity-feed";
 import { QuickAccessWidget } from "@/components/dashboard/quick-access-widget";
 import { PerformanceChart } from "@/components/dashboard/performance-chart";
 import { MarketIntelligenceCard } from "@/components/dashboard/market-intelligence-card";
+import { TerraAiSuggestions } from "@/components/dashboard/terra-ai-suggestions";
 import { PageHeader } from "@/components/shared/page-header";
 import { Button } from "@/components/ui/button";
 import {
@@ -173,7 +174,7 @@ const Dashboard = () => {
         </div>
       </PageHeader>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {kpiData.map((kpi, index) => (
           <KPICard
             key={index}
@@ -187,7 +188,7 @@ const Dashboard = () => {
         ))}
       </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-8 mb-8">
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
         <div className="xl:col-span-2">
           <ActivityFeed />
         </div>
@@ -197,13 +198,16 @@ const Dashboard = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2">
           <PerformanceChart />
         </div>
-        <div className="lg:col-span-1">
+        <div className="lg:col-span-1 flex flex-col gap-8">
           <MarketIntelligenceCard />
         </div>
+      </div>
+       <div className="grid grid-cols-1">
+          <TerraAiSuggestions />
       </div>
     </div>
   );
