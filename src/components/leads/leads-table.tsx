@@ -187,13 +187,13 @@ const LeadTable = ({
 
   return (
     <>
-      <div className="hidden lg:block w-full">
+      <div className="flex-1 overflow-y-auto">
         <table className="w-full">
-          <thead className="bg-muted border-b border-border">
+          <thead className="bg-muted border-b border-border sticky top-0">
             <tr>
               <th className="w-12 px-4 py-3">
                 <Checkbox
-                  checked={isAllSelected}
+                  checked={isAllSelected || isIndeterminate}
                   onCheckedChange={handleSelectAll}
                 />
               </th>
@@ -312,103 +312,20 @@ const LeadTable = ({
             ))}
           </tbody>
         </table>
+        {filteredAndSortedLeads.length === 0 && (
+            <div className="text-center py-12">
+            <Users size={48} className="text-muted-foreground mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-foreground mb-2">
+                No leads found
+            </h3>
+            <p className="text-muted-foreground mb-4">
+                Try adjusting your filters or add new leads to get started.
+            </p>
+            <Button variant="outline">Clear Filters</Button>
+            </div>
+        )}
       </div>
 
-      <div className="lg:hidden">
-        {filteredAndSortedLeads.map((lead) => (
-          <div
-            key={lead.id}
-            className="border-b border-border p-4 hover:bg-muted/50 cursor-pointer transition-colors duration-200"
-            onClick={(e) => handleRowClick(lead, e)}
-          >
-            <div className="flex items-start justify-between mb-3">
-              <div className="flex items-center space-x-3">
-                <div data-noclick>
-                  <Checkbox
-                    checked={selectedLeads.includes(lead.id)}
-                    onCheckedChange={(checked) =>
-                      handleSelectLead(lead.id, !!checked)
-                    }
-                  />
-                </div>
-                 <Avatar>
-                    <AvatarFallback>{lead.name.split(' ').map((n: string) => n[0]).join('')}</AvatarFallback>
-                </Avatar>
-                <div>
-                  <p className="font-medium text-foreground">{lead.name}</p>
-                  <p className="text-sm text-muted-foreground">{lead.source}</p>
-                </div>
-              </div>
-              <div data-noclick>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleContextMenu(e, lead);
-                  }}
-                >
-                  <MoreVertical size={16} />
-                </Button>
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Contact:</span>
-                <div className="text-right">
-                  <p className="text-sm text-foreground">{lead.email}</p>
-                  <p className="text-sm text-muted-foreground">{lead.phone}</p>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Property:</span>
-                <div className="text-right">
-                  <p className="text-sm font-medium text-foreground capitalize">
-                    {lead.propertyInterest.replace('_', ' ')}
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    {lead.location}
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">AI Score:</span>
-                <LeadScoreBadge score={lead.aiScore} size="sm" showLabel={false} />
-              </div>
-
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Status:</span>
-                <LeadStatusBadge status={lead.status} size="sm" />
-              </div>
-
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">
-                  Last Contact:
-                </span>
-                <span className="text-sm text-foreground">
-                  {formatDate(lead.lastContact)}
-                </span>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {filteredAndSortedLeads.length === 0 && (
-        <div className="text-center py-12">
-          <Users size={48} className="text-muted-foreground mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-foreground mb-2">
-            No leads found
-          </h3>
-          <p className="text-muted-foreground mb-4">
-            Try adjusting your filters or add new leads to get started.
-          </p>
-          <Button variant="outline">Clear Filters</Button>
-        </div>
-      )}
 
       {contextMenu.show && (
         <LeadContextMenu

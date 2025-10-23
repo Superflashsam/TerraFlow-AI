@@ -216,15 +216,13 @@ export const LeadsManagement = () => {
                 </div>
                 </div>
             </div>
-
-            <div className="flex-1 overflow-y-auto">
-                <LeadTable
-                leads={mockLeads}
-                selectedLeads={selectedLeads}
-                onSelectionChange={handleSelectionChange}
-                filters={filters}
-                />
-            </div>
+            
+            <LeadTable
+              leads={mockLeads}
+              selectedLeads={selectedLeads}
+              onSelectionChange={handleSelectionChange}
+              filters={filters}
+            />
         </div>
     </div>
   );
