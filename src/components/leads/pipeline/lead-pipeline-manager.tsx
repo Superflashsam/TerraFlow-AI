@@ -237,7 +237,7 @@ export const LeadPipelineManager = () => {
         getStageMetrics={getStageMetrics}
       />
       <div className="flex-1 flex overflow-hidden">
-        <div className="flex-1 overflow-x-auto">
+        <div className="flex-1 overflow-auto">
           {viewMode === 'board' &&
             <PipelineBoard>
               {pipelineStages.map((stage) =>

@@ -37,7 +37,7 @@ export const LeadCalendarView = ({ leads, onLeadClick }: { leads: any[], onLeadC
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-6 h-full">
-      <Card className="md:col-span-2 flex flex-col">
+      <Card className="md:col-span-2 flex flex-col h-full">
         <CardHeader>
           <CardTitle>Leads Calendar</CardTitle>
         </CardHeader>
@@ -46,22 +46,36 @@ export const LeadCalendarView = ({ leads, onLeadClick }: { leads: any[], onLeadC
             mode="single"
             selected={date}
             onSelect={setDate}
-            className="p-0"
+            className="p-0 h-full w-full"
             classNames={{
-                day_cell: 'h-16 w-20 text-center text-sm p-1 relative [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md',
-                day: 'h-14 w-18 p-0 font-normal aria-selected:opacity-100 flex flex-col items-center justify-center',
+                root: 'flex flex-col h-full',
+                months: 'flex-1',
+                month: 'flex flex-col h-full',
+                table: 'flex-1 border-collapse',
+                head_row: 'flex',
+                row: 'flex w-full mt-2',
+                day_cell: 'h-auto w-full text-center text-sm p-1 relative [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md',
+                day: 'h-24 w-full p-1 font-normal aria-selected:opacity-100 flex flex-col items-start justify-start',
             }}
             components={{
               DayContent: ({ date }) => {
                 const dailyLeads = leadsByDate[date.toDateString()];
                 return (
                   <>
-                    <div>{date.getDate()}</div>
+                    <div className="self-start">{date.getDate()}</div>
                     {dailyLeads && (
-                      <div className="flex -space-x-1 overflow-hidden mt-1">
-                        {dailyLeads.slice(0, 3).map(lead => (
-                           <div key={lead.id} className={`w-2 h-2 rounded-full ${getStageColor(lead.stage)} border-2 border-background`}/>
+                      <div className="flex flex-wrap mt-1 gap-1">
+                        {dailyLeads.slice(0, 4).map(lead => (
+                           <Avatar key={lead.id} className="h-6 w-6 border-2 border-background">
+                             <AvatarImage src={lead.profileImage} alt={lead.name} />
+                             <AvatarFallback>{lead.name.charAt(0)}</AvatarFallback>
+                           </Avatar>
                         ))}
+                         {dailyLeads.length > 4 && (
+                          <div className="flex items-center justify-center h-6 w-6 rounded-full bg-muted text-xs">
+                            +{dailyLeads.length - 4}
+                          </div>
+                        )}
                       </div>
                     )}
                   </>
@@ -78,7 +92,7 @@ export const LeadCalendarView = ({ leads, onLeadClick }: { leads: any[], onLeadC
           </CardTitle>
         </CardHeader>
         <CardContent className="flex-grow overflow-hidden">
-          <ScrollArea className="h-full">
+          <ScrollArea className="h-full pr-4">
             {leadsForSelectedDate.length > 0 ? (
               <div className="space-y-4">
                 {leadsForSelectedDate.map(lead => (
@@ -91,9 +105,9 @@ export const LeadCalendarView = ({ leads, onLeadClick }: { leads: any[], onLeadC
                          </Avatar>
                         <span className="font-semibold text-sm">{lead.name}</span>
                        </div>
-                      <Badge variant="outline" className={`capitalize ${getStageColor(lead.stage)} text-white`}>{lead.stage}</Badge>
+                      <Badge variant="outline" className={`capitalize border-0 ${getStageColor(lead.stage)} text-white`}>{lead.stage}</Badge>
                     </div>
-                    <p className="text-xs text-muted-foreground">{lead.nextAction}</p>
+                    <p className="text-xs text-muted-foreground font-medium">Next Action: {lead.nextAction}</p>
                     <p className="text-xs text-muted-foreground mt-1">Last activity: {new Date(lead.lastActivity).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
                   </div>
                 ))}
