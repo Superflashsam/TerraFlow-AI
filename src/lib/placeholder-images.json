@@ -1,3 +1,58 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "avatar-1",
+      "description": "User avatar for Alex Johnson",
+      "imageUrl": "https://images.unsplash.com/photo-1583195763986-0231686dcd43?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxtYW4lMjBwb3J0cmFpdHxlbnwwfHx8fDE3NjExNDUzMDB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "man portrait"
+    },
+    {
+      "id": "avatar-2",
+      "description": "User avatar for Samantha Roe",
+      "imageUrl": "https://images.unsplash.com/photo-1580489944761-15a19d654956?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHx3b21hbiUyMHBvcnRyYWl0fGVufDB8fHx8MTc2MTE0NzUzOXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "woman portrait"
+    },
+    {
+      "id": "avatar-3",
+      "description": "User avatar for Marcus Brown",
+      "imageUrl": "https://images.unsplash.com/photo-1590086782792-42dd2350140d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxwZXJzb24lMjBwb3J0cmFpdHxlbnwwfHx8fDE3NjEyMjc5NjN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "person portrait"
+    },
+    {
+      "id": "bot-avatar",
+      "description": "Avatar for the AI Bot",
+      "imageUrl": "https://images.unsplash.com/photo-1759395162881-83fda11c014f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8cm9ib3QlMjB0ZWNobm9sb2d5fGVufDB8fHx8MTc2MTIzNjkwMXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "robot technology"
+    },
+    {
+      "id": "user-avatar",
+      "description": "Avatar for the current logged-in user",
+      "imageUrl": "https://images.unsplash.com/photo-1610631066894-62452ccb927c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxwcm9mZXNzaW9uYWwlMjBwZXJzb258ZW58MHx8fHwxNzYxMjE1MjAxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "professional person"
+    },
+    {
+      "id": "property-1",
+      "description": "Image of Greenwood Villa",
+      "imageUrl": "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8bW9kZXJuJTIwaG91c2V8ZW58MHx8fHwxNzYxMTkxMDUyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "modern house"
+    },
+    {
+      "id": "property-2",
+      "description": "Image of Oceanview Penthouse",
+      "imageUrl": "https://images.unsplash.com/photo-1512914890251-2f96a9b0bbe2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxsdXh1cnklMjBhcGFydG1lbnR8ZW58MHx8fHwxNzYxMTk2OTc4fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "luxury apartment"
+    },
+    {
+      "id": "property-3",
+      "description": "Image of Hillside Estate",
+      "imageUrl": "https://images.unsplash.com/photo-1761135125354-d024f37d04ec?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxsYXJnZSUyMGVzdGF0ZXxlbnwwfHx8fDE3NjEyMzY5MDF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "large estate"
+    },
+    {
+      "id": "property-4",
+      "description": "Image of Downtown Loft",
+      "imageUrl": "https://images.unsplash.com/photo-1573760464283-3ba64302271f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHx1cmJhbiUyMGxvZnR8ZW58MHx8fHwxNzYxMjIwMjM0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "urban loft"
+    }
+  ]
 }
