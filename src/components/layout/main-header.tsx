@@ -13,6 +13,12 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
 import { getImagePlaceholder } from "@/lib/placeholder-images";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export function MainHeader() {
   return (
@@ -28,6 +34,20 @@ export function MainHeader() {
           />
         </div>
       </div>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <div className="flex items-center space-x-2 px-3 py-2 bg-green-500/10 text-green-500 rounded-lg cursor-pointer">
+              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+              <span className="text-sm font-medium hidden sm:block">All Systems Operational</span>
+            </div>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>All systems are running smoothly.</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" size="icon" className="rounded-full">

@@ -76,7 +76,7 @@ export const QuickActions = () => {
   const getColorClasses = (color: "primary" | "secondary" | "accent" | "success") => {
     const colorMap = {
       primary: "bg-primary text-primary-foreground hover:bg-primary/90",
-      secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/90",
+      secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
       accent: "bg-accent text-accent-foreground hover:bg-accent/90",
       success: "bg-green-500 text-white hover:bg-green-500/90",
     };

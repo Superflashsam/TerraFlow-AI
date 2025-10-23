@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useEffect, useState } from "react";
 import {
@@ -6,9 +5,8 @@ import {
   Building,
   Handshake,
   DollarSign,
-  PlusCircle,
-  SquareCheckBig,
-  MessageSquarePlus,
+  UserPlus,
+  Workflow,
 } from "lucide-react";
 import { KPICard } from "@/components/dashboard/new-kpi-card";
 import { ActivityFeed } from "@/components/dashboard/activity-feed";
@@ -16,18 +14,20 @@ import { QuickAccessWidget } from "@/components/dashboard/quick-access-widget";
 import { PerformanceChart } from "@/components/dashboard/performance-chart";
 import { QuickActions } from "@/components/dashboard/quick-actions";
 import { PageHeader } from "@/components/shared/page-header";
+import { Button } from "@/components/ui/button";
 
 const Dashboard = () => {
   const [currentTime, setCurrentTime] = useState<Date | null>(null);
 
   useEffect(() => {
+    // This will only run on the client, after initial hydration
     setCurrentTime(new Date());
     const timer = setInterval(() => {
       setCurrentTime(new Date());
     }, 60000); // Update every minute
 
     return () => clearInterval(timer);
-  }, []);
+  }, []); // Empty dependency array ensures this runs once on mount
 
   const kpiData = [
     {
@@ -64,6 +64,30 @@ const Dashboard = () => {
     },
   ];
 
+  const quickActions = [
+    {
+      id: "add-lead",
+      title: "Add New Lead",
+      icon: UserPlus,
+      color: "primary" as const,
+      onClick: () => console.log("Add New Lead"),
+    },
+    {
+      id: "add-property",
+      title: "Add Property",
+      icon: Building,
+      color: "secondary" as const,
+      onClick: () => console.log("Add Property"),
+    },
+    {
+      id: "create-workflow",
+      title: "Create Workflow",
+      icon: Workflow,
+      color: "accent" as const,
+      onClick: () => console.log("Create Workflow"),
+    },
+  ];
+
   const formatDateTime = (date: Date) => {
     return date.toLocaleString("en-US", {
       weekday: "long",
@@ -82,11 +106,13 @@ const Dashboard = () => {
         title="Welcome back, Sarah! 👋"
         description={currentTime ? formatDateTime(currentTime) : "Loading..."}
       >
-        <div className="flex items-center space-x-3">
-          <div className="flex items-center space-x-2 px-3 py-2 bg-green-500/10 text-green-500 rounded-lg">
-            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-            <span className="text-sm font-medium">All Systems Operational</span>
-          </div>
+        <div className="flex items-center space-x-2">
+           {quickActions.map((action) => (
+            <Button key={action.id} onClick={action.onClick} variant={action.color as any} size="sm">
+              <action.icon className="mr-2 h-4 w-4" />
+              {action.title}
+            </Button>
+          ))}
         </div>
       </PageHeader>
 
