@@ -25,7 +25,8 @@ import {
   Download,
   MoreHorizontal,
   DollarSign,
-  LineChart as LineChartIcon
+  LineChart as LineChartIcon,
+  ChevronDown,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -37,10 +38,19 @@ import {
   CardDescription,
   CardFooter,
 } from "../ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export const PerformanceChart = () => {
   const [chartType, setChartType] = useState("revenue");
   const [timeRange, setTimeRange] = useState("6months");
+  const isMobile = useIsMobile();
 
   const salesData = [
     { month: "Jul", sales: 850000, deals: 12, leads: 45 },
@@ -319,7 +329,7 @@ export const PerformanceChart = () => {
   return (
     <Card>
       <CardHeader>
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <CardTitle>Performance Analytics</CardTitle>
           <div className="flex items-center space-x-2">
             <Button variant="outline" size="sm">
@@ -332,27 +342,45 @@ export const PerformanceChart = () => {
           </div>
         </div>
 
-        <div className="flex items-center justify-between">
-          <div className="flex space-x-1 bg-muted rounded-lg p-1">
-            {chartOptions.map((option) => (
-              <button
-                key={option.id}
-                onClick={() => setChartType(option.id)}
-                className={cn(
-                  "flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200",
-                  chartType === option.id
-                    ? "bg-card text-foreground shadow-sm"
-                    : "text-muted-foreground hover:text-foreground"
-                )}
-              >
-                <option.icon size={16} />
-                <span className="hidden sm:inline">{option.label}</span>
-              </button>
-            ))}
-          </div>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mt-4">
+          {isMobile ? (
+            <Select value={chartType} onValueChange={setChartType}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select chart type" />
+              </SelectTrigger>
+              <SelectContent>
+                {chartOptions.map((option) => (
+                  <SelectItem key={option.id} value={option.id}>
+                    <div className="flex items-center gap-2">
+                      <option.icon size={16} />
+                      <span>{option.label}</span>
+                    </div>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          ) : (
+            <div className="flex space-x-1 bg-muted rounded-lg p-1">
+              {chartOptions.map((option) => (
+                <button
+                  key={option.id}
+                  onClick={() => setChartType(option.id)}
+                  className={cn(
+                    "flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200",
+                    chartType === option.id
+                      ? "bg-card text-foreground shadow-sm"
+                      : "text-muted-foreground hover:text-foreground"
+                  )}
+                >
+                  <option.icon size={16} />
+                  <span className="hidden md:inline">{option.label}</span>
+                </button>
+              ))}
+            </div>
+          )}
 
           {chartType !== "properties" && (
-            <div className="flex space-x-1 bg-muted rounded-lg p-1">
+            <div className="flex space-x-1 bg-muted rounded-lg p-1 self-end sm:self-center">
               {timeRanges.map((range) => (
                 <button
                   key={range.id}
