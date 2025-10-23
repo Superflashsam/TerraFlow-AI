@@ -7,15 +7,27 @@ import {
   DollarSign,
   UserPlus,
   Workflow,
+  MoreHorizontal,
+  Calendar,
+  FileText,
+  Send,
+  BarChart3,
 } from "lucide-react";
 import { KPICard } from "@/components/dashboard/new-kpi-card";
 import { ActivityFeed } from "@/components/dashboard/activity-feed";
 import { QuickAccessWidget } from "@/components/dashboard/quick-access-widget";
 import { PerformanceChart } from "@/components/dashboard/performance-chart";
 import { MarketIntelligenceCard } from "@/components/dashboard/market-intelligence-card";
-import { QuickActions } from "@/components/dashboard/quick-actions";
 import { PageHeader } from "@/components/shared/page-header";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const Dashboard = () => {
   const [currentTime, setCurrentTime] = useState<Date | null>(null);
@@ -80,12 +92,38 @@ const Dashboard = () => {
       color: "secondary" as const,
       onClick: () => console.log("Add Property"),
     },
-    {
+  ];
+
+  const moreActions = [
+     {
       id: "create-workflow",
       title: "Create Workflow",
       icon: Workflow,
-      color: "accent" as const,
       onClick: () => console.log("Create Workflow"),
+    },
+    {
+      id: "schedule-viewing",
+      title: "Schedule Viewing",
+      icon: Calendar,
+      onClick: () => console.log("Schedule viewing"),
+    },
+    {
+      id: "generate-report",
+      title: "Generate Report",
+      icon: FileText,
+      onClick: () => console.log("Generate report"),
+    },
+    {
+      id: "send-proposal",
+      title: "Send Proposal",
+      icon: Send,
+      onClick: () => console.log("Send proposal"),
+    },
+    {
+      id: "market-analysis",
+      title: "Market Analysis",
+      icon: BarChart3,
+      onClick: () => console.log("Market Analysis"),
     },
   ];
 
@@ -114,6 +152,24 @@ const Dashboard = () => {
               {action.title}
             </Button>
           ))}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="sm">
+                <MoreHorizontal className="h-4 w-4" />
+                <span className="ml-2">More Actions</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Quick Actions</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              {moreActions.map((action) => (
+                <DropdownMenuItem key={action.id} onClick={action.onClick}>
+                  <action.icon className="mr-2 h-4 w-4" />
+                  <span>{action.title}</span>
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </PageHeader>
 
@@ -149,8 +205,6 @@ const Dashboard = () => {
           <MarketIntelligenceCard />
         </div>
       </div>
-
-      <QuickActions />
     </div>
   );
 };
