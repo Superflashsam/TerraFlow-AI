@@ -4,8 +4,6 @@
 import {
   PlusCircle,
   Upload,
-  RefreshCw,
-  Settings,
   LineChart,
   Target,
   Table,

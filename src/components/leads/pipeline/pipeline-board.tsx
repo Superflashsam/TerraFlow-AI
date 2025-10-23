@@ -1,15 +1,13 @@
 
 "use client";
 import React from 'react';
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 
 export const PipelineBoard = ({ children }: { children: React.ReactNode }) => {
   return (
-    <ScrollArea className="w-full h-full">
-      <div className="flex p-6 space-x-4">
+    <div className="flex-1 px-6 pb-6 overflow-x-auto">
+      <div className="flex gap-4 min-w-max pb-4">
         {children}
       </div>
-      <ScrollBar orientation="horizontal"/>
-    </ScrollArea>
+    </div>
   );
 };

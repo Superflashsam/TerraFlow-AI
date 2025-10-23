@@ -237,7 +237,7 @@ export const LeadPipelineManager = () => {
         getStageMetrics={getStageMetrics}
       />
       <div className="flex-1 flex overflow-hidden">
-        <div className="flex-1 overflow-auto">
+        <div className="flex-1 flex flex-col overflow-hidden">
           {viewMode === 'board' &&
             <PipelineBoard>
               {pipelineStages.map((stage) =>
@@ -255,7 +255,7 @@ export const LeadPipelineManager = () => {
            {viewMode === 'calendar' && 
              <LeadCalendarView leads={filteredLeads} onLeadClick={handleLeadClick} />
            }
-           {viewMode === 'list' && <div className="p-8 text-center text-muted-foreground">This view is not yet available.</div>}
+           {viewMode === 'list' && <div className="p-8 text-center text-muted-foreground flex-1 flex items-center justify-center">This view is not yet available.</div>}
         </div>
 
         {isPanelOpen &&

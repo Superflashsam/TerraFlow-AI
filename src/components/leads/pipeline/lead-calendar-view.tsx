@@ -66,92 +66,70 @@ export const LeadCalendarView = ({ leads, onLeadClick }: { leads: any[], onLeadC
   return (
     <div className="flex-1 px-6 pb-6 overflow-hidden h-full">
       <div className="h-full grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Calendar Section - 2/3 width */}
         <div className="lg:col-span-2 bg-card rounded-xl p-6 border border-border overflow-y-auto">
-          <h3 className="text-xl font-semibold mb-6">Leads Calendar</h3>
-          
-          <div className="w-full">
-            {/* Calendar Header with Navigation */}
-            <div className="flex items-center justify-between mb-6">
-              <button className="p-2 hover:bg-muted rounded-lg" onClick={previousMonth}>
-                <ChevronLeft className="w-5 h-5" />
-              </button>
-              <h4 className="text-lg font-medium">{format(firstDayCurrentMonth, 'MMMM yyyy')}</h4>
-              <button className="p-2 hover:bg-muted rounded-lg" onClick={nextMonth}>
-                <ChevronRight className="w-5 h-5" />
-              </button>
+          <div className="flex items-center justify-between mb-6">
+             <h3 className="text-xl font-semibold">Leads Calendar</h3>
+            <div className="flex items-center space-x-2">
+                <button className="p-2 hover:bg-muted rounded-lg" onClick={previousMonth}>
+                    <ChevronLeft className="w-5 h-5" />
+                </button>
+                <h4 className="text-lg font-medium">{format(firstDayCurrentMonth, 'MMMM yyyy')}</h4>
+                <button className="p-2 hover:bg-muted rounded-lg" onClick={nextMonth}>
+                    <ChevronRight className="w-5 h-5" />
+                </button>
             </div>
-            
-            {/* Calendar Grid */}
-            <div className="w-full">
-              {/* Day Headers */}
-              <div className="grid grid-cols-7 gap-2 mb-2">
-                {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-                  <div key={day} className="text-center text-sm font-medium text-muted-foreground py-2">
-                    {day}
-                  </div>
-                ))}
-              </div>
-              
-              {/* Calendar Days */}
-              <div className="grid grid-cols-7 gap-2">
-                {days.map((day, dayIdx) => {
-                  const dailyLeads = leadsByDate[day.toDateString()];
-                  return (
-                    <div
-                      key={day.toString()}
-                      className={`
-                        aspect-square p-2 rounded-lg text-sm flex flex-col
-                        ${dayIdx === 0 && colStartClasses[getDay(day)]}
-                        ${!isSameMonth(day, firstDayCurrentMonth) && 'text-muted-foreground/50'}
-                        ${isEqual(day, selectedDay) && 'bg-primary/10 ring-2 ring-primary'}
-                        ${!isEqual(day, selectedDay) && isToday(day) && 'bg-accent text-accent-foreground'}
-                        ${!isEqual(day, selectedDay) && !isToday(day) && 'hover:bg-muted'}
-                        transition-all cursor-pointer
-                      `}
-                      onClick={() => setSelectedDay(day)}
-                    >
-                      <div className="flex justify-between items-center">
-                        <time dateTime={format(day, 'yyyy-MM-dd')}>
-                          {format(day, 'd')}
-                        </time>
-                      </div>
-                      {dailyLeads && (
-                        <div className="flex flex-wrap mt-1 gap-1">
-                          {dailyLeads.slice(0, 4).map(lead => (
-                            <Avatar key={lead.id} className="h-6 w-6 border-2 border-background">
-                              <AvatarImage src={lead.profileImage} alt={lead.name} />
-                              <AvatarFallback>{lead.name.charAt(0)}</AvatarFallback>
-                            </Avatar>
-                          ))}
-                          {dailyLeads.length > 4 && (
-                            <div className="flex items-center justify-center h-6 w-6 rounded-full bg-muted text-xs">
-                              +{dailyLeads.length - 4}
-                            </div>
-                          )}
+          </div>
+          
+          <div className="grid grid-cols-7 gap-1 text-center text-xs text-muted-foreground mb-2">
+            <div>Sun</div>
+            <div>Mon</div>
+            <div>Tue</div>
+            <div>Wed</div>
+            <div>Thu</div>
+            <div>Fri</div>
+            <div>Sat</div>
+          </div>
+          <div className="grid grid-cols-7 gap-2">
+            {days.map((day, dayIdx) => {
+              const dailyLeads = leadsByDate[day.toDateString()];
+              return (
+                <div
+                  key={day.toString()}
+                  className={`
+                    p-2 rounded-lg text-sm flex flex-col aspect-square
+                    ${dayIdx === 0 && colStartClasses[getDay(day)]}
+                    ${!isSameMonth(day, firstDayCurrentMonth) && 'text-muted-foreground/50'}
+                    ${isEqual(day, selectedDay) && 'bg-primary/10 ring-2 ring-primary'}
+                    ${!isEqual(day, selectedDay) && isToday(day) && 'bg-accent text-accent-foreground'}
+                    ${!isEqual(day, selectedDay) && !isToday(day) && 'hover:bg-muted'}
+                    transition-all cursor-pointer
+                  `}
+                  onClick={() => setSelectedDay(day)}
+                >
+                  <time dateTime={format(day, 'yyyy-MM-dd')} className="font-semibold">
+                    {format(day, 'd')}
+                  </time>
+                  {dailyLeads && (
+                    <div className="flex flex-wrap -space-x-2 mt-2">
+                      {dailyLeads.slice(0, 3).map(lead => (
+                        <Avatar key={lead.id} className="h-6 w-6 border-2 border-background">
+                          <AvatarImage src={lead.profileImage} alt={lead.name} />
+                          <AvatarFallback>{lead.name.charAt(0)}</AvatarFallback>
+                        </Avatar>
+                      ))}
+                      {dailyLeads.length > 3 && (
+                        <div className="flex items-center justify-center h-6 w-6 rounded-full bg-muted text-xs ring-2 ring-background">
+                          +{dailyLeads.length - 3}
                         </div>
                       )}
                     </div>
-                  )
-                })}
-              </div>
-            </div>
-            
-            {/* Calendar Legend */}
-            <div className="mt-6 flex items-center gap-4 text-sm">
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded bg-accent"></div>
-                <span className="text-muted-foreground">Today</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded ring-2 ring-primary/50"></div>
-                <span className="text-muted-foreground">Selected Day</span>
-              </div>
-            </div>
+                  )}
+                </div>
+              )
+            })}
           </div>
         </div>
         
-        {/* Activities Section - 1/3 width */}
         <div className="lg:col-span-1 bg-card rounded-xl p-6 border border-border overflow-y-auto">
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-lg font-semibold">Activities</h3>
