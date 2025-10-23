@@ -18,7 +18,7 @@ import { cn } from '@/lib/utils';
 
 export default function LeadsPage() {
   return (
-    <div className="flex flex-col gap-8 h-full">
+    <div className="flex flex-col gap-8 h-full py-6">
       <PageHeader
         title="Leads"
         description="Track, manage, and analyze your real estate leads with AI-powered insights."
@@ -67,7 +67,7 @@ export default function LeadsPage() {
             <LeadsManagement />
           </div>
         </TabsContent>
-        <TabsContent value="pipeline" className="mt-4 bg-card border-t-0 rounded-b-lg shadow-md flex-1 overflow-hidden">
+        <TabsContent value="pipeline" className="mt-4 flex-1 flex flex-col overflow-hidden">
             <LeadPipelineManager />
         </TabsContent>
         <TabsContent value="analytics" className="mt-4 bg-card border-t-0 rounded-b-lg shadow-md flex-1 overflow-y-auto">

@@ -1,4 +1,4 @@
-import { Search, Bell, User, CheckSquare } from "lucide-react";
+import { Search, Bell, CheckSquare, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -9,7 +9,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
 import { getImagePlaceholder } from "@/lib/placeholder-images";
@@ -22,8 +21,9 @@ import {
 
 export function MainHeader() {
   return (
-    <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center gap-4 border-b bg-background px-4 md:px-8">
-      <SidebarTrigger className="md:hidden" />
+    <header className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-4 border-b bg-background px-4 md:px-8">
+      {/* This can be a trigger for mobile sidebar if needed */}
+      {/* <Button variant="ghost" size="icon" className="lg:hidden"><Menu /></Button> */}
       <div className="flex-1">
         <div className="relative">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />

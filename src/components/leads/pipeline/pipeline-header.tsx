@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useState } from 'react';
 import { Target, List, Grid, Calendar, Search, Settings, Plus, Filter } from 'lucide-react';
@@ -8,8 +7,6 @@ import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
@@ -42,7 +39,7 @@ export const PipelineHeader = ({ viewMode, onViewModeChange, onFiltersChange, to
     setShowFilters(false);
   }
 
-  const activeFiltersCount = Object.values(filters).filter(v => v !== 'all').length;
+  const activeFiltersCount = Object.values(filters).filter(v => v !== 'all').length + (searchTerm ? 1 : 0);
 
   const viewOptions = [
     { value: 'board', label: 'Board View', icon: Grid },
@@ -163,7 +160,6 @@ export const PipelineHeader = ({ viewMode, onViewModeChange, onFiltersChange, to
             </DropdownMenu>
 
             <Button variant="outline"><Settings className="mr-2"/>Manage Stages</Button>
-            <Button><Plus className="mr-2"/>Add Lead</Button>
           </div>
       </div>
     </div>
