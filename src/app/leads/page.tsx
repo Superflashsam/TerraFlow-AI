@@ -69,7 +69,7 @@ export default function LeadsPage() {
             <LeadsManagement />
           </div>
         </TabsContent>
-        <TabsContent value="pipeline" className="mt-4 bg-card border-t-0 rounded-b-lg shadow-md h-[calc(100vh-22rem)]">
+        <TabsContent value="pipeline" className="mt-4 bg-card border-t-0 rounded-b-lg shadow-md h-[calc(100vh-22rem)] overflow-hidden">
            <div className="overflow-auto h-full">
             <LeadPipelineManager />
           </div>

@@ -1,9 +1,10 @@
 "use client";
 
+import { useState, useEffect } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { format } from 'date-fns';
 
-const summaryData = {
+const summaryStaticData = {
   keyAchievements: [
     "Q3 revenue targets exceeded by 12%",
     "Market share increased to 22.1%",
@@ -19,7 +20,6 @@ const summaryData = {
     "Competitive analysis review",
     "Technology roadmap update",
   ],
-  generatedDate: new Date(),
 };
 
 function SummarySection({ title, items }: { title: string; items: string[] }) {
@@ -34,19 +34,25 @@ function SummarySection({ title, items }: { title: string; items: string[] }) {
 }
 
 export function ExecutiveSummary() {
+  const [generatedDate, setGeneratedDate] = useState<Date | null>(null);
+
+  useEffect(() => {
+    setGeneratedDate(new Date());
+  }, []);
+
   return (
     <Card>
         <CardContent className="p-6">
             <div className="flex justify-between items-start mb-6">
                 <h2 className="text-lg font-bold text-foreground">Executive Summary</h2>
                 <p className="text-sm text-muted-foreground">
-                    Generated on {format(summaryData.generatedDate, "dd MMMM yyyy")}
+                    {generatedDate ? `Generated on ${format(generatedDate, "dd MMMM yyyy")}` : 'Loading date...'}
                 </p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <SummarySection title="Key Achievements" items={summaryData.keyAchievements} />
-                <SummarySection title="Focus Areas" items={summaryData.focusAreas} />
-                <SummarySection title="Next Actions" items={summaryData.nextActions} />
+                <SummarySection title="Key Achievements" items={summaryStaticData.keyAchievements} />
+                <SummarySection title="Focus Areas" items={summaryStaticData.focusAreas} />
+                <SummarySection title="Next Actions" items={summaryStaticData.nextActions} />
             </div>
         </CardContent>
     </Card>
