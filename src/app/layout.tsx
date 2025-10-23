@@ -23,9 +23,9 @@ export default function RootLayout({
         <div className="flex h-screen w-full overflow-hidden">
           <SidebarProvider>
             <MainSidebar />
-            <div className="flex flex-1 flex-col overflow-y-auto">
+            <div className="flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
               <MainHeader />
-              <main className="flex-1 p-4 md:p-8">
+              <main className="flex-1">
                 {children}
               </main>
               <ChatAssistant />

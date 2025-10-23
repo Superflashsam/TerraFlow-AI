@@ -2,14 +2,33 @@
 "use client";
 
 import React, { useState } from 'react';
-import { Calendar } from '@/components/ui/calendar';
+import { Calendar as CalendarIcon, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { add, eachDayOfInterval, endOfMonth, format, getDay, isEqual, isSameMonth, isToday, startOfMonth, startOfToday } from 'date-fns';
 
 export const LeadCalendarView = ({ leads, onLeadClick }: { leads: any[], onLeadClick: (lead: any) => void }) => {
-  const [date, setDate] = useState<Date | undefined>(new Date());
+  let today = startOfToday()
+  const [selectedDay, setSelectedDay] = useState(today)
+  const [currentMonth, setCurrentMonth] = useState(format(today, 'MMM-yyyy'))
+  let firstDayCurrentMonth = startOfMonth(new Date(currentMonth));
+
+  const days = eachDayOfInterval({
+    start: firstDayCurrentMonth,
+    end: endOfMonth(firstDayCurrentMonth),
+  })
+
+  function previousMonth() {
+    let firstDayNextMonth = add(firstDayCurrentMonth, { months: -1 })
+    setCurrentMonth(format(firstDayNextMonth, 'MMM-yyyy'))
+  }
+
+  function nextMonth() {
+    let firstDayNextMonth = add(firstDayCurrentMonth, { months: 1 })
+    setCurrentMonth(format(firstDayNextMonth, 'MMM-yyyy'))
+  }
 
   const leadsByDate = leads.reduce((acc, lead) => {
     const activityDate = new Date(lead.lastActivity).toDateString();
@@ -19,10 +38,9 @@ export const LeadCalendarView = ({ leads, onLeadClick }: { leads: any[], onLeadC
     acc[activityDate].push(lead);
     return acc;
   }, {} as { [key: string]: any[] });
-
-  const selectedDateString = date?.toDateString();
-  const leadsForSelectedDate = selectedDateString ? leadsByDate[selectedDateString] || [] : [];
   
+  const leadsForSelectedDate = leadsByDate[selectedDay.toDateString()] || [];
+
   const getStageColor = (stage: string) => {
     const colors: { [key: string]: string } = {
         new: 'bg-blue-500',
@@ -34,92 +52,141 @@ export const LeadCalendarView = ({ leads, onLeadClick }: { leads: any[], onLeadC
     };
     return colors[stage] || 'bg-gray-400';
   };
+  
+  const colStartClasses = [
+    '',
+    'col-start-2',
+    'col-start-3',
+    'col-start-4',
+    'col-start-5',
+    'col-start-6',
+    'col-start-7',
+  ]
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-12 gap-6 p-6 h-full">
-      <Card className="md:col-span-7 flex flex-col h-full">
-        <CardHeader>
-          <CardTitle>Leads Calendar</CardTitle>
-        </CardHeader>
-        <CardContent className="flex-grow flex items-center justify-center">
-           <Calendar
-            mode="single"
-            selected={date}
-            onSelect={setDate}
-            className="p-0 h-full w-full"
-            classNames={{
-                root: 'flex flex-col h-full',
-                months: 'flex-1',
-                month: 'flex flex-col h-full',
-                table: 'flex-1 border-collapse',
-                head_row: 'flex',
-                row: 'flex w-full mt-2',
-                day_cell: 'h-auto w-full text-center text-sm p-1 relative [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md',
-                day: 'h-24 w-full p-1 font-normal aria-selected:opacity-100 flex flex-col items-start justify-start',
-            }}
-            components={{
-              DayContent: ({ date }) => {
-                const dailyLeads = leadsByDate[date.toDateString()];
-                return (
-                  <>
-                    <div className="self-start">{date.getDate()}</div>
-                    {dailyLeads && (
-                      <div className="flex flex-wrap mt-1 gap-1">
-                        {dailyLeads.slice(0, 4).map(lead => (
-                           <Avatar key={lead.id} className="h-6 w-6 border-2 border-background">
-                             <AvatarImage src={lead.profileImage} alt={lead.name} />
-                             <AvatarFallback>{lead.name.charAt(0)}</AvatarFallback>
-                           </Avatar>
-                        ))}
-                         {dailyLeads.length > 4 && (
-                          <div className="flex items-center justify-center h-6 w-6 rounded-full bg-muted text-xs">
-                            +{dailyLeads.length - 4}
-                          </div>
-                        )}
-                      </div>
-                    )}
-                  </>
-                );
-              },
-            }}
-          />
-        </CardContent>
-      </Card>
-      <Card className="md:col-span-5 flex flex-col h-full">
-        <CardHeader>
-          <CardTitle>
-            Activities for {date ? date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }) : 'Select a date'}
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="flex-grow overflow-hidden">
-          <ScrollArea className="h-full pr-4">
-            {leadsForSelectedDate.length > 0 ? (
-              <div className="space-y-4">
-                {leadsForSelectedDate.map(lead => (
-                  <div key={lead.id} className="p-3 bg-muted/50 rounded-lg cursor-pointer hover:bg-muted" onClick={() => onLeadClick(lead)}>
-                    <div className="flex items-center justify-between mb-2">
-                       <div className="flex items-center gap-2">
-                         <Avatar className="h-8 w-8">
-                            <AvatarImage src={lead.profileImage} alt={lead.name} />
-                            <AvatarFallback>{lead.name.charAt(0)}</AvatarFallback>
-                         </Avatar>
-                        <span className="font-semibold text-sm">{lead.name}</span>
-                       </div>
-                      <Badge variant="outline" className={`capitalize border-0 ${getStageColor(lead.stage)} text-white`}>{lead.stage}</Badge>
-                    </div>
-                    <p className="text-xs text-muted-foreground font-medium">Next Action: {lead.nextAction}</p>
-                    <p className="text-xs text-muted-foreground mt-1">Last activity: {new Date(lead.lastActivity).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+    <div className="flex-1 px-6 pb-6 overflow-hidden h-full">
+      <div className="h-full grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Calendar Section - 2/3 width */}
+        <div className="lg:col-span-2 bg-card rounded-xl p-6 border border-border overflow-y-auto">
+          <h3 className="text-xl font-semibold mb-6">Leads Calendar</h3>
+          
+          <div className="w-full">
+            {/* Calendar Header with Navigation */}
+            <div className="flex items-center justify-between mb-6">
+              <button className="p-2 hover:bg-muted rounded-lg" onClick={previousMonth}>
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+              <h4 className="text-lg font-medium">{format(firstDayCurrentMonth, 'MMMM yyyy')}</h4>
+              <button className="p-2 hover:bg-muted rounded-lg" onClick={nextMonth}>
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            </div>
+            
+            {/* Calendar Grid */}
+            <div className="w-full">
+              {/* Day Headers */}
+              <div className="grid grid-cols-7 gap-2 mb-2">
+                {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+                  <div key={day} className="text-center text-sm font-medium text-muted-foreground py-2">
+                    {day}
                   </div>
                 ))}
               </div>
-            ) : (
-              <div className="flex items-center justify-center h-full">
-                <p className="text-muted-foreground">No activities for this day.</p>
+              
+              {/* Calendar Days */}
+              <div className="grid grid-cols-7 gap-2">
+                {days.map((day, dayIdx) => {
+                  const dailyLeads = leadsByDate[day.toDateString()];
+                  return (
+                    <div
+                      key={day.toString()}
+                      className={`
+                        aspect-square p-2 rounded-lg text-sm flex flex-col
+                        ${dayIdx === 0 && colStartClasses[getDay(day)]}
+                        ${!isSameMonth(day, firstDayCurrentMonth) && 'text-muted-foreground/50'}
+                        ${isEqual(day, selectedDay) && 'bg-primary/10 ring-2 ring-primary'}
+                        ${!isEqual(day, selectedDay) && isToday(day) && 'bg-accent text-accent-foreground'}
+                        ${!isEqual(day, selectedDay) && !isToday(day) && 'hover:bg-muted'}
+                        transition-all cursor-pointer
+                      `}
+                      onClick={() => setSelectedDay(day)}
+                    >
+                      <div className="flex justify-between items-center">
+                        <time dateTime={format(day, 'yyyy-MM-dd')}>
+                          {format(day, 'd')}
+                        </time>
+                      </div>
+                      {dailyLeads && (
+                        <div className="flex flex-wrap mt-1 gap-1">
+                          {dailyLeads.slice(0, 4).map(lead => (
+                            <Avatar key={lead.id} className="h-6 w-6 border-2 border-background">
+                              <AvatarImage src={lead.profileImage} alt={lead.name} />
+                              <AvatarFallback>{lead.name.charAt(0)}</AvatarFallback>
+                            </Avatar>
+                          ))}
+                          {dailyLeads.length > 4 && (
+                            <div className="flex items-center justify-center h-6 w-6 rounded-full bg-muted text-xs">
+                              +{dailyLeads.length - 4}
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  )
+                })}
               </div>
+            </div>
+            
+            {/* Calendar Legend */}
+            <div className="mt-6 flex items-center gap-4 text-sm">
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 rounded bg-accent"></div>
+                <span className="text-muted-foreground">Today</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 rounded ring-2 ring-primary/50"></div>
+                <span className="text-muted-foreground">Selected Day</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        {/* Activities Section - 1/3 width */}
+        <div className="lg:col-span-1 bg-card rounded-xl p-6 border border-border overflow-y-auto">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-lg font-semibold">Activities</h3>
+            <span className="text-sm text-muted-foreground">{format(selectedDay, "E, MMM d")}</span>
+          </div>
+          
+          <div className="space-y-4">
+            {leadsForSelectedDate.length === 0 ? (
+              <div className="text-center py-12">
+                <div className="w-12 h-12 bg-muted rounded-full flex items-center justify-center mx-auto mb-3">
+                  <CalendarIcon className="w-6 h-6 text-muted-foreground" />
+                </div>
+                <p className="text-muted-foreground text-sm">No activities for this day</p>
+              </div>
+            ) : (
+              leadsForSelectedDate.map(lead => (
+                <div key={lead.id} className="bg-muted/50 rounded-lg p-3 border border-border hover:border-primary/50 cursor-pointer" onClick={() => onLeadClick(lead)}>
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      <Avatar className="h-8 w-8">
+                        <AvatarImage src={lead.profileImage} alt={lead.name} />
+                        <AvatarFallback>{lead.name.charAt(0)}</AvatarFallback>
+                      </Avatar>
+                      <span className="font-semibold text-sm">{lead.name}</span>
+                    </div>
+                    <Badge variant="outline" className={`capitalize border-0 text-white text-xs ${getStageColor(lead.stage)}`}>{lead.stage}</Badge>
+                  </div>
+                  <p className="text-xs text-muted-foreground font-medium">Next Action: {lead.nextAction}</p>
+                  <p className="text-xs text-muted-foreground mt-1">Last activity: {new Date(lead.lastActivity).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                </div>
+              ))
             )}
-          </ScrollArea>
-        </CardContent>
-      </Card>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
