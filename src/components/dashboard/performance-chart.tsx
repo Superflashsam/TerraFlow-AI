@@ -1,0 +1,387 @@
+
+"use client";
+import React, { useState } from "react";
+import {
+  LineChart,
+  Line,
+  AreaChart,
+  Area,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+} from "recharts";
+import {
+  TrendingUp,
+  Users,
+  Building,
+  Download,
+  MoreHorizontal,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardFooter,
+} from "../ui/card";
+
+export const PerformanceChart = () => {
+  const [chartType, setChartType] = useState("sales");
+  const [timeRange, setTimeRange] = useState("6months");
+
+  const salesData = [
+    { month: "Jul", sales: 850000, deals: 12, leads: 45 },
+    { month: "Aug", sales: 920000, deals: 15, leads: 52 },
+    { month: "Sep", sales: 1100000, deals: 18, leads: 48 },
+    { month: "Oct", sales: 980000, deals: 14, leads: 55 },
+    { month: "Nov", sales: 1250000, deals: 20, leads: 62 },
+    { month: "Dec", sales: 1450000, deals: 24, leads: 58 },
+  ];
+
+  const leadConversionData = [
+    { month: "Jul", leads: 45, converted: 12, rate: 26.7 },
+    { month: "Aug", leads: 52, converted: 15, rate: 28.8 },
+    { month: "Sep", leads: 48, converted: 18, rate: 37.5 },
+    { month: "Oct", leads: 55, converted: 14, rate: 25.5 },
+    { month: "Nov", leads: 62, converted: 20, rate: 32.3 },
+    { month: "Dec", leads: 58, converted: 24, rate: 41.4 },
+  ];
+
+  const propertyTypeData = [
+    { name: "Residential", value: 45, color: "hsl(var(--chart-1))" },
+    { name: "Commercial", value: 25, color: "hsl(var(--chart-2))" },
+    { name: "Industrial", value: 20, color: "hsl(var(--chart-3))" },
+    { name: "Land", value: 10, color: "hsl(var(--chart-4))" },
+  ];
+
+  const chartOptions = [
+    { id: "sales", label: "Sales Performance", icon: TrendingUp },
+    { id: "leads", label: "Lead Conversion", icon: Users },
+    { id: "properties", label: "Property Types", icon: Building },
+  ];
+
+  const timeRanges = [
+    { id: "3months", label: "3M" },
+    { id: "6months", label: "6M" },
+    { id: "1year", label: "1Y" },
+    { id: "all", label: "All" },
+  ];
+
+  const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(value);
+  };
+
+  const formatPercentage = (value: number) => {
+    return `${value.toFixed(1)}%`;
+  };
+
+  const CustomTooltip = ({ active, payload, label }: any) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="bg-popover border border-border rounded-lg p-3 shadow-lg">
+          <p className="text-sm font-medium text-popover-foreground mb-2">
+            {label}
+          </p>
+          {payload.map((entry: any, index: number) => (
+            <div key={index} className="flex items-center space-x-2 text-sm">
+              <div
+                className="w-3 h-3 rounded-full"
+                style={{ backgroundColor: entry.color }}
+              ></div>
+              <span className="text-muted-foreground">{entry.name}:</span>
+              <span className="font-medium text-popover-foreground">
+                {entry.name === "Sales"
+                  ? formatCurrency(entry.value)
+                  : entry.name === "Conversion Rate"
+                  ? formatPercentage(entry.value)
+                  : entry.value}
+              </span>
+            </div>
+          ))}
+        </div>
+      );
+    }
+    return null;
+  };
+
+  const renderChart = () => {
+    switch (chartType) {
+      case "sales":
+        return (
+          <ResponsiveContainer width="100%" height={300}>
+            <AreaChart data={salesData}>
+              <defs>
+                <linearGradient id="salesGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop
+                    offset="5%"
+                    stopColor="hsl(var(--primary))"
+                    stopOpacity={0.3}
+                  />
+                  <stop
+                    offset="95%"
+                    stopColor="hsl(var(--primary))"
+                    stopOpacity={0}
+                  />
+                </linearGradient>
+              </defs>
+              <CartesianGrid
+                strokeDasharray="3 3"
+                stroke="hsl(var(--border))"
+              />
+              <XAxis
+                dataKey="month"
+                stroke="hsl(var(--muted-foreground))"
+                fontSize={12}
+              />
+              <YAxis
+                stroke="hsl(var(--muted-foreground))"
+                fontSize={12}
+                tickFormatter={formatCurrency}
+              />
+              <Tooltip content={<CustomTooltip />} />
+              <Area
+                type="monotone"
+                dataKey="sales"
+                stroke="hsl(var(--primary))"
+                strokeWidth={2}
+                fill="url(#salesGradient)"
+                name="Sales"
+              />
+            </AreaChart>
+          </ResponsiveContainer>
+        );
+
+      case "leads":
+        return (
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={leadConversionData}>
+              <CartesianGrid
+                strokeDasharray="3 3"
+                stroke="hsl(var(--border))"
+              />
+              <XAxis
+                dataKey="month"
+                stroke="hsl(var(--muted-foreground))"
+                fontSize={12}
+              />
+              <YAxis
+                yAxisId="left"
+                stroke="hsl(var(--muted-foreground))"
+                fontSize={12}
+              />
+              <YAxis
+                yAxisId="right"
+                orientation="right"
+                stroke="hsl(var(--muted-foreground))"
+                fontSize={12}
+                tickFormatter={(value) => `${value}%`}
+              />
+              <Tooltip content={<CustomTooltip />} />
+              <Bar
+                yAxisId="left"
+                dataKey="leads"
+                fill="hsl(var(--secondary))"
+                name="Total Leads"
+                opacity={0.7}
+              />
+              <Line
+                yAxisId="right"
+                type="monotone"
+                dataKey="rate"
+                stroke="hsl(var(--accent))"
+                strokeWidth={3}
+                dot={{ fill: "hsl(var(--accent))", strokeWidth: 2, r: 4 }}
+                name="Conversion Rate"
+              />
+            </BarChart>
+          </ResponsiveContainer>
+        );
+
+      case "properties":
+        return (
+          <ResponsiveContainer width="100%" height={300}>
+            <PieChart>
+              <Pie
+                data={propertyTypeData}
+                cx="50%"
+                cy="50%"
+                innerRadius={60}
+                outerRadius={100}
+                paddingAngle={5}
+                dataKey="value"
+              >
+                {propertyTypeData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.color} />
+                ))}
+              </Pie>
+              <Tooltip
+                formatter={(value: number) => [`${value}%`, "Percentage"]}
+                contentStyle={{
+                  backgroundColor: "hsl(var(--popover))",
+                  border: "1px solid hsl(var(--border))",
+                  borderRadius: "8px",
+                }}
+              />
+            </PieChart>
+          </ResponsiveContainer>
+        );
+
+      default:
+        return null;
+    }
+  };
+  
+  const ChartIcon =
+    chartOptions.find((o) => o.id === chartType)?.icon || TrendingUp;
+
+  return (
+    <Card>
+      <CardHeader>
+        <div className="flex items-center justify-between mb-4">
+          <CardTitle>Performance Analytics</CardTitle>
+          <div className="flex items-center space-x-2">
+            <Button variant="outline" size="sm">
+              <Download size={16} className="mr-2" />
+              Export
+            </Button>
+            <Button variant="outline" size="icon">
+              <MoreHorizontal size={16} />
+            </Button>
+          </div>
+        </div>
+
+        <div className="flex items-center justify-between">
+          <div className="flex space-x-1 bg-muted rounded-lg p-1">
+            {chartOptions.map((option) => (
+              <button
+                key={option.id}
+                onClick={() => setChartType(option.id)}
+                className={cn(
+                  "flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200",
+                  chartType === option.id
+                    ? "bg-card text-foreground shadow-sm"
+                    : "text-muted-foreground hover:text-foreground"
+                )}
+              >
+                <option.icon size={16} />
+                <span className="hidden sm:inline">{option.label}</span>
+              </button>
+            ))}
+          </div>
+
+          {chartType !== "properties" && (
+            <div className="flex space-x-1 bg-muted rounded-lg p-1">
+              {timeRanges.map((range) => (
+                <button
+                  key={range.id}
+                  onClick={() => setTimeRange(range.id)}
+                  className={cn(
+                    "px-3 py-1 rounded-md text-sm font-medium transition-all duration-200",
+                    timeRange === range.id
+                      ? "bg-card text-foreground shadow-sm"
+                      : "text-muted-foreground hover:text-foreground"
+                  )}
+                >
+                  {range.label}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      </CardHeader>
+
+      <CardContent>{renderChart()}</CardContent>
+
+      {chartType === "properties" && (
+        <CardContent>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            {propertyTypeData.map((item, index) => (
+              <div key={index} className="flex items-center space-x-2">
+                <div
+                  className="w-3 h-3 rounded-full"
+                  style={{ backgroundColor: item.color }}
+                ></div>
+                <span className="text-sm text-foreground">{item.name}</span>
+                <span className="text-sm font-medium text-muted-foreground">
+                  {item.value}%
+                </span>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      )}
+
+      <CardFooter className="border-t pt-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full">
+          {chartType === "sales" && (
+            <>
+              <div className="text-center">
+                <p className="text-2xl font-bold text-foreground">$6.55M</p>
+                <p className="text-sm text-muted-foreground">Total Sales</p>
+              </div>
+              <div className="text-center">
+                <p className="text-2xl font-bold text-foreground">103</p>
+                <p className="text-sm text-muted-foreground">Deals Closed</p>
+              </div>
+              <div className="text-center">
+                <p className="text-2xl font-bold text-green-500">+18.5%</p>
+                <p className="text-sm text-muted-foreground">Growth Rate</p>
+              </div>
+            </>
+          )}
+
+          {chartType === "leads" && (
+            <>
+              <div className="text-center">
+                <p className="text-2xl font-bold text-foreground">320</p>
+                <p className="text-sm text-muted-foreground">Total Leads</p>
+              </div>
+              <div className="text-center">
+                <p className="text-2xl font-bold text-foreground">103</p>
+                <p className="text-sm text-muted-foreground">Converted</p>
+              </div>
+              <div className="text-center">
+                <p className="text-2xl font-bold text-green-500">32.2%</p>
+                <p className="text-sm text-muted-foreground">Avg. Conversion</p>
+              </div>
+            </>
+          )}
+
+          {chartType === "properties" && (
+            <>
+              <div className="text-center">
+                <p className="text-2xl font-bold text-foreground">156</p>
+                <p className="text-sm text-muted-foreground">Active Listings</p>
+              </div>
+              <div className="text-center">
+                <p className="text-2xl font-bold text-foreground">89</p>
+                <p className="text-sm text-muted-foreground">Sold This Month</p>
+              </div>
+              <div className="text-center">
+                <p className="text-2xl font-bold text-green-500">24 days</p>
+                <p className="text-sm text-muted-foreground">
+                  Avg. Days on Market
+                </p>
+              </div>
+            </>
+          )}
+        </div>
+      </CardFooter>
+    </Card>
+  );
+};
