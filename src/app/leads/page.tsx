@@ -38,31 +38,36 @@ export default function LeadsPage() {
       </PageHeader>
 
       <Tabs defaultValue="management" className="w-full">
-        <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3">
-          <TabsTrigger value="management">
+        <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 bg-transparent p-0 h-auto">
+          <TabsTrigger value="management" className="rounded-t-lg rounded-b-none data-[state=active]:bg-background data-[state=inactive]:bg-muted/50 data-[state=active]:shadow-none data-[state=inactive]:border-b">
             <Table className="mr-2"/>
             Leads Management
           </TabsTrigger>
-          <TabsTrigger value="pipeline">
+          <TabsTrigger value="pipeline" className="rounded-t-lg rounded-b-none data-[state=active]:bg-background data-[state=inactive]:bg-muted/50 data-[state=active]:shadow-none data-[state=inactive]:border-b">
             <Target className="mr-2"/>
             Lead Pipeline
           </TabsTrigger>
-          <TabsTrigger value="analytics">
+          <TabsTrigger value="analytics" className="rounded-t-lg rounded-b-none data-[state=active]:bg-background data-[state=inactive]:bg-muted/50 data-[state=active]:shadow-none data-[state=inactive]:border-b">
             <LineChart className="mr-2"/>
             Lead Analytics
           </TabsTrigger>
         </TabsList>
-        <TabsContent value="management" className="mt-6">
-          <LeadsManagement />
+        <TabsContent value="management" className="mt-0 bg-background border-t-0 rounded-b-lg">
+          <div className="p-6">
+            <LeadsManagement />
+          </div>
         </TabsContent>
-        <TabsContent value="pipeline" className="mt-6">
-          <LeadPipelineManager />
+        <TabsContent value="pipeline" className="mt-0 bg-background border-t-0 rounded-b-lg">
+           <div className="overflow-x-auto">
+            <LeadPipelineManager />
+          </div>
         </TabsContent>
-        <TabsContent value="analytics" className="mt-6">
-          <LeadAnalyticsHub />
+        <TabsContent value="analytics" className="mt-0 bg-background border-t-0 rounded-b-lg">
+          <div className="p-6">
+            <LeadAnalyticsHub />
+          </div>
         </TabsContent>
       </Tabs>
     </div>
   );
 }
-
