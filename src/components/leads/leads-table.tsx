@@ -1,3 +1,4 @@
+
 "use client";
 import React, { useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
@@ -186,7 +187,7 @@ const LeadTable = ({
 
   return (
     <>
-      <div className="hidden lg:block overflow-x-auto">
+      <div className="hidden lg:block w-full">
         <table className="w-full">
           <thead className="bg-muted border-b border-border">
             <tr>
