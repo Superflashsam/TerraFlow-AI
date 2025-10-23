@@ -35,7 +35,7 @@ export default function LeadsPage() {
         </div>
       </PageHeader>
 
-      <Tabs defaultValue="management" className="w-full flex-1 flex flex-col">
+      <Tabs defaultValue="management" className="w-full flex-1 flex flex-col overflow-hidden">
         <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 bg-transparent p-0 h-auto gap-2">
           <TabsTrigger value="management" className={cn(
               "flex items-center justify-center gap-2 rounded-lg p-4 font-semibold text-foreground/80 transition-all",
@@ -62,18 +62,14 @@ export default function LeadsPage() {
             Lead Analytics
           </TabsTrigger>
         </TabsList>
-        <TabsContent value="management" className="mt-4 bg-card border-t-0 rounded-b-lg shadow-md flex-1 overflow-y-auto">
-          <div className="p-6">
-            <LeadsManagement />
-          </div>
+        <TabsContent value="management" className="mt-4 flex-1 overflow-hidden">
+          <LeadsManagement />
         </TabsContent>
         <TabsContent value="pipeline" className="mt-4 flex-1 flex flex-col overflow-hidden">
             <LeadPipelineManager />
         </TabsContent>
-        <TabsContent value="analytics" className="mt-4 bg-card border-t-0 rounded-b-lg shadow-md flex-1 overflow-y-auto">
-          <div className="p-6">
+        <TabsContent value="analytics" className="mt-4 flex-1 overflow-y-auto">
             <LeadAnalyticsHub />
-          </div>
         </TabsContent>
       </Tabs>
     </div>

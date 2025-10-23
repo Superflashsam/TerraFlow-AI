@@ -187,49 +187,45 @@ export const LeadsManagement = () => {
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-    <div className="lg:col-span-1">
-      <LeadFilters
-        onFiltersChange={handleFiltersChange}
-        onClearFilters={handleClearFilters}
-      />
-    </div>
+    <div className="flex-1 flex overflow-hidden">
+        <aside className="flex-shrink-0 w-80 border-r border-border overflow-y-auto">
+          <LeadFilters
+            onFiltersChange={handleFiltersChange}
+            onClearFilters={handleClearFilters}
+          />
+        </aside>
 
-    <div className="lg:col-span-3">
-      <div className="bg-card border border-border rounded-lg shadow-sm">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-4 border-b border-border">
-          <div className="flex items-center space-x-4 mb-4 sm:mb-0">
-            <h2 className="text-lg font-semibold text-foreground">
-              All Leads ({mockLeads.length})
-            </h2>
-            {selectedLeads.length > 0 && (
-              <BulkActionsDropdown
-                selectedCount={selectedLeads.length}
-                onAction={handleBulkAction}
-              />
-            )}
-          </div>
+        <div className="flex-1 flex flex-col overflow-hidden">
+            <div className="flex-shrink-0 px-6 py-4 border-b border-border">
+                <div className="flex items-center justify-between">
+                <h2 className="text-xl font-semibold">All Leads ({mockLeads.length})</h2>
+                
+                <div className="flex items-center gap-3">
+                    <BulkActionsDropdown
+                        selectedCount={selectedLeads.length}
+                        onAction={handleBulkAction}
+                    />
+                    <Button variant="outline" size="sm">
+                        <RefreshCw className="mr-2 h-4 w-4" />
+                        Refresh
+                    </Button>
+                    <Button variant="outline" size="sm">
+                        <Settings className="mr-2 h-4 w-4" />
+                        Columns
+                    </Button>
+                </div>
+                </div>
+            </div>
 
-          <div className="flex items-center space-x-2">
-            <Button variant="outline" size="sm">
-              <RefreshCw className="mr-2" />
-              Refresh
-            </Button>
-            <Button variant="outline" size="sm">
-              <Settings className="mr-2" />
-              Columns
-            </Button>
-          </div>
+            <div className="flex-1 overflow-y-auto">
+                <LeadTable
+                leads={mockLeads}
+                selectedLeads={selectedLeads}
+                onSelectionChange={handleSelectionChange}
+                filters={filters}
+                />
+            </div>
         </div>
-
-        <LeadTable
-          leads={mockLeads}
-          selectedLeads={selectedLeads}
-          onSelectionChange={handleSelectionChange}
-          filters={filters}
-        />
-      </div>
     </div>
-  </div>
   );
 };

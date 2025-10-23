@@ -84,7 +84,7 @@ export const LeadAnalyticsHub = () => {
 
   if (isLoading) {
     return (
-      <div className="space-y-6">
+      <div className="space-y-6 p-6">
         <Skeleton className="h-40 w-full" />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
             {[...Array(6)].map((_, i) => (
@@ -105,7 +105,7 @@ export const LeadAnalyticsHub = () => {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 p-6">
         <FilterControls onFiltersChange={handleFiltersChange} />
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
@@ -133,18 +133,6 @@ export const LeadAnalyticsHub = () => {
         </div>
 
         <LeadJourneyMap />
-
-        <div className="fixed bottom-6 right-6 z-50">
-            <div className="bg-card rounded-lg shadow-lg border border-border p-4 max-w-sm">
-            <div className="flex items-center space-x-3">
-                <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-                <div>
-                <p className="text-sm font-medium text-foreground">Live Updates Active</p>
-                <p className="text-xs text-muted-foreground">Last sync: {lastUpdated.toLocaleTimeString()}</p>
-                </div>
-            </div>
-            </div>
-        </div>
     </div>
   );
 };
