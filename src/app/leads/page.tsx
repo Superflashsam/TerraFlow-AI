@@ -4,7 +4,6 @@
 import {
   PlusCircle,
   Upload,
-  LayoutGrid,
   RefreshCw,
   Settings,
   LineChart,
@@ -17,6 +16,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { LeadAnalyticsHub } from '@/components/leads/analytics/lead-analytics-hub';
 import { LeadPipelineManager } from '@/components/leads/pipeline/lead-pipeline-manager';
 import { LeadsManagement } from '@/components/leads/leads-management';
+import { cn } from '@/lib/utils';
 
 export default function LeadsPage() {
   return (
@@ -38,31 +38,43 @@ export default function LeadsPage() {
       </PageHeader>
 
       <Tabs defaultValue="management" className="w-full">
-        <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 bg-transparent p-0 h-auto">
-          <TabsTrigger value="management" className="rounded-t-lg rounded-b-none data-[state=active]:bg-background data-[state=inactive]:bg-muted/50 data-[state=active]:shadow-none data-[state=inactive]:border-b">
+        <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 bg-transparent p-0 h-auto gap-2">
+          <TabsTrigger value="management" className={cn(
+              "flex items-center justify-center gap-2 rounded-lg p-4 font-semibold text-foreground/80 transition-all",
+              "data-[state=inactive]:bg-muted/50 data-[state=inactive]:shadow-inner data-[state=inactive]:hover:bg-muted",
+              "data-[state=active]:bg-card data-[state=active]:text-primary data-[state=active]:shadow-md"
+            )}>
             <Table className="mr-2"/>
             Leads Management
           </TabsTrigger>
-          <TabsTrigger value="pipeline" className="rounded-t-lg rounded-b-none data-[state=active]:bg-background data-[state=inactive]:bg-muted/50 data-[state=active]:shadow-none data-[state=inactive]:border-b">
+          <TabsTrigger value="pipeline" className={cn(
+              "flex items-center justify-center gap-2 rounded-lg p-4 font-semibold text-foreground/80 transition-all",
+              "data-[state=inactive]:bg-muted/50 data-[state=inactive]:shadow-inner data-[state=inactive]:hover:bg-muted",
+              "data-[state=active]:bg-card data-[state=active]:text-primary data-[state=active]:shadow-md"
+            )}>
             <Target className="mr-2"/>
             Lead Pipeline
           </TabsTrigger>
-          <TabsTrigger value="analytics" className="rounded-t-lg rounded-b-none data-[state=active]:bg-background data-[state=inactive]:bg-muted/50 data-[state=active]:shadow-none data-[state=inactive]:border-b">
+          <TabsTrigger value="analytics" className={cn(
+              "flex items-center justify-center gap-2 rounded-lg p-4 font-semibold text-foreground/80 transition-all",
+              "data-[state=inactive]:bg-muted/50 data-[state=inactive]:shadow-inner data-[state=inactive]:hover:bg-muted",
+              "data-[state=active]:bg-card data-[state=active]:text-primary data-[state=active]:shadow-md"
+            )}>
             <LineChart className="mr-2"/>
             Lead Analytics
           </TabsTrigger>
         </TabsList>
-        <TabsContent value="management" className="mt-0 bg-background border-t-0 rounded-b-lg">
+        <TabsContent value="management" className="mt-4 bg-card border-t-0 rounded-b-lg shadow-md">
           <div className="p-6">
             <LeadsManagement />
           </div>
         </TabsContent>
-        <TabsContent value="pipeline" className="mt-0 bg-background border-t-0 rounded-b-lg">
-           <div className="overflow-x-auto">
+        <TabsContent value="pipeline" className="mt-4 bg-card border-t-0 rounded-b-lg shadow-md h-[calc(100vh-22rem)]">
+           <div className="overflow-auto h-full">
             <LeadPipelineManager />
           </div>
         </TabsContent>
-        <TabsContent value="analytics" className="mt-0 bg-background border-t-0 rounded-b-lg">
+        <TabsContent value="analytics" className="mt-4 bg-card border-t-0 rounded-b-lg shadow-md">
           <div className="p-6">
             <LeadAnalyticsHub />
           </div>

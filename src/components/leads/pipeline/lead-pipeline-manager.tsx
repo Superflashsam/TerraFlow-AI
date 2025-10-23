@@ -6,6 +6,7 @@ import { PipelineBoard } from './pipeline-board';
 import { PipelineStage } from './pipeline-stage';
 import { LeadDetailsPanel } from './lead-details-panel';
 import { StageMetrics } from './stage-metrics';
+import { LeadCalendarView } from './lead-calendar-view';
 
 export const LeadPipelineManager = () => {
   const [leads, setLeads] = useState<any[]>([]);
@@ -191,19 +192,22 @@ export const LeadPipelineManager = () => {
     setFilters(newFilters);
   };
 
-  const getLeadsByStage = (stageId: string) => {
+  const filteredLeads = React.useMemo(() => {
     return leads.filter((lead) => {
-      if (lead.stage !== stageId) return false;
       if (filters.search && !lead.name.toLowerCase().includes(filters.search.toLowerCase()) && !lead.company.toLowerCase().includes(filters.search.toLowerCase())) return false;
       if (filters.assignee !== 'all' && lead.assignee !== filters.assignee) return false;
       if (filters.source !== 'all' && lead.source !== filters.source) return false;
       if (filters.priority !== 'all' && lead.priority !== filters.priority) return false;
       return true;
     });
+  }, [leads, filters]);
+
+  const getLeadsByStage = (stageId: string) => {
+    return filteredLeads.filter((lead) => lead.stage === stageId);
   };
 
   const getStageMetrics = (stageId: string) => {
-    const stageLeads = leads.filter((lead) => lead.stage === stageId);
+    const stageLeads = filteredLeads.filter((lead) => lead.stage === stageId);
     const totalValue = stageLeads.reduce((sum, lead) => {
       const value = parseFloat(lead.dealValue.replace(/[₹,\s]/g, '').replace('Cr', ''));
       return sum + (isNaN(value) ? 0 : value);
@@ -221,12 +225,12 @@ export const LeadPipelineManager = () => {
   };
 
   return (
-    <div className="flex flex-col h-full bg-background">
+    <div className="flex flex-col h-full bg-card">
       <PipelineHeader
         viewMode={viewMode}
         onViewModeChange={setViewMode}
         onFiltersChange={handleFiltersChange}
-        totalLeads={leads.length}
+        totalLeads={filteredLeads.length}
       />
       <StageMetrics
         stages={pipelineStages}
@@ -248,7 +252,10 @@ export const LeadPipelineManager = () => {
               )}
             </PipelineBoard>
           }
-           {viewMode !== 'board' && <div className="p-8 text-center text-muted-foreground">This view is not yet available.</div>}
+           {viewMode === 'calendar' && 
+             <LeadCalendarView leads={filteredLeads} onLeadClick={handleLeadClick} />
+           }
+           {viewMode === 'list' && <div className="p-8 text-center text-muted-foreground">This view is not yet available.</div>}
         </div>
 
         {isPanelOpen &&
