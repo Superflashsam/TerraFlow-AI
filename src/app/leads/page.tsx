@@ -62,7 +62,7 @@ export default function LeadsPage() {
             Lead Analytics
           </TabsTrigger>
         </TabsList>
-        <TabsContent value="management" className="mt-4 flex-1 flex flex-col overflow-hidden">
+        <TabsContent value="management" className="flex-1 overflow-hidden">
           <LeadsManagement />
         </TabsContent>
         <TabsContent value="pipeline" className="mt-4 flex-1 flex flex-col overflow-hidden">
