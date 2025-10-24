@@ -243,7 +243,7 @@ export const LeadsManagement = () => {
   return (
     <div className="flex-1 flex overflow-hidden">
       {/* Left Sidebar - Filters */}
-      <aside className="flex-shrink-0 w-80 border-r border-border overflow-y-auto">
+      <aside className="w-80 flex-shrink-0 border-r border-border overflow-y-auto">
         <LeadFilters
           onFiltersChange={handleFiltersChange}
           onClearFilters={handleClearFilters}

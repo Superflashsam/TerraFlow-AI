@@ -340,4 +340,3 @@ const LeadTable = ({
 };
 
 export { LeadTable };
-
