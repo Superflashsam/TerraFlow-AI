@@ -50,24 +50,24 @@ const LeadTable = ({
       );
     }
     
-    if (filters.source) {
+    if (filters.source && filters.source !== 'all') {
       filtered = filtered.filter(lead => lead.source === filters.source);
     }
 
-    if (filters.scoreRange) {
+    if (filters.scoreRange && filters.scoreRange !== 'all') {
       const [min, max] = filters.scoreRange.split('-').map(Number);
       filtered = filtered.filter(lead => lead.aiScore >= min && lead.aiScore <= max);
     }
 
-    if (filters.propertyType) {
+    if (filters.propertyType && filters.propertyType !== 'all') {
       filtered = filtered.filter(lead => lead.propertyInterest === filters.propertyType);
     }
 
-    if (filters.location) {
+    if (filters.location && filters.location !== 'all') {
       filtered = filtered.filter(lead => lead.location === filters.location);
     }
 
-    if (filters.status) {
+    if (filters.status && filters.status !== 'all') {
       filtered = filtered.filter(lead => lead.status === filters.status);
     }
 
@@ -185,7 +185,7 @@ const LeadTable = ({
 
   return (
     <>
-      <div className="overflow-y-auto flex-1">
+      <div className="overflow-y-auto">
         <table className="w-full">
           <thead className="bg-muted/50 border-b border-border sticky top-0">
             <tr>
@@ -337,5 +337,3 @@ const LeadTable = ({
     </>
   );
 };
-
-export { LeadTable };

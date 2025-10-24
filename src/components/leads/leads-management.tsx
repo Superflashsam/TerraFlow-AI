@@ -9,16 +9,10 @@ import {
   CheckCircle,
   Trophy,
   Users,
-  LayoutGrid,
-  Table as TableIcon,
-  FileDown,
-  PlusCircle
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { LeadFilters } from '@/components/leads/lead-filters';
 import { LeadTable } from '@/components/leads/leads-table';
 import { Card, CardContent } from '@/components/ui/card';
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 
 interface Lead {
   id: string;
@@ -103,10 +97,6 @@ export const LeadsManagement = () => {
     fetchLeads();
   }, []);
 
-  const handleFiltersChange = (newFilters: FilterState) => {
-    setFilters(newFilters);
-  };
-
   const handleClearFilters = () => {
     setFilters({ source: '', scoreRange: '', propertyType: '', location: '', status: '', dateRange: '', searchQuery: '' });
   };
@@ -146,7 +136,7 @@ export const LeadsManagement = () => {
   };
 
   return (
-    <div className="flex flex-col flex-1 overflow-hidden h-full gap-4">
+    <div className="flex flex-col flex-1 h-full gap-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <KPICard title="Total Leads" value={kpiData.totalLeads.toString()} change="+12% from last month" icon={Users} />
             <KPICard title="Hot Leads" value={kpiData.hotLeads.toString()} change="+8% from last week" icon={Flame} />
@@ -154,55 +144,46 @@ export const LeadsManagement = () => {
             <KPICard title="Closed Won" value={kpiData.closedWon.toString()} change="$2.4M revenue" icon={Trophy} />
         </div>
 
-        <div className="flex flex-1 overflow-hidden gap-4">
-            <aside className="w-80 flex-shrink-0">
-                <LeadFilters
-                    onFiltersChange={handleFiltersChange}
-                    onClearFilters={handleClearFilters}
-                />
-            </aside>
-
-            <div className="flex-1 flex flex-col overflow-hidden bg-card border rounded-lg">
-                <div className="flex-shrink-0 px-6 py-4 border-b border-border">
-                    <div className="flex items-center justify-between">
-                        <h2 className="text-lg font-semibold">
-                            All Leads ({isLoading ? '...' : leads.length})
-                        </h2>
-                        <div className="flex items-center gap-3">
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={handleRefresh}
-                                disabled={isLoading}
-                            >
-                                <RefreshCw className={`mr-2 h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
-                                Refresh
-                            </Button>
-                            <Button variant="outline" size="sm">
-                                <Settings className="mr-2 h-4 w-4" />
-                                Columns
-                            </Button>
-                        </div>
+        <div className="flex-1 flex flex-col overflow-hidden bg-card border rounded-lg">
+            <div className="flex-shrink-0 px-6 py-4 border-b border-border">
+                <div className="flex items-center justify-between">
+                    <h2 className="text-lg font-semibold">
+                        All Leads ({isLoading ? '...' : leads.length})
+                    </h2>
+                    <div className="flex items-center gap-3">
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={handleRefresh}
+                            disabled={isLoading}
+                        >
+                            <RefreshCw className={`mr-2 h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
+                            Refresh
+                        </Button>
+                        <Button variant="outline" size="sm">
+                            <Settings className="mr-2 h-4 w-4" />
+                            Columns
+                        </Button>
                     </div>
                 </div>
-
-                {isLoading ? (
-                    <div className="flex-1 flex items-center justify-center">
-                        <div className="text-center">
-                            <RefreshCw className="h-8 w-8 animate-spin mx-auto mb-4 text-primary" />
-                            <p className="text-muted-foreground">Loading leads...</p>
-                        </div>
-                    </div>
-                ) : (
-                    <LeadTable
-                        leads={leads}
-                        selectedLeads={selectedLeads}
-                        onSelectionChange={handleSelectionChange}
-                        filters={filters}
-                        onClearFilters={handleClearFilters}
-                    />
-                )}
             </div>
+
+            {isLoading ? (
+                <div className="flex-1 flex items-center justify-center">
+                    <div className="text-center">
+                        <RefreshCw className="h-8 w-8 animate-spin mx-auto mb-4 text-primary" />
+                        <p className="text-muted-foreground">Loading leads...</p>
+                    </div>
+                </div>
+            ) : (
+                <LeadTable
+                    leads={leads}
+                    selectedLeads={selectedLeads}
+                    onSelectionChange={handleSelectionChange}
+                    filters={filters}
+                    onClearFilters={handleClearFilters}
+                />
+            )}
         </div>
     </div>
   );
