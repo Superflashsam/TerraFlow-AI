@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState } from 'react';
@@ -5,10 +6,28 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Search, Plus, List, Grid, ArrowUpDown, Filter } from 'lucide-react';
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import { Label } from '@/components/ui/label';
 
-export const FilterHeader = ({ onFiltersChange, onCreateProperty, propertiesCount, selectedCount, viewMode, onViewModeChange }: { onFiltersChange: any, onCreateProperty: any, propertiesCount: number, selectedCount: number, viewMode: string, onViewModeChange: (mode: string) => void }) => {
+export const FilterHeader = ({ 
+  onFiltersChange, 
+  onCreateProperty, 
+  propertiesCount, 
+  selectedCount, 
+  viewMode, 
+  onViewModeChange,
+  onSortChange,
+  sortConfig
+}: { 
+  onFiltersChange: any, 
+  onCreateProperty: any, 
+  propertiesCount: number, 
+  selectedCount: number, 
+  viewMode: string, 
+  onViewModeChange: (mode: string) => void,
+  onSortChange: (config: {key: string, direction: string}) => void,
+  sortConfig: {key: string, direction: string}
+}) => {
   const [filters, setFilters] = useState({
     status: 'all',
     propertyType: 'all',
@@ -46,6 +65,14 @@ export const FilterHeader = ({ onFiltersChange, onCreateProperty, propertiesCoun
     { value: '50-100', label: '₹50L - ₹1Cr' },
     { value: '100-200', label: '₹1Cr - ₹2Cr' },
     { value: '200+', label: 'Above ₹2Cr' }
+  ];
+
+  const sortOptions = [
+    { label: 'Date Listed: Newest', key: 'listingDate', direction: 'desc' },
+    { label: 'Date Listed: Oldest', key: 'listingDate', direction: 'asc' },
+    { label: 'Price: High to Low', key: 'price', direction: 'desc' },
+    { label: 'Price: Low to High', key: 'price', direction: 'asc' },
+    { label: 'Views: Most to Least', key: 'views', direction: 'desc' },
   ];
 
   return (
@@ -138,10 +165,27 @@ export const FilterHeader = ({ onFiltersChange, onCreateProperty, propertiesCoun
             </button>
           </div>
 
-          <Button variant="outline" className="flex items-center space-x-2">
-            <ArrowUpDown size={16} />
-            <span>Sort</span>
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="flex items-center space-x-2">
+                <ArrowUpDown size={16} />
+                <span>Sort</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuLabel>Sort by</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              {sortOptions.map(option => (
+                <DropdownMenuItem 
+                  key={option.label}
+                  onClick={() => onSortChange({ key: option.key, direction: option.direction })}
+                  className={sortConfig.key === option.key && sortConfig.direction === option.direction ? 'bg-accent' : ''}
+                >
+                  {option.label}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </div>

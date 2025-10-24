@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useEffect } from 'react';
@@ -34,6 +35,8 @@ export default function PropertiesPage() {
     searchQuery: ''
   });
 
+  const [sortConfig, setSortConfig] = useState({ key: 'listingDate', direction: 'desc' });
+
   useEffect(() => {
     let filtered = [...properties];
 
@@ -59,8 +62,33 @@ export default function PropertiesPage() {
       );
     }
 
+    if (sortConfig.key) {
+      filtered.sort((a, b) => {
+        let aValue, bValue;
+        
+        if (sortConfig.key === 'price') {
+          aValue = parseInt(a.price.replace(/[^0-9]/g, ''), 10);
+          bValue = parseInt(b.price.replace(/[^0-9]/g, ''), 10);
+        } else if (sortConfig.key === 'listingDate') {
+          aValue = new Date(a.listingDate).getTime();
+          bValue = new Date(b.listingDate).getTime();
+        } else {
+          aValue = a[sortConfig.key];
+          bValue = b[sortConfig.key];
+        }
+
+        if (aValue < bValue) {
+          return sortConfig.direction === 'asc' ? -1 : 1;
+        }
+        if (aValue > bValue) {
+          return sortConfig.direction === 'asc' ? 1 : -1;
+        }
+        return 0;
+      });
+    }
+
     setFilteredProperties(filtered);
-  }, [filters, properties]);
+  }, [filters, properties, sortConfig]);
 
   const handlePropertySelect = (propertyId: string) => {
     const newSelected = new Set(selectedProperties);
@@ -130,6 +158,8 @@ export default function PropertiesPage() {
           selectedCount={selectedProperties.length}
           viewMode={viewMode}
           onViewModeChange={setViewMode}
+          onSortChange={setSortConfig}
+          sortConfig={sortConfig}
         />
 
         <div className="bg-card border-b border-border">
