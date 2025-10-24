@@ -11,7 +11,7 @@ import { LeadContextMenu } from './lead-context-menu';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 
 
-const LeadTable = ({
+export const LeadTable = ({
   leads,
   selectedLeads,
   onSelectionChange,
