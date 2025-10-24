@@ -128,7 +128,7 @@ const LeadFilters = ({
   );
 
   return (
-    <div className="bg-card border border-border rounded-lg h-full flex flex-col">
+    <div className="bg-card border border-border rounded-lg flex flex-col">
       <div className="flex items-center justify-between p-4 border-b border-border">
         <div className="flex items-center space-x-2">
           <Filter size={16} className="text-muted-foreground" />
@@ -161,7 +161,7 @@ const LeadFilters = ({
             />
       </div>
 
-      <Accordion type="multiple" defaultValue={["Lead Source", "AI Lead Score", "Property Type", "Location", "Status", "Last Contact"]} className="w-full overflow-y-auto flex-1">
+      <Accordion type="multiple" defaultValue={["Lead Source", "AI Lead Score", "Property Type", "Location", "Status", "Last Contact"]} className="w-full">
         <FilterSection title="Lead Source">
             <Select onValueChange={(value) => handleFilterChange('source', value)} value={filters.source}>
                 <SelectTrigger className="text-xs"><SelectValue placeholder="All sources" /></SelectTrigger>

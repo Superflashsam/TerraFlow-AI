@@ -152,7 +152,7 @@ export const LeadsManagement = () => {
   };
 
   return (
-    <div className="flex flex-col flex-1 h-full gap-4">
+    <div className="flex flex-col gap-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <KPICard title="Total Leads" value={kpiData.totalLeads.toString()} change="+12% from last month" icon={Users} />
             <KPICard title="Hot Leads" value={kpiData.hotLeads.toString()} change="+8% from last week" icon={Flame} changeType="negative" />
@@ -160,14 +160,14 @@ export const LeadsManagement = () => {
             <KPICard title="Closed Won" value={kpiData.closedWon.toString()} change="$2.4M revenue" icon={Trophy} />
         </div>
         
-        <div className="flex flex-1 overflow-hidden gap-4">
+        <div className="flex gap-4">
             <aside className="w-80 flex-shrink-0">
                 <LeadFilters 
                     onFiltersChange={handleFiltersChange}
                     onClearFilters={handleClearFilters}
                 />
             </aside>
-            <div className="flex-1 flex flex-col overflow-hidden">
+            <div className="flex-1 flex flex-col">
                  <div className="flex-shrink-0 px-6 py-4 border-b border-border bg-card rounded-t-lg">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-4">
@@ -196,9 +196,9 @@ export const LeadsManagement = () => {
                         </div>
                     </div>
                 </div>
-                 <div className="flex-1 overflow-y-auto bg-card rounded-b-lg">
+                 <div className="bg-card rounded-b-lg">
                     {isLoading ? (
-                        <div className="flex-1 flex items-center justify-center">
+                        <div className="flex-1 flex items-center justify-center p-10">
                             <div className="text-center">
                                 <RefreshCw className="h-8 w-8 animate-spin mx-auto mb-4 text-primary" />
                                 <p className="text-muted-foreground">Loading leads...</p>

@@ -185,7 +185,7 @@ export const LeadTable = ({
 
   return (
     <>
-      <div className="overflow-y-auto">
+      <div>
         <table className="w-full">
           <thead className="bg-muted/50 border-b border-border sticky top-0">
             <tr>
