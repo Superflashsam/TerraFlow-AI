@@ -9,7 +9,7 @@ import { PhotoManager } from '@/components/properties/photo-manager';
 import { PerformanceDashboard } from '@/components/properties/performance-dashboard';
 import { AddPropertyModal } from '@/components/properties/add-property-modal';
 import { properties as mockPropertiesData } from '@/lib/placeholder-data';
-import { Home, BarChart3, Camera } from 'lucide-react';
+import { Home, BarChart3, Camera, Users, List, Table } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const tabs = [
@@ -25,6 +25,7 @@ export default function PropertiesPage() {
   const [showEditor, setShowEditor] = useState(false);
   const [editingProperty, setEditingProperty] = useState(null);
   const [activeTab, setActiveTab] = useState('listings');
+  const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'list'
 
   const [filters, setFilters] = useState({
     status: 'all',
@@ -41,6 +42,14 @@ export default function PropertiesPage() {
     }
     if (filters?.propertyType && filters?.propertyType !== 'all') {
       filtered = filtered?.filter(prop => prop?.type.toLowerCase() === filters?.propertyType);
+    }
+    if(filters.priceRange && filters.priceRange !== 'all') {
+      const [min, max] = filters.priceRange.split('-').map(p => parseInt(p, 10));
+      filtered = filtered.filter(prop => {
+        const price = parseInt(prop.price.replace(/[^0-9]/g, ''), 10);
+        if(filters.priceRange.includes('+')) return price >= min;
+        return price >= min * 100000 && price <= max * 100000;
+      })
     }
     if (filters.searchQuery && filters.searchQuery.trim()) {
       const query = filters.searchQuery.toLowerCase();
@@ -119,6 +128,8 @@ export default function PropertiesPage() {
           onCreateProperty={handleCreateProperty}
           propertiesCount={filteredProperties.length}
           selectedCount={selectedProperties.length}
+          viewMode={viewMode}
+          onViewModeChange={setViewMode}
         />
 
         <div className="bg-card border-b border-border">
@@ -166,22 +177,65 @@ export default function PropertiesPage() {
                     Select all ({filteredProperties.length} properties)
                   </label>
                 </div>
-                <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-                  {filteredProperties.map((property) => (
-                    <PropertyCard
-                      key={property.id}
-                      property={property}
-                      isSelected={selectedProperties.includes(property.id.toString())}
-                      onSelect={() => handlePropertySelect(property.id.toString())}
-                      onEdit={() => handleEditProperty(property)}
-                    />
-                  ))}
-                </div>
+
+                {viewMode === 'grid' ? (
+                  <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+                    {filteredProperties.map((property) => (
+                      <PropertyCard
+                        key={property.id}
+                        property={property}
+                        isSelected={selectedProperties.includes(property.id.toString())}
+                        onSelect={() => handlePropertySelect(property.id.toString())}
+                        onEdit={() => handleEditProperty(property)}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="bg-card border border-border rounded-lg">
+                    <table className="w-full">
+                       <thead className="bg-muted/50">
+                          <tr>
+                            <th className="p-4 text-left font-medium text-muted-foreground"><Table /></th>
+                            <th className="p-4 text-left font-medium text-muted-foreground">Property</th>
+                            <th className="p-4 text-left font-medium text-muted-foreground">Price</th>
+                            <th className="p-4 text-left font-medium text-muted-foreground">Status</th>
+                            <th className="p-4 text-left font-medium text-muted-foreground">Agent</th>
+                          </tr>
+                       </thead>
+                       <tbody>
+                        {filteredProperties.map((property) => (
+                           <tr key={property.id} className="border-b border-border last:border-b-0 hover:bg-muted/50">
+                             <td className="p-4">
+                                <input
+                                  type="checkbox"
+                                  checked={selectedProperties.includes(property.id.toString())}
+                                  onChange={() => handlePropertySelect(property.id.toString())}
+                                  className="rounded border-border text-primary focus:ring-primary"
+                                />
+                             </td>
+                              <td className="p-4">
+                                <div className="font-medium text-foreground">{property.title}</div>
+                                <div className="text-sm text-muted-foreground">{property.address}</div>
+                              </td>
+                             <td className="p-4 font-medium text-primary">{property.price}</td>
+                             <td className="p-4">{property.status}</td>
+                             <td className="p-4">{property.agent}</td>
+                           </tr>
+                        ))}
+                       </tbody>
+                    </table>
+                  </div>
+                )}
+                
                 {filteredProperties.length === 0 && (
                   <div className="text-center py-12">
-                    <div className="text-muted-foreground mb-4">
-                      No properties found matching your criteria
+                    <div className="w-16 h-16 bg-muted text-muted-foreground rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Users size={32} />
                     </div>
+                    <h3 className="text-lg font-medium text-foreground mb-2">No Properties Found</h3>
+                    <p className="text-muted-foreground mb-4">
+                      No properties found matching your criteria. Try adjusting the filters.
+                    </p>
                     <Button
                       onClick={handleCreateProperty}
                     >

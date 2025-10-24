@@ -8,7 +8,7 @@ import { Search, Plus, List, Grid, ArrowUpDown, Filter } from 'lucide-react';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
 import { Label } from '@/components/ui/label';
 
-export const FilterHeader = ({ onFiltersChange, onCreateProperty, propertiesCount, selectedCount }: { onFiltersChange: any, onCreateProperty: any, propertiesCount: number, selectedCount: number }) => {
+export const FilterHeader = ({ onFiltersChange, onCreateProperty, propertiesCount, selectedCount, viewMode, onViewModeChange }: { onFiltersChange: any, onCreateProperty: any, propertiesCount: number, selectedCount: number, viewMode: string, onViewModeChange: (mode: string) => void }) => {
   const [filters, setFilters] = useState({
     status: 'all',
     propertyType: 'all',
@@ -124,10 +124,16 @@ export const FilterHeader = ({ onFiltersChange, onCreateProperty, propertiesCoun
           </DropdownMenu>
 
           <div className="flex items-center bg-muted rounded-lg p-1">
-            <button className="p-2 rounded text-primary bg-background shadow-sm">
+            <button 
+              onClick={() => onViewModeChange('grid')}
+              className={`p-2 rounded ${viewMode === 'grid' ? 'text-primary bg-background shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
+            >
               <Grid size={16} />
             </button>
-            <button className="p-2 rounded text-muted-foreground hover:text-foreground">
+            <button 
+              onClick={() => onViewModeChange('list')}
+              className={`p-2 rounded ${viewMode === 'list' ? 'text-primary bg-background shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
+            >
               <List size={16} />
             </button>
           </div>
