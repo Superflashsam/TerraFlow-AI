@@ -12,16 +12,16 @@ export const LeadCard = ({ lead, onClick }: { lead: any, onClick: (lead: any) =>
 
   const getPriorityClasses = (priority: string) => {
     switch (priority) {
-      case 'high': return 'border-red-400 bg-red-50';
-      case 'medium': return 'border-yellow-400 bg-yellow-50';
-      case 'low': return 'border-green-400 bg-green-50';
-      default: return 'border-gray-300 bg-card';
+      case 'high': return 'border-destructive bg-destructive/10';
+      case 'medium': return 'border-yellow-500 bg-yellow-500/10';
+      case 'low': return 'border-green-500 bg-green-500/10';
+      default: return 'border-border bg-card';
     }
   };
 
   const getPriorityIcon = (priority: string) => {
     switch (priority) {
-      case 'high': return <AlertTriangle size={14} className="text-red-500"/>;
+      case 'high': return <AlertTriangle size={14} className="text-destructive"/>;
       case 'medium': return <Clock size={14} className="text-yellow-500"/>;
       case 'low': return <CheckCircle size={14} className="text-green-500"/>;
       default: return <Circle size={14} />;
@@ -29,9 +29,9 @@ export const LeadCard = ({ lead, onClick }: { lead: any, onClick: (lead: any) =>
   };
 
   const getLeadScoreColor = (score: number) => {
-    if (score >= 80) return 'text-green-600 bg-green-100';
-    if (score >= 60) return 'text-yellow-600 bg-yellow-100';
-    return 'text-red-600 bg-red-100';
+    if (score >= 80) return 'text-green-400 bg-green-500/10';
+    if (score >= 60) return 'text-yellow-400 bg-yellow-500/10';
+    return 'text-red-400 bg-red-500/10';
   };
 
   const formatDealValue = (value: string) => {
@@ -110,7 +110,7 @@ export const LeadCard = ({ lead, onClick }: { lead: any, onClick: (lead: any) =>
         </div>
       </div>
 
-      <div className="flex items-center justify-between pt-2 border-t border-border">
+      <div className="flex items-center justify-between pt-2 border-t border-border/50">
         <div className="flex items-center space-x-1">
           <div className="w-2 h-2 bg-primary rounded-full"></div>
           <span className="text-xs text-muted-foreground">{lead.source}</span>
@@ -120,7 +120,7 @@ export const LeadCard = ({ lead, onClick }: { lead: any, onClick: (lead: any) =>
         </div>
       </div>
 
-      <div className="flex items-center justify-center space-x-1 mt-3 pt-2 border-t border-border">
+      <div className="flex items-center justify-center space-x-1 mt-3 pt-2 border-t border-border/50">
         <button className="flex-1 flex items-center justify-center space-x-1 py-1.5 px-2 rounded-md text-xs text-muted-foreground hover:text-foreground hover:bg-muted transition-colors" title="Call" onClick={(e) => { e.stopPropagation(); console.log('Call lead:', lead.id); }}>
           <Phone size={12} />
           <span>Call</span>
