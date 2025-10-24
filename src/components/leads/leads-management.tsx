@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useEffect } from 'react';
@@ -177,11 +178,6 @@ export const LeadsManagement = () => {
         // Simulate API call delay
         await new Promise(resolve => setTimeout(resolve, 500));
         
-        // In production, replace with actual API call:
-        // const response = await fetch('/api/leads');
-        // const data = await response.json();
-        // setLeads(data);
-        
         setLeads(MOCK_LEADS);
       } catch (err) {
         setError('Failed to load leads. Please try again.');
@@ -229,37 +225,8 @@ export const LeadsManagement = () => {
 
   const handleBulkAction = async (action: string) => {
     if (selectedLeads.length === 0) return;
-
-    try {
-      // Handle different bulk actions
-      switch (action) {
-        case 'email_campaign':
-          // TODO: Open email campaign modal
-          // await sendEmailCampaign(selectedLeads);
-          break;
-        case 'update_status':
-          // TODO: Open status update modal
-          // await updateLeadsStatus(selectedLeads, newStatus);
-          break;
-        case 'assign_team':
-          // TODO: Open team assignment modal
-          // await assignLeadsToTeam(selectedLeads, teamId);
-          break;
-        case 'export':
-          // TODO: Export selected leads
-          // await exportLeads(selectedLeads);
-          break;
-        case 'delete':
-          // TODO: Show confirmation dialog, then delete
-          // if (confirm('Are you sure?')) await deleteLeads(selectedLeads);
-          break;
-        default:
-          break;
-      }
-    } catch (err) {
-      setError(`Failed to perform bulk action: ${action}`);
-      console.error('Bulk action error:', err);
-    }
+    // Placeholder for bulk action logic
+    console.log(`Performing bulk action: ${action} on leads:`, selectedLeads);
   };
 
   if (error) {
