@@ -241,7 +241,7 @@ export const LeadsManagement = () => {
   }
 
   return (
-    <div className="flex-1 flex overflow-hidden">
+    <div className="flex flex-1 overflow-hidden">
       {/* Left Sidebar - Filters */}
       <aside className="w-80 flex-shrink-0 border-r border-border overflow-y-auto">
         <LeadFilters

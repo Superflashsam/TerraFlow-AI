@@ -187,7 +187,7 @@ const LeadTable = ({
 
   return (
     <>
-      <div className="flex-1 overflow-y-auto">
+      <div className="overflow-y-auto">
         <table className="w-full">
           <thead className="bg-muted border-b border-border sticky top-0">
             <tr>
