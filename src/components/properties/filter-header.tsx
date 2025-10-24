@@ -1,14 +1,28 @@
 "use client";
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Search, Plus, List, Grid, ArrowUpDown, Filter } from 'lucide-react';
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
+import { Label } from '@/components/ui/label';
 
 export const FilterHeader = ({ onFiltersChange, onCreateProperty, propertiesCount, selectedCount }: { onFiltersChange: any, onCreateProperty: any, propertiesCount: number, selectedCount: number }) => {
+  const [filters, setFilters] = useState({
+    status: 'all',
+    propertyType: 'all',
+    priceRange: 'all',
+  });
+
   const handleFilterChange = (key: string, value: string) => {
-    onFiltersChange((prev: any) => ({ ...prev, [key]: value }));
+    const newFilters = { ...filters, [key]: value };
+    setFilters(newFilters);
+    onFiltersChange((prev: any) => ({ ...prev, ...newFilters }));
+  };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    onFiltersChange((prev: any) => ({ ...prev, searchQuery: e.target.value }));
   };
 
   const statusOptions = [
@@ -50,9 +64,7 @@ export const FilterHeader = ({ onFiltersChange, onCreateProperty, propertiesCoun
             </div>
           </div>
           
-          <Button
-            onClick={onCreateProperty}
-          >
+          <Button onClick={onCreateProperty}>
             <Plus size={16} className="mr-2" />
             Add Property
           </Button>
@@ -66,42 +78,50 @@ export const FilterHeader = ({ onFiltersChange, onCreateProperty, propertiesCoun
                 type="text"
                 placeholder="Search properties, locations, or agents..."
                 className="pl-10"
-                onChange={(e) => handleFilterChange('searchQuery', e.target.value)}
+                onChange={handleSearchChange}
               />
             </div>
           </div>
 
-          <Select onValueChange={(value) => handleFilterChange('status', value)} defaultValue="all">
-            <SelectTrigger className="min-w-[120px]">
-                <SelectValue placeholder="All Status" />
-            </SelectTrigger>
-            <SelectContent>
-                {statusOptions.map(option => <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>)}
-            </SelectContent>
-          </Select>
-
-          <Select onValueChange={(value) => handleFilterChange('propertyType', value)} defaultValue="all">
-            <SelectTrigger className="min-w-[120px]">
-                <SelectValue placeholder="All Types" />
-            </SelectTrigger>
-            <SelectContent>
-                {propertyTypeOptions.map(option => <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>)}
-            </SelectContent>
-          </Select>
-
-          <Select onValueChange={(value) => handleFilterChange('priceRange', value)} defaultValue="all">
-            <SelectTrigger className="min-w-[140px]">
-                <SelectValue placeholder="All Prices" />
-            </SelectTrigger>
-            <SelectContent>
-                {priceRangeOptions.map(option => <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>)}
-            </SelectContent>
-          </Select>
-
-          <Button variant="outline" className="flex items-center space-x-2">
-            <Filter size={16} />
-            <span>More Filters</span>
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="flex items-center space-x-2">
+                    <Filter size={16} />
+                    <span>Filters</span>
+                </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-64 p-4 space-y-4">
+                <DropdownMenuLabel>Filter Properties</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <div>
+                  <Label htmlFor="status-filter">Status</Label>
+                  <Select onValueChange={(value) => handleFilterChange('status', value)} defaultValue="all">
+                    <SelectTrigger id="status-filter"><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                        {statusOptions.map(option => <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label htmlFor="type-filter">Property Type</Label>
+                  <Select onValueChange={(value) => handleFilterChange('propertyType', value)} defaultValue="all">
+                    <SelectTrigger id="type-filter"><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                        {propertyTypeOptions.map(option => <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
+                </div>
+                 <div>
+                  <Label htmlFor="price-filter">Price Range</Label>
+                  <Select onValueChange={(value) => handleFilterChange('priceRange', value)} defaultValue="all">
+                    <SelectTrigger id="price-filter"><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                        {priceRangeOptions.map(option => <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
+                </div>
+            </DropdownMenuContent>
+          </DropdownMenu>
 
           <div className="flex items-center bg-muted rounded-lg p-1">
             <button className="p-2 rounded text-primary bg-background shadow-sm">

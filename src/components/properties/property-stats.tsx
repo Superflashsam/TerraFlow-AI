@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { Home, Eye, Clock, CheckCircle, TrendingUp, Users, MessageCircle, Calendar } from 'lucide-react';
+import { Home, Eye, Clock, CheckCircle, TrendingUp, Users, MessageCircle, Calendar, DollarSign } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 
 export const PropertyStats = ({ properties }: { properties: any[] }) => {
@@ -40,13 +40,13 @@ export const PropertyStats = ({ properties }: { properties: any[] }) => {
     { title: 'Sold', value: stats.sold, icon: CheckCircle, color: 'bg-accent' },
     { title: 'Total Views', value: stats.totalViews.toLocaleString(), icon: Eye, color: 'bg-blue-500', change: '+12%' },
     { title: 'Total Inquiries', value: stats.totalInquiries.toLocaleString(), icon: MessageCircle, color: 'bg-secondary', change: '+8%' },
-    { title: 'Avg Days on Market', value: stats.avgDaysOnMarket, icon: Calendar, color: 'bg-muted', change: '-3 days' },
-    { title: 'Conversion Rate', value: `${stats.conversionRate}%`, icon: TrendingUp, color: 'bg-green-500', change: '+0.8%' }
+    { title: 'Avg Days on Market', value: stats.avgDaysOnMarket, icon: Calendar, color: 'bg-purple-500', change: '-3 days' },
+    { title: 'Conversion Rate', value: `${stats.conversionRate}%`, icon: TrendingUp, color: 'bg-teal-500', change: '+0.8%' }
   ];
 
   return (
     <div className="mb-6">
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {statCards.map((stat, index) => {
           const Icon = stat.icon;
           return (
