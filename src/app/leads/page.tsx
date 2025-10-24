@@ -68,7 +68,7 @@ export default function LeadsPage() {
         <TabsContent value="management" className="mt-4">
             <LeadsManagement />
         </TabsContent>
-        <TabsContent value="pipeline" className="ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 flex-1 flex flex-col overflow-hidden">
+        <TabsContent value="pipeline" className="flex-1 flex flex-col overflow-hidden">
             <LeadPipelineManager />
         </TabsContent>
         <TabsContent value="analytics" className="flex-1 overflow-y-auto">
