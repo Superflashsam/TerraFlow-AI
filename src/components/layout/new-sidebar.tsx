@@ -39,11 +39,11 @@ interface NavItem {
 const navigationItems: NavItem[] = [
   { icon: LayoutDashboard, label: 'Dashboard', href: '/' },
   { icon: Users, label: 'Leads', href: '/leads' },
+  { icon: Building2, label: 'Properties', href: '/properties' },
   { icon: Briefcase, label: 'Deals', href: '/deals' },
   { icon: Contact, label: 'Contacts', href: '/contacts' },
   { icon: Mails, label: 'Inbox', href: '/inbox', badge: '3' },
   { icon: CheckSquare, label: 'Tasks', href: '/tasks' },
-  { icon: Building2, label: 'Properties', href: '/properties' },
 ]
 
 const secondaryItems: NavItem[] = [

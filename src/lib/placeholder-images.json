@@ -32,27 +32,27 @@
     },
     {
       "id": "property-1",
-      "description": "Image of Greenwood Villa",
-      "imageUrl": "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8bW9kZXJuJTIwaG91c2V8ZW58MHx8fHwxNzYxMTkxMDUyfDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "modern house"
+      "description": "Image of 3BHK Luxury Apartment in Baner",
+      "imageUrl": "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      "imageHint": "modern apartment"
     },
     {
       "id": "property-2",
-      "description": "Image of Oceanview Penthouse",
-      "imageUrl": "https://images.unsplash.com/photo-1512914890251-2f96a9b0bbe2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxsdXh1cnklMjBhcGFydG1lbnR8ZW58MHx8fHwxNzYxMTk2OTc4fDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "luxury apartment"
+      "description": "Image of Premium Villa in Koregaon Park",
+      "imageUrl": "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      "imageHint": "luxury villa"
     },
     {
       "id": "property-3",
-      "description": "Image of Hillside Estate",
-      "imageUrl": "https://images.unsplash.com/photo-1761135125354-d024f37d04ec?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxsYXJnZSUyMGVzdGF0ZXxlbnwwfHx8fDE3NjEyMzY5MDF8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "large estate"
+      "description": "Image of 2BHK Modern Flat in Wakad",
+      "imageUrl": "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      "imageHint": "modern flat"
     },
     {
       "id": "property-4",
-      "description": "Image of Downtown Loft",
-      "imageUrl": "https://images.unsplash.com/photo-1573760464283-3ba64302271f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHx1cmJhbiUyMGxvZnR8ZW58MHx8fHwxNzYxMjIwMjM0fDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "urban loft"
+      "description": "Image of Luxury Penthouse in Kalyani Nagar",
+      "imageUrl": "https://images.unsplash.com/photo-1600607687644-aac4c3eac7f4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      "imageHint": "luxury penthouse"
     }
   ]
 }

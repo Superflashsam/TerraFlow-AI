@@ -142,11 +142,107 @@ export const documents = [
 ];
 
 export const properties = [
-  { id: 1, title: 'Greenwood Villa', type: 'House', address: '123 Green Valley', price: '$850,000', status: 'For Sale', imageId: 'property-1' },
-  { id: 2, title: 'Oceanview Penthouse', type: 'Apartment', address: '456 Ocean Drive', price: '$2,500,000', status: 'Sold', imageId: 'property-2' },
-  { id: 3, title: 'Hillside Estate', type: 'House', address: '789 Hillside Rd', price: '$1,200,000', status: 'For Sale', imageId: 'property-3' },
-  { id: 4, title: 'Downtown Loft', type: 'Apartment', address: '101 Main St', price: '$650,000', status: 'For Sale', imageId: 'property-4' },
-];
+    {
+      id: '1',
+      title: '3BHK Luxury Apartment in Baner',
+      price: '₹85,00,000',
+      address: 'Baner, Pune',
+      type: 'apartment',
+      bedrooms: 3,
+      bathrooms: 2,
+      area: '1,450 sq ft',
+      status: 'active',
+      daysOnMarket: 28,
+      views: 245,
+      inquiries: 12,
+      showings: 8,
+      imageId: 'property-1',
+      alt: 'Modern 3BHK luxury apartment with spacious living room and contemporary furniture',
+      features: ['Parking', 'Gym', 'Swimming Pool', 'Security'],
+      listingDate: '2025-09-19',
+      agent: 'Priya Sharma',
+      performance: {
+        conversionRate: 4.9,
+        avgTimeOnSite: '3:24',
+        inquiryQuality: 'High'
+      }
+    },
+    {
+      id: '2',
+      title: 'Premium Villa in Koregaon Park',
+      price: '₹2,50,00,000',
+      address: 'Koregaon Park, Pune',
+      type: 'villa',
+      bedrooms: 4,
+      bathrooms: 4,
+      area: '3,200 sq ft',
+      status: 'pending',
+      daysOnMarket: 45,
+      views: 189,
+      inquiries: 22,
+      showings: 15,
+      imageId: 'property-2',
+      alt: 'Luxurious 4BHK villa with private garden and modern architecture',
+      features: ['Private Garden', 'Parking', 'Security', 'Clubhouse'],
+      listingDate: '2025-09-02',
+      agent: 'Rajesh Kumar',
+      performance: {
+        conversionRate: 11.6,
+        avgTimeOnSite: '4:12',
+        inquiryQuality: 'Very High'
+      }
+    },
+    {
+      id: '3',
+      title: '2BHK Modern Flat in Wakad',
+      price: '₹65,00,000',
+      address: 'Wakad, Pune',
+      type: 'apartment',
+      bedrooms: 2,
+      bathrooms: 2,
+      area: '1,180 sq ft',
+      status: 'sold',
+      daysOnMarket: 62,
+      views: 328,
+      inquiries: 28,
+      showings: 18,
+      imageId: 'property-3',
+      alt: 'Contemporary 2BHK apartment with modern kitchen and balcony views',
+      features: ['Balcony', 'Parking', 'Lift', 'Power Backup'],
+      listingDate: '2025-08-15',
+      agent: 'Sneha Patel',
+      performance: {
+        conversionRate: 8.5,
+        avgTimeOnSite: '2:56',
+        inquiryQuality: 'Medium'
+      }
+    },
+    {
+      id: '4',
+      title: 'Luxury Penthouse in Kalyani Nagar',
+      price: '₹3,80,00,000',
+      address: 'Kalyani Nagar, Pune',
+      type: 'penthouse',
+      bedrooms: 5,
+      bathrooms: 5,
+      area: '4,500 sq ft',
+      status: 'active',
+      daysOnMarket: 18,
+      views: 156,
+      inquiries: 9,
+      showings: 6,
+      imageId: 'property-4',
+      alt: 'Exclusive penthouse with panoramic city views and premium finishes',
+      features: ['Terrace Garden', 'Jacuzzi', 'Home Theater', 'Wine Cellar'],
+      listingDate: '2025-09-29',
+      agent: 'Amit Desai',
+      performance: {
+        conversionRate: 5.8,
+        avgTimeOnSite: '5:48',
+        inquiryQuality: 'Very High'
+      }
+    }
+  ];
 
 export const analyticsReports = [
   { id: 1, title: "Lead Source Performance", description: "Breakdown of leads by source channel over the last quarter.", icon: BarChart },
