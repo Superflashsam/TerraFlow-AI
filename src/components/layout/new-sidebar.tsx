@@ -1,7 +1,9 @@
+
 "use client";
 
 import React, { useState, useEffect } from "react";
 import Link from 'next/link'
+import Image from "next/image";
 import { usePathname } from 'next/navigation'
 import {
   LayoutDashboard, 
@@ -21,7 +23,6 @@ import {
   Search,
   User as UserIcon,
 } from 'lucide-react';
-import { Logo } from '../icons/logo';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getImagePlaceholder } from "@/lib/placeholder-images";
 import { cn } from "@/lib/utils";
@@ -188,7 +189,7 @@ export function NewSidebar() {
           <div className="flex items-center justify-between">
               {!isCollapsed && (
                  <Link href="/" className="flex items-center gap-2">
-                    <Logo />
+                    <Image src="https://res.cloudinary.com/dvic0tda9/image/upload/e_improve,e_sharpen/v1761230806/generated-image_1_k77rij.png" width={32} height={32} alt="Terraflow AI Logo" />
                     <span className="font-semibold text-sidebar-foreground">Terraflow AI</span>
                 </Link>
               )}
