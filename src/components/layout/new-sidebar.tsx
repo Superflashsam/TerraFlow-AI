@@ -3,7 +3,6 @@
 
 import React, { useState, useEffect } from "react";
 import Link from 'next/link'
-import Image from "next/image";
 import { usePathname } from 'next/navigation'
 import {
   LayoutDashboard, 
@@ -26,6 +25,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getImagePlaceholder } from "@/lib/placeholder-images";
 import { cn } from "@/lib/utils";
+import { Logo } from "@/components/icons/logo";
 
 // Softer spring animation curve
 const softSpringEasing = "cubic-bezier(0.25, 1.1, 0.4, 1)";
@@ -189,7 +189,7 @@ export function NewSidebar() {
           <div className="flex items-center justify-between">
               {!isCollapsed && (
                  <Link href="/" className="flex items-center gap-2">
-                    <Image src="https://res.cloudinary.com/dvic0tda9/image/upload/e_improve,e_sharpen/v1761341547/generated-image_1_k77rij_e_improve_e_sharpen-removebg-preview_lowavj.png" width={32} height={32} alt="Terraflow AI Logo" />
+                    <Logo />
                     <span className="font-semibold text-sidebar-foreground">Terraflow AI</span>
                 </Link>
               )}
