@@ -4,7 +4,7 @@ import React from 'react';
 import { Camera, MapPin, Bed, Bath, AppWindow, Edit, BarChart3, Share, CheckSquare } from 'lucide-react';
 import { getImagePlaceholder } from '@/lib/placeholder-images';
 
-const PropertyCard = ({ property, isSelected, onSelect, onEdit }: { property: any, isSelected: boolean, onSelect: any, onEdit: any }) => {
+export const PropertyCard = ({ property, isSelected, onSelect, onEdit }: { property: any, isSelected: boolean, onSelect: any, onEdit: any }) => {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'active': return 'bg-green-500 text-green-50';
