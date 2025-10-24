@@ -6,7 +6,6 @@ import { KPICard } from './kpi-card';
 import { ConversionFunnel } from './conversion-funnel';
 import { LeadScoringChart } from './lead-scoring-chart';
 import { TopSourcesRanking } from './top-sources-ranking';
-import { LeadJourneyMap } from './lead-journey-map';
 import { FilterControls } from './filter-controls';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Clock } from 'lucide-react';
@@ -131,8 +130,6 @@ export const LeadAnalyticsHub = () => {
                 <TopSourcesRanking />
             </div>
         </div>
-
-        <LeadJourneyMap />
     </div>
   );
 };
