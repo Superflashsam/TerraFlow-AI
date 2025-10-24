@@ -114,6 +114,10 @@ const LeadFilters = ({
     onClearFilters();
   };
 
+  const getActiveFiltersCount = () => {
+    return Object.values(filters).filter(value => value !== '' && value !== 'all').length;
+  };
+
   const FilterSection = ({ title, defaultOpen = false, children }: { title: string, defaultOpen?: boolean, children: React.ReactNode }) => (
     <AccordionItem value={title}>
         <AccordionTrigger className="text-sm font-semibold px-4 py-2 hover:no-underline">{title}</AccordionTrigger>
@@ -129,14 +133,28 @@ const LeadFilters = ({
         <div className="flex items-center space-x-2">
           <Filter size={16} className="text-muted-foreground" />
           <h3 className="font-semibold text-foreground">Filters</h3>
+           {getActiveFiltersCount() > 0 && (
+            <span className="bg-primary text-primary-foreground text-xs px-2 py-1 rounded-full">
+              {getActiveFiltersCount()}
+            </span>
+          )}
         </div>
-        <ChevronUp size={16} />
+        {getActiveFiltersCount() > 0 && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleClearAll}
+              className="text-muted-foreground hover:text-foreground"
+            >
+              Clear all
+            </Button>
+          )}
       </div>
 
       <div className="p-4 border-b border-border">
           <Input
               type="search"
-              placeholder="Search leads by name, email, or phone..."
+              placeholder="Search leads..."
               value={filters.searchQuery}
               onChange={(e) => handleFilterChange('searchQuery', e.target.value)}
               className="w-full text-xs"

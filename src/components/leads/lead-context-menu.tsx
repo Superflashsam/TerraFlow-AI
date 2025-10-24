@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useEffect, useRef } from 'react';
@@ -169,7 +170,7 @@ const LeadContextMenu = ({
               <div key={index} className="my-1 border-t border-border" />
             );
           }
-          const Icon = iconMap[item.icon];
+          const Icon = iconMap[item.icon as keyof typeof iconMap];
           return (
             <button
               key={index}

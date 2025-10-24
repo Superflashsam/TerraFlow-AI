@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useRef, useEffect } from 'react';
@@ -145,7 +146,7 @@ const BulkActionsDropdown = ({
                   <div key={index} className="my-2 border-t border-border" />
                 );
               }
-              const Icon = iconMap[action.icon];
+              const Icon = iconMap[action.icon as keyof typeof iconMap];
 
               const getTextColor = () => {
                 if (action.variant === 'destructive')

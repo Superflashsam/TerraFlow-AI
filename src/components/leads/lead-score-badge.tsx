@@ -25,31 +25,36 @@ const LeadScoreBadge = ({
     if (score >= 90) {
       return {
         label: 'Hot',
-        color: 'bg-destructive/10 text-destructive',
+        color: 'bg-destructive text-destructive-foreground',
+        progressColor: 'bg-destructive',
         icon: 'Flame',
       };
     } else if (score >= 70) {
       return {
         label: 'Warm',
-        color: 'bg-yellow-500/10 text-yellow-600',
+        color: 'bg-yellow-500 text-white',
+        progressColor: 'bg-yellow-500',
         icon: 'TrendingUp',
       };
     } else if (score >= 50) {
       return {
         label: 'Moderate',
-        color: 'bg-blue-500/10 text-blue-600',
+        color: 'bg-accent text-accent-foreground',
+        progressColor: 'bg-accent',
         icon: 'Minus',
       };
     } else if (score >= 30) {
       return {
         label: 'Cool',
-        color: 'bg-sky-500/10 text-sky-600',
+        color: 'bg-secondary text-secondary-foreground',
+        progressColor: 'bg-secondary',
         icon: 'TrendingDown',
       };
     } else {
       return {
         label: 'Cold',
         color: 'bg-muted text-muted-foreground',
+        progressColor: 'bg-muted-foreground',
         icon: 'Snowflake',
       };
     }
@@ -63,12 +68,12 @@ const LeadScoreBadge = ({
   };
 
   const iconSizes = {
-    sm: 14,
-    default: 16,
-    lg: 18,
+    sm: 12,
+    default: 14,
+    lg: 16,
   };
 
-  const Icon = iconMap[config.icon];
+  const Icon = iconMap[config.icon as keyof typeof iconMap];
 
   return (
     <div

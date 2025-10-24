@@ -33,32 +33,32 @@ const LeadStatusBadge = ({
     const configs: { [key: string]: { label: string; color: string; icon: string } } = {
       new: {
         label: 'New',
-        color: 'bg-blue-500/10 text-blue-600',
+        color: 'bg-accent text-accent-foreground',
         icon: 'Plus',
       },
       contacted: {
         label: 'Contacted',
-        color: 'bg-cyan-500/10 text-cyan-600',
+        color: 'bg-secondary text-secondary-foreground',
         icon: 'Phone',
       },
       qualified: {
         label: 'Qualified',
-        color: 'bg-yellow-500/10 text-yellow-600',
+        color: 'bg-yellow-500 text-white',
         icon: 'CheckCircle',
       },
       proposal_sent: {
         label: 'Proposal Sent',
-        color: 'bg-purple-500/10 text-purple-600',
+        color: 'bg-primary text-primary-foreground',
         icon: 'FileText',
       },
       negotiation: {
         label: 'Negotiation',
-        color: 'bg-orange-500/10 text-orange-600',
+        color: 'bg-yellow-500 text-white',
         icon: 'MessageSquare',
       },
       closed_won: {
         label: 'Closed Won',
-        color: 'bg-green-500/10 text-green-600',
+        color: 'bg-green-500 text-white',
         icon: 'Trophy',
       },
       closed_lost: {
@@ -79,16 +79,16 @@ const LeadStatusBadge = ({
   };
 
   const iconSizes = {
-    sm: 14,
-    default: 16,
-    lg: 18,
+    sm: 12,
+    default: 14,
+    lg: 16,
   };
 
-  const Icon = iconMap[config.icon];
+  const Icon = iconMap[config.icon as keyof typeof iconMap];
 
   return (
     <div
-      className={`inline-flex items-center space-x-1.5 rounded-full font-semibold ${config.color} ${sizeClasses[size]}`}
+      className={`inline-flex items-center space-x-1.5 rounded-full font-medium ${config.color} ${sizeClasses[size]}`}
     >
       <Icon size={iconSizes[size]} />
       <span>{config.label}</span>

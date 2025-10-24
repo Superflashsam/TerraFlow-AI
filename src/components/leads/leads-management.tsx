@@ -13,6 +13,8 @@ import {
 import { Button } from '@/components/ui/button';
 import { LeadTable } from '@/components/leads/leads-table';
 import { Card, CardContent } from '@/components/ui/card';
+import { LeadFilters } from '@/components/leads/lead-filters';
+import { BulkActionsDropdown } from '@/components/leads/bulk-actions-dropdown';
 
 interface Lead {
   id: string;
@@ -56,11 +58,17 @@ const KPICard = ({ title, value, change, icon: Icon, changeType = 'positive' }: 
     <Card>
         <CardContent className="p-4">
             <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">{title}</span>
-                <Icon className="w-5 h-5 text-muted-foreground" />
+                <div>
+                  <p className="text-sm text-muted-foreground">{title}</p>
+                  <p className="text-2xl font-bold text-foreground">{value}</p>
+                </div>
+                <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${changeType === 'positive' ? 'bg-primary/10' : 'bg-destructive/10'}`}>
+                  <Icon size={20} className={changeType === 'positive' ? 'text-primary' : 'text-destructive'} />
+                </div>
+              </div>
+              <div className="flex items-center mt-2">
+                <span className={`text-sm ${changeType === 'positive' ? 'text-green-500' : 'text-red-500'}`}>{change}</span>
             </div>
-            <div className="text-2xl font-bold mt-2">{value}</div>
-            <div className={`text-xs mt-1 ${changeType === 'positive' ? 'text-green-500' : 'text-red-500'}`}>{change}</div>
         </CardContent>
     </Card>
 );
@@ -97,12 +105,20 @@ export const LeadsManagement = () => {
     fetchLeads();
   }, []);
 
+  const handleFiltersChange = (newFilters: Partial<FilterState>) => {
+    setFilters(prev => ({ ...prev, ...newFilters }));
+  };
+
   const handleClearFilters = () => {
     setFilters({ source: '', scoreRange: '', propertyType: '', location: '', status: '', dateRange: '', searchQuery: '' });
   };
 
   const handleSelectionChange = (newSelection: string[]) => {
     setSelectedLeads(newSelection);
+  };
+
+  const handleBulkAction = (action: string) => {
+    console.log(`Bulk action: ${action} for leads:`, selectedLeads);
   };
 
   const handleRefresh = async () => {
@@ -137,53 +153,68 @@ export const LeadsManagement = () => {
 
   return (
     <div className="flex flex-col flex-1 h-full gap-4">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <KPICard title="Total Leads" value={kpiData.totalLeads.toString()} change="+12% from last month" icon={Users} />
-            <KPICard title="Hot Leads" value={kpiData.hotLeads.toString()} change="+8% from last week" icon={Flame} />
+            <KPICard title="Hot Leads" value={kpiData.hotLeads.toString()} change="+8% from last week" icon={Flame} changeType="negative" />
             <KPICard title="Qualified" value={kpiData.qualified.toString()} change="+15% conversion" icon={CheckCircle} />
             <KPICard title="Closed Won" value={kpiData.closedWon.toString()} change="$2.4M revenue" icon={Trophy} />
         </div>
-
-        <div className="flex-1 flex flex-col overflow-hidden bg-card border rounded-lg">
-            <div className="flex-shrink-0 px-6 py-4 border-b border-border">
-                <div className="flex items-center justify-between">
-                    <h2 className="text-lg font-semibold">
-                        All Leads ({isLoading ? '...' : leads.length})
-                    </h2>
-                    <div className="flex items-center gap-3">
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={handleRefresh}
-                            disabled={isLoading}
-                        >
-                            <RefreshCw className={`mr-2 h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
-                            Refresh
-                        </Button>
-                        <Button variant="outline" size="sm">
-                            <Settings className="mr-2 h-4 w-4" />
-                            Columns
-                        </Button>
-                    </div>
-                </div>
-            </div>
-
-            {isLoading ? (
-                <div className="flex-1 flex items-center justify-center">
-                    <div className="text-center">
-                        <RefreshCw className="h-8 w-8 animate-spin mx-auto mb-4 text-primary" />
-                        <p className="text-muted-foreground">Loading leads...</p>
-                    </div>
-                </div>
-            ) : (
-                <LeadTable
-                    leads={leads}
-                    selectedLeads={selectedLeads}
-                    onSelectionChange={handleSelectionChange}
-                    filters={filters}
+        
+        <div className="flex flex-1 overflow-hidden gap-4">
+            <aside className="w-80 flex-shrink-0">
+                <LeadFilters 
+                    onFiltersChange={handleFiltersChange}
                     onClearFilters={handleClearFilters}
                 />
-            )}
+            </aside>
+            <div className="flex-1 flex flex-col overflow-hidden">
+                 <div className="flex-shrink-0 px-6 py-4 border-b border-border bg-card rounded-t-lg">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-4">
+                            <h2 className="text-lg font-semibold">
+                                All Leads ({isLoading ? '...' : leads.length})
+                            </h2>
+                            <BulkActionsDropdown
+                                selectedCount={selectedLeads.length}
+                                onAction={handleBulkAction}
+                            />
+                        </div>
+                        <div className="flex items-center gap-3">
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={handleRefresh}
+                                disabled={isLoading}
+                            >
+                                <RefreshCw className={`mr-2 h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
+                                Refresh
+                            </Button>
+                            <Button variant="outline" size="sm">
+                                <Settings className="mr-2 h-4 w-4" />
+                                Columns
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+                 <div className="flex-1 overflow-y-auto bg-card rounded-b-lg">
+                    {isLoading ? (
+                        <div className="flex-1 flex items-center justify-center">
+                            <div className="text-center">
+                                <RefreshCw className="h-8 w-8 animate-spin mx-auto mb-4 text-primary" />
+                                <p className="text-muted-foreground">Loading leads...</p>
+                            </div>
+                        </div>
+                    ) : (
+                        <LeadTable
+                            leads={leads}
+                            selectedLeads={selectedLeads}
+                            onSelectionChange={handleSelectionChange}
+                            filters={filters}
+                            onClearFilters={handleClearFilters}
+                        />
+                    )}
+                </div>
+            </div>
         </div>
     </div>
   );
