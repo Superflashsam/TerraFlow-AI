@@ -189,7 +189,7 @@ export function NewSidebar() {
           <div className="flex items-center justify-between">
               {!isCollapsed && (
                  <Link href="/" className="flex items-center gap-2">
-                    <Image src="https://res.cloudinary.com/dvic0tda9/image/upload/e_improve,e_sharpen/v1761230806/generated-image_1_k77rij.png" width={32} height={32} alt="Terraflow AI Logo" />
+                    <Image src="https://res.cloudinary.com/dvic0tda9/image/upload/e_improve,e_sharpen/v1761341547/generated-image_1_k77rij_e_improve_e_sharpen-removebg-preview_lowavj.png" width={32} height={32} alt="Terraflow AI Logo" />
                     <span className="font-semibold text-sidebar-foreground">Terraflow AI</span>
                 </Link>
               )}
