@@ -16,11 +16,13 @@ const LeadTable = ({
   selectedLeads,
   onSelectionChange,
   filters,
+  onClearFilters,
 }: {
   leads: any[];
   selectedLeads: string[];
   onSelectionChange: (ids: string[]) => void;
   filters: any;
+  onClearFilters: () => void;
 }) => {
   const router = useRouter();
   const [sortConfig, setSortConfig] = useState<{
@@ -277,7 +279,7 @@ const LeadTable = ({
                       {lead.propertyInterest}
                     </p>
                     <p className="text-sm text-muted-foreground capitalize">
-                      {lead.location}
+                      {lead.location.replace('_', ' ')}
                     </p>
                   </div>
                 </td>

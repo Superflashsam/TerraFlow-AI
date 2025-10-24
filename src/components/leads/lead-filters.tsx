@@ -27,12 +27,12 @@ const LeadFilters = ({
   onClearFilters: () => void;
 }) => {
   const [filters, setFilters] = useState({
-    source: '',
-    scoreRange: '',
-    propertyType: '',
-    location: '',
-    status: '',
-    dateRange: '',
+    source: 'all',
+    scoreRange: 'all',
+    propertyType: 'all',
+    location: 'all',
+    status: 'all',
+    dateRange: 'all',
     searchQuery: '',
   });
 
@@ -94,19 +94,20 @@ const LeadFilters = ({
   ];
 
   const handleFilterChange = (key: string, value: string) => {
-    const newFilters = { ...filters, [key]: value };
-    setFilters(newFilters);
+    const newFilters = { ...filters, [key]: value === 'all' ? '' : value };
+    const stateFilters = { ...filters, [key]: value };
+    setFilters(stateFilters);
     onFiltersChange(newFilters);
   };
   
   const handleClearAll = () => {
     const clearedFilters = {
-      source: '',
-      scoreRange: '',
-      propertyType: '',
-      location: '',
-      status: '',
-      dateRange: '',
+      source: 'all',
+      scoreRange: 'all',
+      propertyType: 'all',
+      location: 'all',
+      status: 'all',
+      dateRange: 'all',
       searchQuery: '',
     };
     setFilters(clearedFilters);
@@ -147,7 +148,7 @@ const LeadFilters = ({
             <Select onValueChange={(value) => handleFilterChange('source', value)} value={filters.source}>
                 <SelectTrigger className="text-xs"><SelectValue placeholder="All sources" /></SelectTrigger>
                 <SelectContent>
-                    <SelectItem value="">All sources</SelectItem>
+                    <SelectItem value="all">All sources</SelectItem>
                     {leadSources.map((s) => (<SelectItem key={s.value} value={s.value} className="text-xs">{s.label}</SelectItem>))}
                 </SelectContent>
             </Select>
@@ -157,7 +158,7 @@ const LeadFilters = ({
             <Select onValueChange={(value) => handleFilterChange('scoreRange', value)} value={filters.scoreRange}>
                 <SelectTrigger className="text-xs"><SelectValue placeholder="All scores" /></SelectTrigger>
                 <SelectContent>
-                    <SelectItem value="">All scores</SelectItem>
+                    <SelectItem value="all">All scores</SelectItem>
                     {scoreRanges.map((s) => (<SelectItem key={s.value} value={s.value} className="text-xs">{s.label}</SelectItem>))}
                 </SelectContent>
             </Select>
@@ -167,7 +168,7 @@ const LeadFilters = ({
             <Select onValueChange={(value) => handleFilterChange('propertyType', value)} value={filters.propertyType}>
                 <SelectTrigger className="text-xs"><SelectValue placeholder="All types" /></SelectTrigger>
                 <SelectContent>
-                    <SelectItem value="">All types</SelectItem>
+                    <SelectItem value="all">All types</SelectItem>
                     {propertyTypes.map((p) => (<SelectItem key={p.value} value={p.value} className="text-xs">{p.label}</SelectItem>))}
                 </SelectContent>
             </Select>
@@ -177,7 +178,7 @@ const LeadFilters = ({
             <Select onValueChange={(value) => handleFilterChange('location', value)} value={filters.location}>
                 <SelectTrigger className="text-xs"><SelectValue placeholder="All locations" /></SelectTrigger>
                 <SelectContent>
-                    <SelectItem value="">All locations</SelectItem>
+                    <SelectItem value="all">All locations</SelectItem>
                     {locations.map((l) => (<SelectItem key={l.value} value={l.value} className="text-xs">{l.label}</SelectItem>))}
                 </SelectContent>
             </Select>
@@ -187,7 +188,7 @@ const LeadFilters = ({
             <Select onValueChange={(value) => handleFilterChange('status', value)} value={filters.status}>
                 <SelectTrigger className="text-xs"><SelectValue placeholder="All statuses" /></SelectTrigger>
                 <SelectContent>
-                    <SelectItem value="">All statuses</SelectItem>
+                    <SelectItem value="all">All statuses</SelectItem>
                     {statuses.map((s) => (<SelectItem key={s.value} value={s.value} className="text-xs">{s.label}</SelectItem>))}
                 </SelectContent>
             </Select>
@@ -197,7 +198,7 @@ const LeadFilters = ({
             <Select onValueChange={(value) => handleFilterChange('dateRange', value)} value={filters.dateRange}>
                 <SelectTrigger className="text-xs"><SelectValue placeholder="Any time" /></SelectTrigger>
                 <SelectContent>
-                    <SelectItem value="">Any time</SelectItem>
+                    <SelectItem value="all">Any time</SelectItem>
                     {dateRanges.map((d) => (<SelectItem key={d.value} value={d.value} className="text-xs">{d.label}</SelectItem>))}
                 </SelectContent>
             </Select>

@@ -199,6 +199,7 @@ export const LeadsManagement = () => {
                         selectedLeads={selectedLeads}
                         onSelectionChange={handleSelectionChange}
                         filters={filters}
+                        onClearFilters={handleClearFilters}
                     />
                 )}
             </div>
