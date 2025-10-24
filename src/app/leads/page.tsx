@@ -2,13 +2,11 @@
 "use client";
 
 import {
-  PlusCircle,
   Upload,
-  LineChart,
-  Target,
-  Table,
   LayoutGrid,
+  Table,
   FileDown,
+  PlusCircle
 } from 'lucide-react';
 import { PageHeader } from '@/components/shared/page-header';
 import { Button } from '@/components/ui/button';
@@ -18,6 +16,7 @@ import { LeadPipelineManager } from '@/components/leads/pipeline/lead-pipeline-m
 import { LeadsManagement } from '@/components/leads/leads-management';
 import { cn } from '@/lib/utils';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { LineChart, Target } from 'lucide-react';
 
 export default function LeadsPage() {
   return (
@@ -66,7 +65,7 @@ export default function LeadsPage() {
             Lead Analytics
           </TabsTrigger>
         </TabsList>
-        <TabsContent value="management" className="flex-1 overflow-hidden mt-4">
+        <TabsContent value="management" className="flex-1 overflow-hidden">
             <LeadsManagement />
         </TabsContent>
         <TabsContent value="pipeline" className="flex-1 flex flex-col overflow-hidden">
