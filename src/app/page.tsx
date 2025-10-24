@@ -29,8 +29,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ExecutiveSummary } from "@/components/dashboard/executive-summary";
-
 
 const Dashboard = () => {
   const [currentTime, setCurrentTime] = useState<Date | null>(null);
@@ -210,7 +208,6 @@ const Dashboard = () => {
       </div>
        <div className="grid grid-cols-1 gap-8">
           <TerraAiSuggestions />
-          <ExecutiveSummary />
       </div>
     </div>
   );
