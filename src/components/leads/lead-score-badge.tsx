@@ -1,3 +1,4 @@
+
 "use client";
 
 import React from 'react';
@@ -24,36 +25,31 @@ const LeadScoreBadge = ({
     if (score >= 90) {
       return {
         label: 'Hot',
-        color: 'bg-destructive text-destructive-foreground',
-        progressColor: 'bg-destructive',
+        color: 'bg-destructive/10 text-destructive',
         icon: 'Flame',
       };
     } else if (score >= 70) {
       return {
         label: 'Warm',
-        color: 'bg-yellow-500 text-white',
-        progressColor: 'bg-yellow-500',
+        color: 'bg-yellow-500/10 text-yellow-600',
         icon: 'TrendingUp',
       };
     } else if (score >= 50) {
       return {
         label: 'Moderate',
-        color: 'bg-accent text-accent-foreground',
-        progressColor: 'bg-accent',
+        color: 'bg-blue-500/10 text-blue-600',
         icon: 'Minus',
       };
     } else if (score >= 30) {
       return {
         label: 'Cool',
-        color: 'bg-secondary text-secondary-foreground',
-        progressColor: 'bg-secondary',
+        color: 'bg-sky-500/10 text-sky-600',
         icon: 'TrendingDown',
       };
     } else {
       return {
         label: 'Cold',
         color: 'bg-muted text-muted-foreground',
-        progressColor: 'bg-muted-foreground',
         icon: 'Snowflake',
       };
     }
@@ -67,34 +63,21 @@ const LeadScoreBadge = ({
   };
 
   const iconSizes = {
-    sm: 12,
-    default: 14,
-    lg: 16,
+    sm: 14,
+    default: 16,
+    lg: 18,
   };
 
   const Icon = iconMap[config.icon];
 
   return (
-    <div className="flex items-center space-x-2">
-      <div
-        className={`inline-flex items-center space-x-1.5 rounded-full font-medium ${config.color} ${sizeClasses[size]}`}
-      >
-        <Icon size={iconSizes[size]} />
-        <span>{score}</span>
-        {showLabel && size !== 'sm' && (
-          <span className="hidden sm:inline">({config.label})</span>
-        )}
-      </div>
-
-      {size !== 'sm' && (
-        <div className="flex-1 max-w-20">
-          <div className="w-full bg-muted rounded-full h-2">
-            <div
-              className={`h-2 rounded-full transition-all duration-300 ${config.progressColor}`}
-              style={{ width: `${score}%` }}
-            />
-          </div>
-        </div>
+    <div
+      className={`inline-flex items-center space-x-1.5 rounded-full font-medium ${config.color} ${sizeClasses[size]}`}
+    >
+      <Icon size={iconSizes[size]} />
+      <span className="font-semibold">{score}</span>
+      {showLabel && size !== 'sm' && (
+        <span className="hidden sm:inline">({config.label})</span>
       )}
     </div>
   );

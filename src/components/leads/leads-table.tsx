@@ -156,25 +156,21 @@ const LeadTable = ({
   };
 
   const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffTime = Math.abs(now.getTime() - date.getTime());
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-    if (diffDays <= 1) return 'Today';
-    if (diffDays === 2) return 'Yesterday';
-    if (diffDays <= 7) return `${diffDays - 1} days ago`;
-    return date.toLocaleDateString();
+    return new Date(dateString).toLocaleDateString('en-US', {
+        month: 'numeric',
+        day: 'numeric',
+        year: 'numeric'
+    });
   };
 
   const getSortIcon = (key: string) => {
     if (sortConfig.key !== key) {
-      return <ArrowUpDown size={14} className="text-muted-foreground" />;
+      return <ArrowUpDown size={14} className="ml-2 text-muted-foreground" />;
     }
     return sortConfig.direction === 'asc' ? (
-      <ArrowUp size={14} className="text-primary" />
+      <ArrowUp size={14} className="ml-2 text-primary" />
     ) : (
-      <ArrowDown size={14} className="text-primary" />
+      <ArrowDown size={14} className="ml-2 text-primary" />
     );
   };
 
@@ -189,7 +185,7 @@ const LeadTable = ({
     <>
       <div className="overflow-y-auto flex-1">
         <table className="w-full">
-          <thead className="bg-muted border-b border-border sticky top-0">
+          <thead className="bg-muted/50 border-b border-border sticky top-0">
             <tr>
               <th className="w-12 px-4 py-3">
                 <Checkbox
@@ -200,24 +196,24 @@ const LeadTable = ({
               <th className="text-left px-4 py-3">
                 <button
                   onClick={() => handleSort('name')}
-                  className="flex items-center space-x-2 font-medium text-foreground hover:text-primary transition-colors duration-200"
+                  className="flex items-center font-semibold text-foreground hover:text-primary transition-colors duration-200"
                 >
                   <span>Lead Name</span>
                   {getSortIcon('name')}
                 </button>
               </th>
               <th className="text-left px-4 py-3">
-                <span className="font-medium text-foreground">Contact</span>
+                <span className="font-semibold text-foreground">Contact</span>
               </th>
               <th className="text-left px-4 py-3">
-                <span className="font-medium text-foreground">
+                <span className="font-semibold text-foreground">
                   Property Interest
                 </span>
               </th>
               <th className="text-left px-4 py-3">
                 <button
                   onClick={() => handleSort('aiScore')}
-                  className="flex items-center space-x-2 font-medium text-foreground hover:text-primary transition-colors duration-200"
+                  className="flex items-center font-semibold text-foreground hover:text-primary transition-colors duration-200"
                 >
                   <span>AI Score</span>
                   {getSortIcon('aiScore')}
@@ -226,14 +222,14 @@ const LeadTable = ({
               <th className="text-left px-4 py-3">
                 <button
                   onClick={() => handleSort('lastContact')}
-                  className="flex items-center space-x-2 font-medium text-foreground hover:text-primary transition-colors duration-200"
+                  className="flex items-center font-semibold text-foreground hover:text-primary transition-colors duration-200"
                 >
                   <span>Last Contact</span>
                   {getSortIcon('lastContact')}
                 </button>
               </th>
               <th className="text-left px-4 py-3">
-                <span className="font-medium text-foreground">Status</span>
+                <span className="font-semibold text-foreground">Status</span>
               </th>
               <th className="w-12 px-4 py-3"></th>
             </tr>
@@ -246,7 +242,7 @@ const LeadTable = ({
                 onClick={(e) => handleRowClick(lead, e)}
                 onContextMenu={(e) => handleContextMenu(e, lead)}
               >
-                <td className="px-4 py-4" data-noclick>
+                <td className="px-4 py-3" data-noclick>
                   <Checkbox
                     checked={selectedLeads.includes(lead.id)}
                     onCheckedChange={(checked) =>
@@ -254,20 +250,20 @@ const LeadTable = ({
                     }
                   />
                 </td>
-                <td className="px-4 py-4">
+                <td className="px-4 py-3">
                   <div className="flex items-center space-x-3">
-                    <Avatar>
+                    <Avatar className="h-8 w-8 bg-muted-foreground text-background">
                         <AvatarFallback>{lead.name.split(' ').map((n: string) => n[0]).join('')}</AvatarFallback>
                     </Avatar>
                     <div>
                       <p className="font-medium text-foreground">{lead.name}</p>
-                      <p className="text-sm text-muted-foreground">
-                        {lead.source}
+                      <p className="text-sm text-muted-foreground capitalize">
+                        {lead.source.replace('_', ' ')}
                       </p>
                     </div>
                   </div>
                 </td>
-                <td className="px-4 py-4">
+                <td className="px-4 py-3">
                   <div>
                     <p className="text-sm text-foreground">{lead.email}</p>
                     <p className="text-sm text-muted-foreground">
@@ -275,31 +271,32 @@ const LeadTable = ({
                     </p>
                   </div>
                 </td>
-                <td className="px-4 py-4">
+                <td className="px-4 py-3">
                   <div>
-                    <p className="text-sm font-medium text-foreground capitalize">
-                      {lead.propertyInterest.replace('_', ' ')}
+                    <p className="text-sm font-medium text-foreground">
+                      {lead.propertyInterest}
                     </p>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-sm text-muted-foreground capitalize">
                       {lead.location}
                     </p>
                   </div>
                 </td>
-                <td className="px-4 py-4">
-                  <LeadScoreBadge score={lead.aiScore} size="sm" />
+                <td className="px-4 py-3">
+                  <LeadScoreBadge score={lead.aiScore} size="sm" showLabel={false} />
                 </td>
-                <td className="px-4 py-4">
+                <td className="px-4 py-3">
                   <p className="text-sm text-foreground">
                     {formatDate(lead.lastContact)}
                   </p>
                 </td>
-                <td className="px-4 py-4">
+                <td className="px-4 py-3">
                   <LeadStatusBadge status={lead.status} size="sm" />
                 </td>
-                <td className="px-4 py-4" data-noclick>
+                <td className="px-4 py-3" data-noclick>
                   <Button
                     variant="ghost"
                     size="icon"
+                    className="h-8 w-8"
                     onClick={(e) => {
                       e.stopPropagation();
                       handleContextMenu(e, lead);
@@ -321,7 +318,7 @@ const LeadTable = ({
             <p className="text-muted-foreground mb-4">
                 Try adjusting your filters or add new leads to get started.
             </p>
-            <Button variant="outline">Clear Filters</Button>
+            <Button variant="outline" onClick={onClearFilters}>Clear Filters</Button>
             </div>
         )}
       </div>

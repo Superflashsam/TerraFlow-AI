@@ -7,6 +7,8 @@ import {
   LineChart,
   Target,
   Table,
+  LayoutGrid,
+  FileDown,
 } from 'lucide-react';
 import { PageHeader } from '@/components/shared/page-header';
 import { Button } from '@/components/ui/button';
@@ -15,25 +17,27 @@ import { LeadAnalyticsHub } from '@/components/leads/analytics/lead-analytics-hu
 import { LeadPipelineManager } from '@/components/leads/pipeline/lead-pipeline-manager';
 import { LeadsManagement } from '@/components/leads/leads-management';
 import { cn } from '@/lib/utils';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 
 export default function LeadsPage() {
   return (
-    <div className="flex flex-col gap-8 h-full">
-      <PageHeader
-        title="Leads"
-        description="Track, manage, and analyze your real estate leads with AI-powered insights."
-      >
+    <div className="flex flex-col gap-4 h-full">
+      <div className="flex items-center justify-between">
+        <PageHeader
+            title="Leads"
+            description="Track, manage, and analyze your real estate leads with AI-powered insights."
+        />
         <div className="flex items-center gap-2">
-          <Button variant="outline">
-            <Upload className="mr-2" />
-            Import Leads
-          </Button>
-          <Button>
-            <PlusCircle className="mr-2" />
-            Add New Lead
-          </Button>
+            <Button variant="outline">
+                <Upload className="mr-2" />
+                Import Leads
+            </Button>
+            <Button>
+                <PlusCircle className="mr-2" />
+                Add New Lead
+            </Button>
         </div>
-      </PageHeader>
+      </div>
 
       <Tabs defaultValue="management" className="w-full flex-1 flex flex-col overflow-hidden">
         <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 bg-transparent p-0 h-auto gap-2">
@@ -63,12 +67,12 @@ export default function LeadsPage() {
           </TabsTrigger>
         </TabsList>
         <TabsContent value="management" className="flex-1 overflow-hidden mt-4">
-          <LeadsManagement />
+            <LeadsManagement />
         </TabsContent>
-        <TabsContent value="pipeline" className="flex-1 flex flex-col overflow-hidden mt-4">
+        <TabsContent value="pipeline" className="flex-1 flex flex-col overflow-hidden">
             <LeadPipelineManager />
         </TabsContent>
-        <TabsContent value="analytics" className="flex-1 overflow-y-auto mt-4">
+        <TabsContent value="analytics" className="flex-1 overflow-y-auto">
             <LeadAnalyticsHub />
         </TabsContent>
       </Tabs>

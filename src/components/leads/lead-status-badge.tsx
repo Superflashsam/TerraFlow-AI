@@ -1,3 +1,4 @@
+
 "use client";
 
 import React from 'react';
@@ -32,32 +33,32 @@ const LeadStatusBadge = ({
     const configs: { [key: string]: { label: string; color: string; icon: string } } = {
       new: {
         label: 'New',
-        color: 'bg-accent text-accent-foreground',
+        color: 'bg-blue-500/10 text-blue-600',
         icon: 'Plus',
       },
       contacted: {
         label: 'Contacted',
-        color: 'bg-secondary text-secondary-foreground',
+        color: 'bg-cyan-500/10 text-cyan-600',
         icon: 'Phone',
       },
       qualified: {
         label: 'Qualified',
-        color: 'bg-yellow-500 text-white',
+        color: 'bg-yellow-500/10 text-yellow-600',
         icon: 'CheckCircle',
       },
       proposal_sent: {
         label: 'Proposal Sent',
-        color: 'bg-primary text-primary-foreground',
+        color: 'bg-purple-500/10 text-purple-600',
         icon: 'FileText',
       },
       negotiation: {
         label: 'Negotiation',
-        color: 'bg-yellow-500 text-white',
+        color: 'bg-orange-500/10 text-orange-600',
         icon: 'MessageSquare',
       },
       closed_won: {
         label: 'Closed Won',
-        color: 'bg-green-500 text-white',
+        color: 'bg-green-500/10 text-green-600',
         icon: 'Trophy',
       },
       closed_lost: {
@@ -78,16 +79,16 @@ const LeadStatusBadge = ({
   };
 
   const iconSizes = {
-    sm: 12,
-    default: 14,
-    lg: 16,
+    sm: 14,
+    default: 16,
+    lg: 18,
   };
 
   const Icon = iconMap[config.icon];
 
   return (
     <div
-      className={`inline-flex items-center space-x-1.5 rounded-full font-medium ${config.color} ${sizeClasses[size]}`}
+      className={`inline-flex items-center space-x-1.5 rounded-full font-semibold ${config.color} ${sizeClasses[size]}`}
     >
       <Icon size={iconSizes[size]} />
       <span>{config.label}</span>

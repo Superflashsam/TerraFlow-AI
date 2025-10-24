@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState } from 'react';
@@ -11,6 +12,12 @@ import {
 } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
 
 const LeadFilters = ({
   onFiltersChange,
@@ -29,16 +36,15 @@ const LeadFilters = ({
     searchQuery: '',
   });
 
-  const [isExpanded, setIsExpanded] = useState(true);
 
   const leadSources = [
-    { value: 'Website', label: 'Website' },
-    { value: 'Referral', label: 'Referral' },
-    { value: 'Social Media', label: 'Social Media' },
-    { value: 'Cold Call', label: 'Cold Call' },
-    { value: 'Email Campaign', label: 'Email Campaign' },
-    { value: 'Property Portal', label: 'Property Portal' },
-    { value: 'Walk-in', label: 'Walk-in' },
+    { value: 'website', label: 'Website' },
+    { value: 'referral', label: 'Referral' },
+    { value: 'social_media', label: 'Social Media' },
+    { value: 'cold_call', label: 'Cold Call' },
+    { value: 'email_campaign', label: 'Email Campaign' },
+    { value: 'property_portal', label: 'Property Portal' },
+    { value: 'walk_in', label: 'Walk-in' },
   ];
 
   const scoreRanges = [
@@ -50,18 +56,18 @@ const LeadFilters = ({
   ];
 
   const propertyTypes = [
-    { value: 'apartment', label: 'Apartment' },
-    { value: 'villa', label: 'Villa' },
-    { value: 'townhouse', label: 'Townhouse' },
-    { value: 'penthouse', label: 'Penthouse' },
-    { value: 'studio', label: 'Studio' },
-    { value: 'commercial', label: 'Commercial' },
-    { value: 'land', label: 'Land' },
+    { value: 'Apartment', label: 'Apartment' },
+    { value: 'Villa', label: 'Villa' },
+    { value: 'Townhouse', label: 'Townhouse' },
+    { value: 'Penthouse', label: 'Penthouse' },
+    { value: 'Studio', label: 'Studio' },
+    { value: 'Commercial', label: 'Commercial' },
+    { value: 'Land', label: 'Land' },
   ];
 
   const locations = [
     { value: 'downtown', label: 'Downtown' },
-    { value: 'marina', label: 'Marina District' },
+    { value: 'marina', label: 'Marina' },
     { value: 'business_bay', label: 'Business Bay' },
     { value: 'jumeirah', label: 'Jumeirah' },
     { value: 'dubai_hills', label: 'Dubai Hills' },
@@ -80,13 +86,11 @@ const LeadFilters = ({
   ];
 
   const dateRanges = [
+    { value: 'any_time', label: 'Any Time' },
     { value: 'today', label: 'Today' },
-    { value: 'yesterday', label: 'Yesterday' },
     { value: 'last_7_days', label: 'Last 7 days' },
     { value: 'last_30_days', label: 'Last 30 days' },
     { value: 'last_90_days', label: 'Last 90 days' },
-    { value: 'this_month', label: 'This month' },
-    { value: 'last_month', label: 'Last month' },
   ];
 
   const handleFilterChange = (key: string, value: string) => {
@@ -94,7 +98,7 @@ const LeadFilters = ({
     setFilters(newFilters);
     onFiltersChange(newFilters);
   };
-
+  
   const handleClearAll = () => {
     const clearedFilters = {
       source: '',
@@ -109,153 +113,96 @@ const LeadFilters = ({
     onClearFilters();
   };
 
-  const getActiveFiltersCount = () => {
-    return Object.values(filters).filter((value) => value !== '').length;
-  };
+  const FilterSection = ({ title, defaultOpen = false, children }: { title: string, defaultOpen?: boolean, children: React.ReactNode }) => (
+    <AccordionItem value={title}>
+        <AccordionTrigger className="text-sm font-semibold px-4 py-2 hover:no-underline">{title}</AccordionTrigger>
+        <AccordionContent className="px-4">
+            {children}
+        </AccordionContent>
+    </AccordionItem>
+  );
 
   return (
-    <div className="bg-card border border-border rounded-lg shadow-sm">
+    <div className="bg-card border border-border rounded-lg h-full flex flex-col">
       <div className="flex items-center justify-between p-4 border-b border-border">
         <div className="flex items-center space-x-2">
-          <Filter size={20} className="text-muted-foreground" />
-          <h3 className="font-medium text-foreground">Filters</h3>
-          {getActiveFiltersCount() > 0 && (
-            <span className="bg-primary text-primary-foreground text-xs px-2 py-1 rounded-full">
-              {getActiveFiltersCount()}
-            </span>
-          )}
+          <Filter size={16} className="text-muted-foreground" />
+          <h3 className="font-semibold text-foreground">Filters</h3>
         </div>
-        <div className="flex items-center space-x-2">
-          {getActiveFiltersCount() > 0 && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleClearAll}
-              className="text-muted-foreground hover:text-foreground"
-            >
-              Clear all
-            </Button>
-          )}
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setIsExpanded(!isExpanded)}
-          >
-            {isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-          </Button>
-        </div>
+        <ChevronUp size={16} />
       </div>
 
-      {isExpanded && (
-        <div className="p-4 space-y-4">
-          <div>
-            <Input
+      <div className="p-4 border-b border-border">
+          <Input
               type="search"
-              placeholder="Search leads..."
+              placeholder="Search leads by name, email, or phone..."
               value={filters.searchQuery}
               onChange={(e) => handleFilterChange('searchQuery', e.target.value)}
-              className="w-full"
+              className="w-full text-xs"
             />
-          </div>
+      </div>
 
-          <Select
-            onValueChange={(value) => handleFilterChange('source', value)}
-            value={filters.source}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="All Sources" />
-            </SelectTrigger>
-            <SelectContent>
-              {leadSources.map((s) => (
-                <SelectItem key={s.value} value={s.value}>
-                  {s.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          
-          <Select
-            onValueChange={(value) => handleFilterChange('scoreRange', value)}
-            value={filters.scoreRange}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="All Scores" />
-            </SelectTrigger>
-            <SelectContent>
-              {scoreRanges.map((s) => (
-                <SelectItem key={s.value} value={s.value}>
-                  {s.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+      <Accordion type="multiple" defaultValue={["Lead Source", "AI Lead Score", "Property Type", "Location", "Status", "Last Contact"]} className="w-full overflow-y-auto flex-1">
+        <FilterSection title="Lead Source">
+            <Select onValueChange={(value) => handleFilterChange('source', value)} value={filters.source}>
+                <SelectTrigger className="text-xs"><SelectValue placeholder="All sources" /></SelectTrigger>
+                <SelectContent>
+                    <SelectItem value="">All sources</SelectItem>
+                    {leadSources.map((s) => (<SelectItem key={s.value} value={s.value} className="text-xs">{s.label}</SelectItem>))}
+                </SelectContent>
+            </Select>
+        </FilterSection>
 
-          <Select
-            onValueChange={(value) => handleFilterChange('propertyType', value)}
-            value={filters.propertyType}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="All Property Types" />
-            </SelectTrigger>
-            <SelectContent>
-              {propertyTypes.map((p) => (
-                <SelectItem key={p.value} value={p.value}>
-                  {p.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+        <FilterSection title="AI Lead Score">
+            <Select onValueChange={(value) => handleFilterChange('scoreRange', value)} value={filters.scoreRange}>
+                <SelectTrigger className="text-xs"><SelectValue placeholder="All scores" /></SelectTrigger>
+                <SelectContent>
+                    <SelectItem value="">All scores</SelectItem>
+                    {scoreRanges.map((s) => (<SelectItem key={s.value} value={s.value} className="text-xs">{s.label}</SelectItem>))}
+                </SelectContent>
+            </Select>
+        </FilterSection>
 
-          <Select
-            onValueChange={(value) => handleFilterChange('location', value)}
-            value={filters.location}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="All Locations" />
-            </SelectTrigger>
-            <SelectContent>
-              {locations.map((l) => (
-                <SelectItem key={l.value} value={l.value}>
-                  {l.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          
-          <Select
-            onValueChange={(value) => handleFilterChange('status', value)}
-            value={filters.status}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="All Statuses" />
-            </SelectTrigger>
-            <SelectContent>
-              {statuses.map((s) => (
-                <SelectItem key={s.value} value={s.value}>
-                  {s.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+         <FilterSection title="Property Type">
+            <Select onValueChange={(value) => handleFilterChange('propertyType', value)} value={filters.propertyType}>
+                <SelectTrigger className="text-xs"><SelectValue placeholder="All types" /></SelectTrigger>
+                <SelectContent>
+                    <SelectItem value="">All types</SelectItem>
+                    {propertyTypes.map((p) => (<SelectItem key={p.value} value={p.value} className="text-xs">{p.label}</SelectItem>))}
+                </SelectContent>
+            </Select>
+        </FilterSection>
 
-          <Select
-            onValueChange={(value) => handleFilterChange('dateRange', value)}
-            value={filters.dateRange}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Any Time" />
-            </SelectTrigger>
-            <SelectContent>
-              {dateRanges.map((d) => (
-                <SelectItem key={d.value} value={d.value}>
-                  {d.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+        <FilterSection title="Location">
+            <Select onValueChange={(value) => handleFilterChange('location', value)} value={filters.location}>
+                <SelectTrigger className="text-xs"><SelectValue placeholder="All locations" /></SelectTrigger>
+                <SelectContent>
+                    <SelectItem value="">All locations</SelectItem>
+                    {locations.map((l) => (<SelectItem key={l.value} value={l.value} className="text-xs">{l.label}</SelectItem>))}
+                </SelectContent>
+            </Select>
+        </FilterSection>
+        
+        <FilterSection title="Status">
+            <Select onValueChange={(value) => handleFilterChange('status', value)} value={filters.status}>
+                <SelectTrigger className="text-xs"><SelectValue placeholder="All statuses" /></SelectTrigger>
+                <SelectContent>
+                    <SelectItem value="">All statuses</SelectItem>
+                    {statuses.map((s) => (<SelectItem key={s.value} value={s.value} className="text-xs">{s.label}</SelectItem>))}
+                </SelectContent>
+            </Select>
+        </FilterSection>
 
-        </div>
-      )}
+        <FilterSection title="Last Contact">
+            <Select onValueChange={(value) => handleFilterChange('dateRange', value)} value={filters.dateRange}>
+                <SelectTrigger className="text-xs"><SelectValue placeholder="Any time" /></SelectTrigger>
+                <SelectContent>
+                    <SelectItem value="">Any time</SelectItem>
+                    {dateRanges.map((d) => (<SelectItem key={d.value} value={d.value} className="text-xs">{d.label}</SelectItem>))}
+                </SelectContent>
+            </Select>
+        </FilterSection>
+      </Accordion>
     </div>
   );
 };
