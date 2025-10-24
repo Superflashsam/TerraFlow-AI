@@ -4,7 +4,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { MainHeader } from "@/components/layout/main-header";
 import { cn } from "@/lib/utils";
 import { ChatAssistant } from "@/components/chat/chat-assistant";
-import { CollapsibleSidebar } from "@/components/layout/collapsible-sidebar";
+import { NewSidebar } from "@/components/layout/new-sidebar";
 
 export const metadata: Metadata = {
   title: "Terraflow AI",
@@ -18,9 +18,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body className={cn("font-body antialiased")}>
+      <body className={cn("font-body antialiased bg-app-background")}>
         <div className="flex h-screen w-full overflow-hidden">
-          <CollapsibleSidebar />
+          <NewSidebar />
           <div className="flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
             <MainHeader />
             <main className="flex-1 p-6">
