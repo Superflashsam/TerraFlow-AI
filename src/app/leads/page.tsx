@@ -18,7 +18,7 @@ import { cn } from '@/lib/utils';
 
 export default function LeadsPage() {
   return (
-    <div className="flex flex-col gap-8 h-full py-6">
+    <div className="flex flex-col gap-8 h-full">
       <PageHeader
         title="Leads"
         description="Track, manage, and analyze your real estate leads with AI-powered insights."
