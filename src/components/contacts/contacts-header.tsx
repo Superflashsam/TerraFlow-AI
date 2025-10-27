@@ -67,7 +67,7 @@ export const ContactsHeader = ({ selectedCount, totalCount, onFiltersChange, onB
             <AppIcon name="Users" size={20} />
           </div>
           <div>
-            <h1 className="text-xl font-semibold text-foreground">CRM Contacts Hub</h1>
+            <h1 className="text-xl font-semibold text-foreground">Contacts Hub</h1>
             <p className="text-sm text-muted-foreground">
               {selectedCount > 0 ? (
                 `${selectedCount} of ${totalCount} contacts selected`
