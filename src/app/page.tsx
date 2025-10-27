@@ -31,10 +31,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { AddLeadModal } from "@/components/leads/add-lead-modal";
+import { AddPropertyModal } from "@/components/properties/add-property-modal";
 
 const Dashboard = () => {
   const [currentTime, setCurrentTime] = useState<Date | null>(null);
   const [isAddLeadModalOpen, setIsAddLeadModalOpen] = useState(false);
+  const [isAddPropertyModalOpen, setIsAddPropertyModalOpen] = useState(false);
 
   useEffect(() => {
     // This will only run on the client, after initial hydration
@@ -50,6 +52,12 @@ const Dashboard = () => {
     console.log("New Lead Added:", newLead);
     // Here you would typically handle the state update for leads
   };
+  
+  const handleAddProperty = (newProperty: any) => {
+    console.log("New Property Added:", newProperty);
+    // Here you would typically handle the state update for properties
+  };
+
 
   const kpiData = [
     {
@@ -99,7 +107,7 @@ const Dashboard = () => {
       title: "Add Property",
       icon: Building,
       color: "secondary" as const,
-      onClick: () => console.log("Add Property"),
+      onClick: () => setIsAddPropertyModalOpen(true),
     },
   ];
 
@@ -222,6 +230,13 @@ const Dashboard = () => {
         isOpen={isAddLeadModalOpen}
         onClose={() => setIsAddLeadModalOpen(false)}
         onAddLead={handleAddNewLead}
+      />
+
+      <AddPropertyModal
+        isOpen={isAddPropertyModalOpen}
+        onClose={() => setIsAddPropertyModalOpen(false)}
+        onSubmit={handleAddProperty}
+        property={null}
       />
     </div>
   );
