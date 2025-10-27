@@ -51,7 +51,7 @@ export const KPICard = ({
   };
 
   return (
-    <div className="bg-card border border-border rounded-lg p-6 shadow-sm hover:shadow-md transition-all duration-200">
+    <div className="bg-card border border-border rounded-lg p-6 shadow-sm hover:shadow-md hover:border-primary/50 transition-all duration-300 cursor-pointer animate-in fade-in slide-in-from-bottom-4">
       <div className="flex items-center justify-between mb-4">
         <div
           className={cn(

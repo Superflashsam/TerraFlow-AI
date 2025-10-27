@@ -1,6 +1,7 @@
 
 "use client";
 import React, { useEffect, useState } from "react";
+import Link from "next/link";
 import {
   Users,
   Building,
@@ -67,6 +68,7 @@ const Dashboard = () => {
       changeType: "positive" as const,
       icon: Users,
       color: "primary" as const,
+      href: "/leads",
     },
     {
       title: "Properties Listed",
@@ -75,6 +77,7 @@ const Dashboard = () => {
       changeType: "positive" as const,
       icon: Building,
       color: "secondary" as const,
+      href: "/properties",
     },
     {
       title: "Deals Closed",
@@ -83,6 +86,7 @@ const Dashboard = () => {
       changeType: "positive" as const,
       icon: Handshake,
       color: "success" as const,
+      href: "/deals",
     },
     {
       title: "Monthly Revenue",
@@ -91,6 +95,7 @@ const Dashboard = () => {
       changeType: "positive" as const,
       icon: DollarSign,
       color: "accent" as const,
+      href: "/analytics",
     },
   ];
 
@@ -192,15 +197,16 @@ const Dashboard = () => {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {kpiData.map((kpi, index) => (
-          <KPICard
-            key={index}
-            title={kpi.title}
-            value={kpi.value}
-            change={kpi.change}
-            changeType={kpi.changeType}
-            icon={kpi.icon}
-            color={kpi.color}
-          />
+          <Link href={kpi.href} key={index}>
+            <KPICard
+              title={kpi.title}
+              value={kpi.value}
+              change={kpi.change}
+              changeType={kpi.changeType}
+              icon={kpi.icon}
+              color={kpi.color}
+            />
+          </Link>
         ))}
       </div>
 
