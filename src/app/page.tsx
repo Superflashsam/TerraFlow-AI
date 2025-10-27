@@ -1,3 +1,4 @@
+
 "use client";
 import React, { useEffect, useState } from "react";
 import {
@@ -29,9 +30,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { AddLeadModal } from "@/components/leads/add-lead-modal";
 
 const Dashboard = () => {
   const [currentTime, setCurrentTime] = useState<Date | null>(null);
+  const [isAddLeadModalOpen, setIsAddLeadModalOpen] = useState(false);
 
   useEffect(() => {
     // This will only run on the client, after initial hydration
@@ -41,7 +44,12 @@ const Dashboard = () => {
     }, 60000); // Update every minute
 
     return () => clearInterval(timer);
-  }, []); // Empty dependency array ensures this runs once on mount
+  }, []);
+
+  const handleAddNewLead = (newLead: any) => {
+    console.log("New Lead Added:", newLead);
+    // Here you would typically handle the state update for leads
+  };
 
   const kpiData = [
     {
@@ -84,7 +92,7 @@ const Dashboard = () => {
       title: "Add New Lead",
       icon: UserPlus,
       color: "primary" as const,
-      onClick: () => console.log("Add New Lead"),
+      onClick: () => setIsAddLeadModalOpen(true),
     },
     {
       id: "add-property",
@@ -209,6 +217,12 @@ const Dashboard = () => {
        <div className="grid grid-cols-1 gap-8">
           <TerraAiSuggestions />
       </div>
+
+      <AddLeadModal
+        isOpen={isAddLeadModalOpen}
+        onClose={() => setIsAddLeadModalOpen(false)}
+        onAddLead={handleAddNewLead}
+      />
     </div>
   );
 };
