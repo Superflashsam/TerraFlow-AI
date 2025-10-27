@@ -7,6 +7,7 @@ import { ContactsSidebar } from '@/components/contacts/contacts-sidebar';
 import { ContactsHeader } from '@/components/contacts/contacts-header';
 import { ContactDetailsPanel } from '@/components/contacts/contact-details-panel';
 import { BulkActionsModal } from '@/components/contacts/bulk-actions-modal';
+import { AddContactModal } from '@/components/contacts/add-contact-modal';
 
 const CRMContactsHub = () => {
   const [contacts, setContacts] = useState<any[]>([]);
@@ -14,6 +15,7 @@ const CRMContactsHub = () => {
   const [selectedContact, setSelectedContact] = useState<any | null>(null);
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [isBulkModalOpen, setIsBulkModalOpen] = useState(false);
+  const [isAddContactModalOpen, setIsAddContactModalOpen] = useState(false);
   const [filters, setFilters] = useState({
     search: '',
     category: 'all',
@@ -100,6 +102,21 @@ const CRMContactsHub = () => {
     setContacts(mockContacts);
   }, []);
 
+  const handleAddContact = (newContact: any) => {
+    const contactToAdd = {
+        ...newContact,
+        id: contacts.length + 1,
+        lastInteraction: new Date().toISOString().split('T')[0],
+        relationshipStrength: 50,
+        profileImage: `https://picsum.photos/seed/${newContact.name}/150/150`,
+        alt: `Profile image of ${newContact.name}`,
+        interactionCount: 0,
+        properties: [],
+        tags: []
+    }
+    setContacts(prev => [contactToAdd, ...prev]);
+  };
+
   const handleContactSelect = (contactId: string) => {
     setSelectedContacts((prev) => {
       if (prev?.includes(contactId)) {
@@ -173,7 +190,9 @@ const CRMContactsHub = () => {
             selectedCount={selectedContacts?.length}
             totalCount={contacts?.length}
             onFiltersChange={handleFiltersChange}
-            onBulkActions={() => setIsBulkModalOpen(true)} />
+            onBulkActions={() => setIsBulkModalOpen(true)} 
+            onAddContact={() => setIsAddContactModalOpen(true)}
+            />
 
 
           <div className="flex flex-1 overflow-hidden">
@@ -212,8 +231,13 @@ const CRMContactsHub = () => {
             selectedCount={selectedContacts?.length}
             onAction={handleBulkAction}
             onClose={() => setIsBulkModalOpen(false)} />
-
           }
+
+          <AddContactModal
+            isOpen={isAddContactModalOpen}
+            onClose={() => setIsAddContactModalOpen(false)}
+            onAddContact={handleAddContact}
+          />
       </div>
     </>
   );

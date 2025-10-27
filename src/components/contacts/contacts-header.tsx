@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 
-export const ContactsHeader = ({ selectedCount, totalCount, onFiltersChange, onBulkActions }: { selectedCount: number, totalCount: number, onFiltersChange: (filters: any) => void, onBulkActions: () => void }) => {
+export const ContactsHeader = ({ selectedCount, totalCount, onFiltersChange, onBulkActions, onAddContact }: { selectedCount: number, totalCount: number, onFiltersChange: (filters: any) => void, onBulkActions: () => void, onAddContact: () => void }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [categoryFilter, setCategoryFilter] = useState('all');
@@ -138,6 +138,7 @@ export const ContactsHeader = ({ selectedCount, totalCount, onFiltersChange, onB
 
           {/* Add Contact Button */}
           <Button
+            onClick={onAddContact}
             className="flex items-center space-x-2"
           >
             <AppIcon name="Plus" size={16} />
