@@ -14,6 +14,15 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { LucideIcon } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
 
 type ActivityType = {
   id: number;
@@ -103,27 +112,11 @@ export const ActivityFeed = () => {
   ];
 
   const filterOptions = [
-    { value: "all", label: "All Activity", count: activities.length },
-    {
-      value: "lead",
-      label: "Leads",
-      count: activities.filter((a) => a.type === "lead").length,
-    },
-    {
-      value: "property",
-      label: "Properties",
-      count: activities.filter((a) => a.type === "property").length,
-    },
-    {
-      value: "deal",
-      label: "Deals",
-      count: activities.filter((a) => a.type === "deal").length,
-    },
-    {
-      value: "workflow",
-      label: "Workflows",
-      count: activities.filter((a) => a.type === "workflow").length,
-    },
+    { value: "all", label: "All Activity" },
+    { value: "lead", label: "Leads" },
+    { value: "property", label: "Properties" },
+    { value: "deal", label: "Deals" },
+    { value: "workflow", label: "Workflows" },
   ];
 
   const filteredActivities =
@@ -158,39 +151,27 @@ export const ActivityFeed = () => {
   return (
     <div className="bg-card border border-border rounded-lg shadow-sm">
       <div className="p-6 border-b border-border">
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between">
           <h2 className="text-lg font-semibold text-foreground">
             Recent Activity
           </h2>
-          <Button variant="outline" size="sm">
-            <Filter size={16} className="mr-2" />
-            Filter
-          </Button>
-        </div>
-
-        <div className="flex space-x-1 bg-muted rounded-lg p-1">
-          {filterOptions.map((option) => (
-            <button
-              key={option.value}
-              onClick={() => setFilter(option.value)}
-              className={`flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
-                filter === option.value
-                  ? "bg-card text-foreground shadow-sm"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              <span>{option.label}</span>
-              <span
-                className={`px-1.5 py-0.5 text-xs rounded-full ${
-                  filter === option.value
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-muted-foreground/20 text-muted-foreground"
-                }`}
-              >
-                {option.count}
-              </span>
-            </button>
-          ))}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="sm">
+                <Filter size={16} className="mr-2" />
+                Filter
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56">
+                <DropdownMenuRadioGroup value={filter} onValueChange={setFilter}>
+                    {filterOptions.map((option) => (
+                        <DropdownMenuRadioItem key={option.value} value={option.value}>
+                            {option.label}
+                        </DropdownMenuRadioItem>
+                    ))}
+                </DropdownMenuRadioGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
 
