@@ -1,0 +1,71 @@
+
+"use client";
+
+import React from 'react';
+import {
+  Users,
+  Home,
+  Tag,
+  TrendingUp,
+  Target,
+  Hash,
+  Bookmark,
+  Search,
+  Settings,
+  Plus,
+  X,
+  ChevronRight,
+  Clock,
+  FileText,
+  Phone,
+  Mail,
+  Building,
+  Key,
+  Download,
+  Trash2,
+  Calendar,
+  Circle,
+  ArrowUpDown,
+  ArrowUp,
+  ArrowDown
+} from 'lucide-react';
+
+const iconMap: { [key: string]: React.ElementType } = {
+  Users,
+  Home,
+  Tag,
+  TrendingUp,
+  Target,
+  Hash,
+  Bookmark,
+  Search,
+  Settings,
+  Plus,
+  X,
+  ChevronRight,
+  Clock,
+  FileText,
+  Phone,
+  Mail,
+  Building,
+  Key,
+  Download,
+  Trash2,
+  Calendar,
+  Circle,
+  ArrowUpDown,
+  ArrowUp,
+  ArrowDown
+};
+
+const AppIcon = ({ name, size, color, className }: { name: string; size?: number; color?: string; className?: string }) => {
+  const IconComponent = iconMap[name];
+
+  if (!IconComponent) {
+    return null; // Or return a default icon
+  }
+
+  return <IconComponent size={size} color={color} className={className} />;
+};
+
+export default AppIcon;
