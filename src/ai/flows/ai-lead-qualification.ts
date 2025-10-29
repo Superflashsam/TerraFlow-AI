@@ -10,6 +10,7 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
+import { searchLeads } from './search-leads';
 
 const AiLeadQualificationInputSchema = z.object({
   userDetails: z
@@ -24,7 +25,7 @@ const AiLeadQualificationOutputSchema = z.object({
   timeline: z.string().describe('The timeline of the lead. Default to "Not specified" if not found.'),
   siteVisitBooking: z.string().optional().describe('Confirmation and details of the site visit booking, if applicable.'),
   qualified: z.boolean().describe('Whether the lead is qualified or not.'),
-  summary: z.string().describe('A summary of the conversation with the lead.'),
+  summary: z.string().describe('A summary of the conversation with the lead or the result of the tool call.'),
 });
 export type AiLeadQualificationOutput = z.infer<typeof AiLeadQualificationOutputSchema>;
 
@@ -56,16 +57,19 @@ const prompt = ai.definePrompt({
   name: 'aiLeadQualificationPrompt',
   input: {schema: AiLeadQualificationInputSchema},
   output: {schema: AiLeadQualificationOutputSchema},
-  tools: [bookSiteVisit],
-  prompt: `You are an AI chat assistant specializing in qualifying real estate leads. Your goal is to determine the lead's budget, preferred location, and timeline for purchasing a property.  You will also attempt to book a site visit for qualified leads.
-
-  Based on the following conversation with the user, extract the budget, location, and timeline. If any of these are not mentioned, default them to "Not specified".
+  tools: [bookSiteVisit, searchLeads],
+  prompt: `You are Terra, an AI chat assistant specializing in qualifying real estate leads and managing CRM data. 
   
-  If the lead seems serious and provides clear information (budget, location, timeline), use the bookSiteVisit tool to schedule a site visit.
+  Your primary goals are:
+  1. Qualify real estate leads by determining their budget, preferred location, and timeline.
+  2. Interact with the CRM by using the available tools to search for leads.
+  3. Schedule site visits for qualified leads.
 
-  After analyzing the conversation, determine if the lead is qualified. A lead is qualified if they have provided a clear budget, location, and timeline.
+  Analyze the user's request. 
+  - If the user is providing information about a potential lead, extract their budget, location, and timeline. If they seem qualified, use the bookSiteVisit tool.
+  - If the user is asking to find leads (e.g., "find all hot leads", "show me investors in Pune"), use the searchLeads tool to find the information and summarize the results.
   
-  Finally, provide a concise summary of the conversation and output all the gathered information in the required JSON format.
+  Finally, provide a concise summary of the outcome and output all the gathered information in the required JSON format.
 
   Conversation:
   {{{userDetails}}}`,
