@@ -169,7 +169,7 @@ export const QuickAccessWidget = () => {
 
   return (
     <>
-    <div className="bg-card border border-border rounded-lg shadow-sm">
+    <div className="bg-card border border-border rounded-lg shadow-sm h-full flex flex-col">
       <div className="p-4 border-b border-border">
         <h2 className="text-lg font-semibold text-foreground mb-4">
           Quick Access
@@ -203,7 +203,7 @@ export const QuickAccessWidget = () => {
         </div>
       </div>
 
-      <div className="max-h-80 overflow-y-auto">
+      <div className="max-h-80 overflow-y-auto flex-1">
         {activeTab === "tasks" && (
           <div className="p-4 space-y-3">
             {tasks.map((task) => (

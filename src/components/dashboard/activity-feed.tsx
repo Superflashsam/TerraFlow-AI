@@ -150,7 +150,7 @@ export const ActivityFeed = () => {
   };
 
   return (
-    <div className="bg-card border border-border rounded-lg shadow-sm">
+    <div className="bg-card border border-border rounded-lg shadow-sm h-full flex flex-col">
       <div className="p-6 border-b border-border">
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-semibold text-foreground">
@@ -176,7 +176,7 @@ export const ActivityFeed = () => {
         </div>
       </div>
 
-      <div className="max-h-96 overflow-y-auto">
+      <div className="max-h-96 overflow-y-auto flex-1">
         {filteredActivities.length > 0 ? (
           <div className="divide-y divide-border">
             {filteredActivities.map((activity) => {
@@ -237,7 +237,7 @@ export const ActivityFeed = () => {
         )}
       </div>
 
-      <div className="p-4 border-t border-border">
+      <div className="p-4 border-t border-border mt-auto">
         <Link href="/analytics" className="w-full">
             <Button variant="ghost" size="sm" className="w-full">
             View All Activity
