@@ -355,9 +355,6 @@ export const PerformanceChart = () => {
               <Download size={16} className="mr-2" />
               Export
             </Button>
-            <Button variant="outline" size="icon">
-              <MoreHorizontal size={16} />
-            </Button>
           </div>
         </div>
 
@@ -399,22 +396,16 @@ export const PerformanceChart = () => {
           )}
 
           {chartType !== "properties" && (
-            <div className="flex space-x-1 bg-muted rounded-lg p-1 self-end md:self-center">
-              {timeRanges.map((range) => (
-                <button
-                  key={range.id}
-                  onClick={() => setTimeRange(range.id)}
-                  className={cn(
-                    "px-3 py-1 rounded-md text-sm font-medium transition-all duration-200",
-                    timeRange === range.id
-                      ? "bg-card text-foreground shadow-sm"
-                      : "text-muted-foreground hover:text-foreground"
-                  )}
-                >
-                  {range.label}
-                </button>
-              ))}
-            </div>
+            <Select value={timeRange} onValueChange={setTimeRange}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Select time range" />
+              </SelectTrigger>
+              <SelectContent>
+                {timeRanges.map((range) => (
+                  <SelectItem key={range.id} value={range.id}>{range.label}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           )}
         </div>
       </CardHeader>
