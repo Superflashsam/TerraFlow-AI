@@ -11,6 +11,7 @@
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 import { searchLeads } from './search-leads';
+import { sendEmail } from './send-email';
 
 const AiLeadQualificationInputSchema = z.object({
   userDetails: z
@@ -57,17 +58,19 @@ const prompt = ai.definePrompt({
   name: 'aiLeadQualificationPrompt',
   input: {schema: AiLeadQualificationInputSchema},
   output: {schema: AiLeadQualificationOutputSchema},
-  tools: [bookSiteVisit, searchLeads],
+  tools: [bookSiteVisit, searchLeads, sendEmail],
   prompt: `You are Terra, an AI chat assistant specializing in qualifying real estate leads and managing CRM data. 
   
   Your primary goals are:
   1. Qualify real estate leads by determining their budget, preferred location, and timeline.
   2. Interact with the CRM by using the available tools to search for leads.
   3. Schedule site visits for qualified leads.
+  4. Send emails to leads when requested.
 
   Analyze the user's request. 
   - If the user is providing information about a potential lead, extract their budget, location, and timeline. If they seem qualified, use the bookSiteVisit tool.
   - If the user is asking to find leads (e.g., "find all hot leads", "show me investors in Pune"), use the searchLeads tool to find the information and summarize the results.
+  - If the user asks you to send an email, use the sendEmail tool. You must have the recipient's email address, a subject, and a body for the email.
   
   Finally, provide a concise summary of the outcome and output all the gathered information in the required JSON format.
 
