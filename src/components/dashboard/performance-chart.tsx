@@ -355,6 +355,18 @@ export const PerformanceChart = () => {
               <Download size={16} className="mr-2" />
               Export
             </Button>
+            {chartType !== "properties" && (
+                <Select value={timeRange} onValueChange={setTimeRange}>
+                <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="Select time range" />
+                </SelectTrigger>
+                <SelectContent>
+                    {timeRanges.map((range) => (
+                    <SelectItem key={range.id} value={range.id}>{range.label}</SelectItem>
+                    ))}
+                </SelectContent>
+                </Select>
+            )}
           </div>
         </div>
 
@@ -395,18 +407,6 @@ export const PerformanceChart = () => {
             </div>
           )}
 
-          {chartType !== "properties" && (
-            <Select value={timeRange} onValueChange={setTimeRange}>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Select time range" />
-              </SelectTrigger>
-              <SelectContent>
-                {timeRanges.map((range) => (
-                  <SelectItem key={range.id} value={range.id}>{range.label}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          )}
         </div>
       </CardHeader>
 
@@ -507,3 +507,5 @@ export const PerformanceChart = () => {
     </Card>
   );
 };
+
+    
