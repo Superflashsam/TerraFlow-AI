@@ -1,6 +1,7 @@
 
 "use client";
 import React, { useState } from "react";
+import Link from "next/link";
 import {
   UserPlus,
   Building,
@@ -237,10 +238,12 @@ export const ActivityFeed = () => {
       </div>
 
       <div className="p-4 border-t border-border">
-        <Button variant="ghost" size="sm" className="w-full">
-          View All Activity
-          <ArrowRight size={16} className="ml-2" />
-        </Button>
+        <Link href="/analytics" className="w-full">
+            <Button variant="ghost" size="sm" className="w-full">
+            View All Activity
+            <ArrowRight size={16} className="ml-2" />
+            </Button>
+        </Link>
       </div>
     </div>
   );
