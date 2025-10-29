@@ -20,7 +20,7 @@ import { PageHeader } from "@/components/shared/page-header";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { conversations, selectedConversation } from "@/lib/placeholder-data";
+import { conversations as originalConversations, selectedConversation } from "@/lib/placeholder-data";
 import { getImagePlaceholder } from "@/lib/placeholder-images";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
@@ -32,6 +32,11 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+
+const conversations = originalConversations.map(c => ({
+    ...c,
+    avatar: getImagePlaceholder(`inbox-${c.name.toLowerCase()}`)?.imageUrl
+}))
 
 function ConversationItem({ conv, active, onSelect }: { conv: any, active: boolean, onSelect: () => void }) {
   const getChannelIcon = (channel: string) => {
@@ -53,7 +58,7 @@ function ConversationItem({ conv, active, onSelect }: { conv: any, active: boole
     >
       <div className="relative">
         <Avatar>
-          <AvatarImage src={`https://picsum.photos/seed/${conv.name}/40/40`} data-ai-hint="person portrait" />
+          <AvatarImage src={conv.avatar} data-ai-hint="person portrait" />
           <AvatarFallback>{conv.name.charAt(0)}</AvatarFallback>
         </Avatar>
         <div className="absolute bottom-0 right-0 bg-background p-0.5 rounded-full">
@@ -170,7 +175,7 @@ export default function InboxPage() {
              <div className="flex items-center justify-between p-4 border-b">
               <div className="flex items-center gap-3">
                 <Avatar>
-                  <AvatarImage src={`https://picsum.photos/seed/${selectedConversation.name}/40/40`} data-ai-hint="person portrait" />
+                  <AvatarImage src={getImagePlaceholder('inbox-alice')?.imageUrl} data-ai-hint="person portrait" />
                   <AvatarFallback>{selectedConversation.name.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <div>
@@ -215,7 +220,7 @@ export default function InboxPage() {
                             <div key={index} className={`flex items-end gap-3 ${msg.from === 'Agent' ? 'justify-end' : ''}`}>
                             {msg.from !== 'Agent' && 
                                 <Avatar className="h-8 w-8">
-                                    <AvatarImage src={`https://picsum.photos/seed/${selectedConversation.name}/40/40`} data-ai-hint="person portrait" />
+                                    <AvatarImage src={getImagePlaceholder('inbox-alice')?.imageUrl} data-ai-hint="person portrait" />
                                     <AvatarFallback>{selectedConversation.name.charAt(0)}</AvatarFallback>
                                 </Avatar>}
                             <div className={`rounded-lg p-3 max-w-md shadow-sm ${msg.from === 'Agent' ? 'bg-primary text-primary-foreground' : 'bg-muted'}`}>

@@ -3,38 +3,98 @@
     {
       "id": "avatar-1",
       "description": "User avatar for Alex Johnson",
-      "imageUrl": "https://images.unsplash.com/photo-1583195763986-0231686dcd43?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxtYW4lMjBwb3J0cmFpdHxlbnwwfHx8fDE3NjExNDUzMDB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1583195763986-0231686dcd43?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&h=150&q=80",
       "imageHint": "man portrait"
     },
     {
       "id": "avatar-2",
       "description": "User avatar for Samantha Roe",
-      "imageUrl": "https://images.unsplash.com/photo-1580489944761-15a19d654956?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHx3b21hbiUyMHBvcnRyYWl0fGVufDB8fHx8MTc2MTE0NzUzOXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&h=150&q=80",
       "imageHint": "woman portrait"
     },
     {
       "id": "avatar-3",
       "description": "User avatar for Marcus Brown",
-      "imageUrl": "https://images.unsplash.com/photo-1590086782792-42dd2350140d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxwZXJzb24lMjBwb3J0cmFpdHxlbnwwfHx8fDE3NjEyMjc5NjN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1590086782792-42dd2350140d?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&h=150&q=80",
       "imageHint": "person portrait"
     },
     {
       "id": "bot-avatar",
       "description": "Avatar for the AI Bot",
-      "imageUrl": "https://images.unsplash.com/photo-1759395162881-83fda11c014f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8cm9ib3QlMjB0ZWNobm9sb2d5fGVufDB8fHx8MTc2MTIzNjkwMXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1517976487-142831192593?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&h=150&q=80",
       "imageHint": "robot technology"
     },
     {
       "id": "user-avatar",
       "description": "Avatar for the current logged-in user",
-      "imageUrl": "https://images.unsplash.com/photo-1610631066894-62452ccb927c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxwcm9mZXNzaW9uYWwlMjBwZXJzb258ZW58MHx8fHwxNzYxMjE1MjAxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&h=150&q=80",
       "imageHint": "professional person"
+    },
+    {
+      "id": "avatar-rajesh",
+      "description": "Avatar for Rajesh Kumar",
+      "imageUrl": "https://images.unsplash.com/photo-1653566031535-bcf33e1c2893?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&h=150&q=80",
+      "imageHint": "indian man"
+    },
+    {
+      "id": "avatar-priya",
+      "description": "Avatar for Priya Sharma",
+      "imageUrl": "https://images.unsplash.com/photo-1590649880765-91b1956b8276?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&h=150&q=80",
+      "imageHint": "indian woman"
+    },
+    {
+      "id": "avatar-amit",
+      "description": "Avatar for Amit Patel",
+      "imageUrl": "https://images.unsplash.com/photo-1580130379601-1a28f2e8df4a?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&h=150&q=80",
+      "imageHint": "businessman portrait"
+    },
+    {
+      "id": "avatar-sunita",
+      "description": "Avatar for Sunita Reddy",
+      "imageUrl": "https://images.unsplash.com/photo-1498200705497-2c9e717e5ab8?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&h=150&q=80",
+      "imageHint": "businesswoman portrait"
+    },
+    {
+      "id": "avatar-generic",
+      "description": "Generic user avatar",
+      "imageUrl": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxwZXJzb258ZW58MHx8fHwxNzYxNzQ1NjU2fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "person"
+    },
+    {
+      "id": "inbox-alice",
+      "description": "Avatar for Alice in inbox",
+      "imageUrl": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&h=150&q=80",
+      "imageHint": "woman smiling"
+    },
+    {
+      "id": "inbox-bob",
+      "description": "Avatar for Bob in inbox",
+      "imageUrl": "https://images.unsplash.com/photo-1557862921-37829c790f19?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&h=150&q=80",
+      "imageHint": "man professional"
+    },
+    {
+      "id": "inbox-charlie",
+      "description": "Avatar for Charlie in inbox",
+      "imageUrl": "https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&h=150&q=80",
+      "imageHint": "man glasses"
+    },
+    {
+      "id": "inbox-diana",
+      "description": "Avatar for Diana in inbox",
+      "imageUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&h=150&q=80",
+      "imageHint": "woman looking"
+    },
+    {
+      "id": "inbox-ethan",
+      "description": "Avatar for Ethan in inbox",
+      "imageUrl": "https://images.unsplash.com/photo-1564564321837-a57b7070ac4f?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&h=150&q=80",
+      "imageHint": "man smiling"
     },
     {
       "id": "property-1",
       "description": "Image of 3BHK Luxury Apartment in Baner",
-      "imageUrl": "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      "imageHint": "modern apartment"
+      "imageUrl": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      "imageHint": "modern house"
     },
     {
       "id": "property-2",
@@ -46,7 +106,7 @@
       "id": "property-3",
       "description": "Image of 2BHK Modern Flat in Wakad",
       "imageUrl": "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      "imageHint": "modern flat"
+      "imageHint": "modern apartment"
     },
     {
       "id": "property-4",

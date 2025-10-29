@@ -8,6 +8,7 @@ import { ContactsHeader } from '@/components/contacts/contacts-header';
 import { ContactDetailsPanel } from '@/components/contacts/contact-details-panel';
 import { BulkActionsModal } from '@/components/contacts/bulk-actions-modal';
 import { AddContactModal } from '@/components/contacts/add-contact-modal';
+import { getImagePlaceholder } from '@/lib/placeholder-images';
 
 const CRMContactsHub = () => {
   const [contacts, setContacts] = useState<any[]>([]);
@@ -41,7 +42,7 @@ const CRMContactsHub = () => {
       lastInteraction: '2025-01-15',
       relationshipStrength: 85,
       dealValue: '₹2.5 Cr',
-      profileImage: "https://images.unsplash.com/photo-1653566031535-bcf33e1c2893?w=150&h=150&fit=crop&crop=face",
+      profileImage: getImagePlaceholder('avatar-rajesh')?.imageUrl,
       alt: 'Professional headshot of Rajesh Kumar in business attire',
       tags: ['High Value', 'Mumbai'],
       interactionCount: 12,
@@ -58,7 +59,7 @@ const CRMContactsHub = () => {
       lastInteraction: '2025-01-12',
       relationshipStrength: 72,
       dealValue: '₹1.8 Cr',
-      profileImage: "https://images.unsplash.com/photo-1590649880765-91b1956b8276?w=150&h=150&fit=crop&crop=face",
+      profileImage: getImagePlaceholder('avatar-priya')?.imageUrl,
       alt: 'Professional photo of Priya Sharma smiling in office setting',
       tags: ['Quick Sale', 'Delhi'],
       interactionCount: 8,
@@ -75,7 +76,7 @@ const CRMContactsHub = () => {
       lastInteraction: '2025-01-08',
       relationshipStrength: 45,
       dealValue: '₹5.2 Cr',
-      profileImage: "https://images.unsplash.com/photo-1580130379601-1a28f2e8df4a?w=150&h=150&fit=crop&crop=face",
+      profileImage: getImagePlaceholder('avatar-amit')?.imageUrl,
       alt: 'Business portrait of Amit Patel in formal suit',
       tags: ['Bulk Purchase', 'Pune'],
       interactionCount: 15,
@@ -92,7 +93,7 @@ const CRMContactsHub = () => {
       lastInteraction: '2025-01-14',
       relationshipStrength: 92,
       dealValue: '₹3.1 Cr',
-      profileImage: "https://images.unsplash.com/photo-1498200705497-2c9e717e5ab8?w=150&h=150&fit=crop&crop=face",
+      profileImage: getImagePlaceholder('avatar-sunita')?.imageUrl,
       alt: 'Executive headshot of Sunita Reddy in professional business attire',
       tags: ['Repeat Client', 'Bangalore'],
       interactionCount: 25,
@@ -108,7 +109,7 @@ const CRMContactsHub = () => {
         id: contacts.length + 1,
         lastInteraction: new Date().toISOString().split('T')[0],
         relationshipStrength: 50,
-        profileImage: `https://picsum.photos/seed/${newContact.name}/150/150`,
+        profileImage: getImagePlaceholder('avatar-generic')?.imageUrl,
         alt: `Profile image of ${newContact.name}`,
         interactionCount: 0,
         properties: [],
