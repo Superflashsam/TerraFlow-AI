@@ -256,11 +256,6 @@ export const QuickAccessWidget = () => {
                 </div>
               </div>
             ))}
-
-            <Button variant="ghost" size="sm" className="w-full mt-4" onClick={() => setIsAddTaskModalOpen(true)}>
-              <Plus size={16} className="mr-2" />
-              Add New Task
-            </Button>
           </div>
         )}
 
@@ -301,11 +296,6 @@ export const QuickAccessWidget = () => {
                 </div>
               );
             })}
-
-            <Button variant="ghost" size="sm" className="w-full mt-4">
-              <Calendar size={16} className="mr-2" />
-              View Calendar
-            </Button>
           </div>
         )}
 
@@ -349,12 +339,27 @@ export const QuickAccessWidget = () => {
                 </div>
               );
             })}
-
-            <Button variant="ghost" size="sm" className="w-full mt-4">
+          </div>
+        )}
+      </div>
+      <div className="p-4 border-t border-border mt-auto">
+        {activeTab === 'tasks' && (
+            <Button variant="ghost" size="sm" className="w-full" onClick={() => setIsAddTaskModalOpen(true)}>
+              <Plus size={16} className="mr-2" />
+              Add New Task
+            </Button>
+        )}
+        {activeTab === 'appointments' && (
+            <Button variant="ghost" size="sm" className="w-full">
+              <Calendar size={16} className="mr-2" />
+              View Calendar
+            </Button>
+        )}
+        {activeTab === 'notifications' && (
+            <Button variant="ghost" size="sm" className="w-full">
               <Bell size={16} className="mr-2" />
               View All Notifications
             </Button>
-          </div>
         )}
       </div>
     </div>
