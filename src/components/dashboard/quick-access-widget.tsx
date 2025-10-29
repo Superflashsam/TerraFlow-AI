@@ -15,9 +15,11 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { LucideIcon } from "lucide-react";
+import { AddTaskModal } from "@/components/tasks/add-task-modal";
 
 export const QuickAccessWidget = () => {
   const [activeTab, setActiveTab] = useState("tasks");
+  const [isAddTaskModalOpen, setIsAddTaskModalOpen] = useState(false);
 
   const todaysTasks = [
     {
@@ -117,6 +119,16 @@ export const QuickAccessWidget = () => {
       )
     );
   };
+  
+  const handleAddTask = (newTask: any) => {
+    const taskToAdd = {
+        ...newTask,
+        id: tasks.length + 1,
+        completed: false,
+        dueTime: new Date(newTask.dueDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    };
+    setTasks(prev => [taskToAdd, ...prev]);
+  };
 
   const getPriorityColor = (priority: "high" | "medium" | "low") => {
     const colorMap = {
@@ -156,6 +168,7 @@ export const QuickAccessWidget = () => {
   ];
 
   return (
+    <>
     <div className="bg-card border border-border rounded-lg shadow-sm">
       <div className="p-4 border-b border-border">
         <h2 className="text-lg font-semibold text-foreground mb-4">
@@ -244,7 +257,7 @@ export const QuickAccessWidget = () => {
               </div>
             ))}
 
-            <Button variant="ghost" size="sm" className="w-full mt-4">
+            <Button variant="ghost" size="sm" className="w-full mt-4" onClick={() => setIsAddTaskModalOpen(true)}>
               <Plus size={16} className="mr-2" />
               Add New Task
             </Button>
@@ -345,6 +358,11 @@ export const QuickAccessWidget = () => {
         )}
       </div>
     </div>
+    <AddTaskModal
+        isOpen={isAddTaskModalOpen}
+        onClose={() => setIsAddTaskModalOpen(false)}
+        onAddTask={handleAddTask}
+    />
+    </>
   );
 };
-
