@@ -359,10 +359,12 @@ export const QuickAccessWidget = () => {
             </Link>
         )}
         {activeTab === 'notifications' && (
+          <Link href="/" className="w-full">
             <Button variant="ghost" size="sm" className="w-full">
               <Bell size={16} className="mr-2" />
               View All Notifications
             </Button>
+          </Link>
         )}
       </div>
     </div>
