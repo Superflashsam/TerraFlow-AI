@@ -67,7 +67,7 @@ const useIsTablet = () => {
 
 export const PerformanceChart = () => {
   const [chartType, setChartType] = useState("revenue");
-  const [timeRange, setTimeRange] = useState("6months");
+  const [timeRange, setTimeRange] = useState("all");
   const isMobile = useIsMobile();
   const isTablet = useIsTablet();
 
@@ -351,10 +351,6 @@ export const PerformanceChart = () => {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <CardTitle>Performance Analytics</CardTitle>
           <div className="flex items-center space-x-2">
-            <Button variant="outline" size="sm">
-              <Download size={16} className="mr-2" />
-              Export
-            </Button>
             {chartType !== "properties" && (
                 <Select value={timeRange} onValueChange={setTimeRange}>
                 <SelectTrigger className="w-[180px]">
@@ -367,6 +363,10 @@ export const PerformanceChart = () => {
                 </SelectContent>
                 </Select>
             )}
+            <Button variant="outline" size="sm">
+              <Download size={16} className="mr-2" />
+              Export
+            </Button>
           </div>
         </div>
 
@@ -507,5 +507,7 @@ export const PerformanceChart = () => {
     </Card>
   );
 };
+
+    
 
     
