@@ -1,6 +1,7 @@
 
 "use client";
 import React, { useState } from "react";
+import Link from "next/link";
 import {
   Check,
   Plus,
@@ -350,10 +351,12 @@ export const QuickAccessWidget = () => {
             </Button>
         )}
         {activeTab === 'appointments' && (
-            <Button variant="ghost" size="sm" className="w-full">
-              <Calendar size={16} className="mr-2" />
-              View Calendar
-            </Button>
+            <Link href="/tasks" className="w-full">
+                <Button variant="ghost" size="sm" className="w-full">
+                <Calendar size={16} className="mr-2" />
+                View Calendar
+                </Button>
+            </Link>
         )}
         {activeTab === 'notifications' && (
             <Button variant="ghost" size="sm" className="w-full">
