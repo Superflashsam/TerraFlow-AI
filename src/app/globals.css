@@ -19,7 +19,7 @@
     --secondary: 207 70% 53%;
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 225 33% 97%;
+    --muted: 225 33% 93%;
     --muted-foreground: 206 7% 39%;
 
     --accent: 225 33% 93%;
@@ -43,13 +43,13 @@
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
 
-    --app-background: 213 20% 7%;
+    --app-background: 225 33% 97%;
 
-    --sidebar-background: 0 0% 0%;
-    --sidebar-foreground: 212 43% 93%;
-    --sidebar-border: 214 12% 20%;
-    --sidebar-accent: 213 20% 15%;
-    --sidebar-accent-foreground: 212 43% 93%;
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 195 10% 20%;
+    --sidebar-border: 212 43% 93%;
+    --sidebar-accent: 225 33% 93%;
+    --sidebar-accent-foreground: 195 10% 20%;
     --sidebar-primary: 160 100% 35%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-ring: 160 100% 35%;

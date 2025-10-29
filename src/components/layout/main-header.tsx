@@ -18,6 +18,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { ThemeToggle } from "@/components/shared/theme-toggle";
 
 export function MainHeader() {
   return (
@@ -47,6 +48,8 @@ export function MainHeader() {
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
+
+      <ThemeToggle />
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>

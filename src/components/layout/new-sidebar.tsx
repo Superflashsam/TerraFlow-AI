@@ -65,7 +65,7 @@ function SearchContainer({ isCollapsed }: { isCollapsed?: boolean }) {
       style={{ transitionTimingFunction: softSpringEasing }}
     >
       <div
-        className={`bg-black h-10 relative rounded-lg flex items-center transition-all duration-500 ${
+        className={`bg-sidebar-accent h-10 relative rounded-lg flex items-center transition-all duration-500 ${
           isCollapsed ? "w-10 min-w-10 justify-center" : "w-full"
         }`}
         style={{ transitionTimingFunction: softSpringEasing }}
@@ -77,7 +77,7 @@ function SearchContainer({ isCollapsed }: { isCollapsed?: boolean }) {
           style={{ transitionTimingFunction: softSpringEasing }}
         >
           <div className="size-8 flex items-center justify-center">
-            <Search size={16} className="text-neutral-50" />
+            <Search size={16} className="text-sidebar-foreground" />
           </div>
         </div>
 
@@ -94,17 +94,12 @@ function SearchContainer({ isCollapsed }: { isCollapsed?: boolean }) {
                 placeholder="Search..."
                 value={searchValue}
                 onChange={(e) => setSearchValue(e.target.value)}
-                className="w-full bg-transparent border-none outline-none text-[14px] text-neutral-50 placeholder:text-neutral-400 leading-[20px]"
+                className="w-full bg-transparent border-none outline-none text-[14px] text-sidebar-foreground placeholder:text-sidebar-foreground/60 leading-[20px]"
                 tabIndex={isCollapsed ? -1 : 0}
               />
             </div>
           </div>
         </div>
-
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 rounded-lg border border-neutral-800 pointer-events-none"
-        />
       </div>
     </div>
   );
@@ -133,13 +128,13 @@ function MenuItem({
         href={item.href}
         className={cn(
           "rounded-lg cursor-pointer transition-all duration-500 flex items-center relative",
-          isActive ? "bg-neutral-800" : "hover:bg-neutral-800",
+          isActive ? "bg-sidebar-accent" : "hover:bg-sidebar-accent",
           isCollapsed ? "w-10 min-w-10 h-10 justify-center" : "w-full h-10 px-4 py-2"
         )}
         style={{ transitionTimingFunction: softSpringEasing }}
         title={isCollapsed ? item.label : undefined}
       >
-        <div className={cn("flex items-center justify-center shrink-0", isActive ? 'text-neutral-50' : 'text-neutral-400 group-hover:text-neutral-300' )}>
+        <div className={cn("flex items-center justify-center shrink-0", isActive ? 'text-sidebar-accent-foreground' : 'text-sidebar-foreground/80 group-hover:text-sidebar-accent-foreground' )}>
           <Icon size={16} />
         </div>
 
@@ -149,7 +144,7 @@ function MenuItem({
           }`}
           style={{ transitionTimingFunction: softSpringEasing }}
         >
-          <div className="text-[14px] text-neutral-50 leading-[20px] truncate">
+          <div className="text-[14px] text-sidebar-accent-foreground leading-[20px] truncate">
             {item.label}
           </div>
         </div>
@@ -179,7 +174,7 @@ export function NewSidebar() {
 
   return (
     <aside
-      className={`bg-sidebar-background flex flex-col gap-4 items-start p-4 transition-all duration-500 h-screen ${
+      className={`bg-sidebar flex flex-col gap-4 items-start p-4 transition-all duration-500 h-screen border-r border-sidebar-border ${
         isCollapsed ? "w-[88px]" : "w-72"
       }`}
       style={{ transitionTimingFunction: softSpringEasing }}
@@ -197,7 +192,7 @@ export function NewSidebar() {
                   <button
                       type="button"
                       onClick={toggleCollapse}
-                      className="flex items-center justify-center rounded-lg size-10 min-w-10 transition-all duration-500 hover:bg-neutral-800 text-neutral-400 hover:text-neutral-300"
+                      className="flex items-center justify-center rounded-lg size-10 min-w-10 transition-all duration-500 hover:bg-sidebar-accent text-sidebar-foreground/80 hover:text-sidebar-accent-foreground"
                       style={{ transitionTimingFunction: softSpringEasing }}
                       aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
                   >
@@ -218,7 +213,7 @@ export function NewSidebar() {
                     style={{ transitionTimingFunction: softSpringEasing }}
                 >
                     <div className="flex items-center h-10 px-4">
-                    <div className="text-[14px] text-neutral-400">
+                    <div className="text-[14px] text-sidebar-foreground/60">
                         Menu
                     </div>
                     </div>
@@ -236,7 +231,7 @@ export function NewSidebar() {
                     style={{ transitionTimingFunction: softSpringEasing }}
                 >
                     <div className="flex items-center h-10 px-4">
-                    <div className="text-[14px] text-neutral-400">
+                    <div className="text-[14px] text-sidebar-foreground/60">
                         Tools
                     </div>
                     </div>
@@ -254,13 +249,13 @@ export function NewSidebar() {
 
       {/* User Profile */}
       {!isCollapsed && (
-        <div className="w-full mt-auto pt-2 border-t border-neutral-800">
+        <div className="w-full mt-auto pt-2 border-t border-sidebar-border">
           <div className="flex items-center gap-2 px-2 py-2">
             <Avatar className="w-8 h-8">
               <AvatarImage src={getImagePlaceholder("user-avatar")?.imageUrl} alt="User avatar" />
               <AvatarFallback>A</AvatarFallback>
             </Avatar>
-            <div className="text-[14px] text-neutral-50">Sarah Johnson</div>
+            <div className="text-[14px] text-sidebar-foreground">Sarah Johnson</div>
           </div>
         </div>
       )}
