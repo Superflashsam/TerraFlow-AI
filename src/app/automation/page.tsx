@@ -9,10 +9,11 @@ import { WorkflowCard } from '@/components/automation/dashboard/WorkflowCard';
 import { EmptyState } from '@/components/automation/dashboard/EmptyState';
 import { WorkflowCreationMethodSelectionModal } from '@/components/automation/modal/WorkflowCreationMethodSelectionModal';
 import VisualCanvasBuilder from './visual-canvas/page';
+import WorkflowTemplates from '@/components/automation/WorkflowTemplates';
 
 const MyWorkflowsDashboard = () => {
   const [isCreationModalOpen, setIsCreationModalOpen] = useState(false);
-  const [isCanvasOpen, setIsCanvasOpen] = useState(false);
+  const [currentView, setCurrentView] = useState('dashboard'); // 'dashboard', 'canvas', 'templates'
   const [selectedWorkflows, setSelectedWorkflows] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
@@ -145,7 +146,7 @@ const MyWorkflowsDashboard = () => {
   };
 
   const handleEditWorkflow = (workflow: any) => {
-    setIsCanvasOpen(true);
+    setCurrentView('canvas');
   };
 
   const handleDuplicateWorkflow = (workflow: any) => {
@@ -223,12 +224,21 @@ const MyWorkflowsDashboard = () => {
     setSearchQuery('');
     setStatusFilter('all');
   };
+  
+  const handleSelectTemplate = (template: any) => {
+    console.log('Selected template:', template);
+    setCurrentView('canvas');
+  }
 
   const hasFilters = searchQuery || statusFilter !== 'all';
   const showEmptyState = filteredWorkflows.length === 0;
 
-  if (isCanvasOpen) {
-    return <VisualCanvasBuilder onBack={() => setIsCanvasOpen(false)} />;
+  if (currentView === 'canvas') {
+    return <VisualCanvasBuilder onBack={() => setCurrentView('dashboard')} />;
+  }
+  
+  if (currentView === 'templates') {
+    return <WorkflowTemplates onSelectTemplate={handleSelectTemplate} onCreateFromScratch={() => setCurrentView('canvas')} />;
   }
 
   return (
@@ -302,7 +312,9 @@ const MyWorkflowsDashboard = () => {
           onSelectMethod={(method) => {
             setIsCreationModalOpen(false);
             if (method === 'visual-canvas') {
-                setIsCanvasOpen(true)
+                setCurrentView('canvas')
+            } else if (method === 'templates') {
+                setCurrentView('templates')
             }
           }}
         />

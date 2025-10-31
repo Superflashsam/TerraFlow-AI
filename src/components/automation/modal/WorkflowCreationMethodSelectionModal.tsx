@@ -64,6 +64,23 @@ const WorkflowCreationMethodSelectionModal = ({ isOpen, onClose, onSelectMethod 
       ],
       recommended: false,
       difficulty: 'AI-Powered'
+    },
+    {
+      id: 'templates',
+      title: 'Start from a Template',
+      description: `Browse a library of pre-built workflow templates for common real estate tasks. Get a head start on your automation by customizing a proven workflow to fit your specific needs.`,
+      icon: 'LayoutGrid',
+      path: '/workflow-templates',
+      buttonText: 'Browse Templates',
+      features: [
+        'Pre-built for common use cases',
+        'Quickly customize to fit your needs',
+        'Best practices baked in',
+        'Learn by example',
+        'Save time on setup'
+      ],
+      recommended: false,
+      difficulty: 'Easiest'
     }
   ];
 
@@ -72,13 +89,13 @@ const WorkflowCreationMethodSelectionModal = ({ isOpen, onClose, onSelectMethod 
   return (
     <ModalBackdrop onClose={onClose}>
         <div className={`
-          relative w-full max-w-6xl bg-card rounded-2xl shadow-xl 
+          relative w-full max-w-7xl bg-card rounded-2xl shadow-xl 
           transform transition-all duration-500 ease-out
           ${isVisible ? 'scale-100 opacity-100 translate-y-0' : 'scale-95 opacity-0 translate-y-8'}
         `}>
           <ModalHeader onClose={onClose} />
           <div className="p-8">
-            <div className="grid lg:grid-cols-2 gap-8">
+            <div className="grid lg:grid-cols-3 gap-8">
               {creationMethods.map((method, index) => (
                 <div
                   key={method.id}
@@ -88,7 +105,7 @@ const WorkflowCreationMethodSelectionModal = ({ isOpen, onClose, onSelectMethod 
                       ? 'translate-y-0 opacity-100' :'translate-y-12 opacity-0'
                     }
                   `}
-                  style={{ transitionDelay: `${index * 200}ms` }}
+                  style={{ transitionDelay: `${index * 150}ms` }}
                 >
                   <CreationMethodCard 
                     method={method} 
@@ -96,22 +113,6 @@ const WorkflowCreationMethodSelectionModal = ({ isOpen, onClose, onSelectMethod 
                   />
                 </div>
               ))}
-            </div>
-            <div className="mt-8 p-6 bg-muted/30 rounded-xl border border-border">
-              <div className="grid md:grid-cols-2 gap-6 text-sm">
-                <div className="space-y-2">
-                  <h4 className="font-semibold text-foreground">Visual Canvas Builder</h4>
-                  <p className="text-muted-foreground">
-                    Best for users who want complete control over workflow structure and prefer visual feedback during creation.
-                  </p>
-                </div>
-                <div className="space-y-2">
-                  <h4 className="font-semibold text-foreground">Conversational AI Builder</h4>
-                  <p className="text-muted-foreground">
-                    Ideal for rapid prototyping and users who want to describe workflows in natural language.
-                  </p>
-                </div>
-              </div>
             </div>
           </div>
           <ModalFooter onClose={onClose} />

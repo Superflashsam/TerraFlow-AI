@@ -56,6 +56,10 @@ import {
   Info,
   Keyboard,
   List,
+  UserCheck,
+  Megaphone,
+  Layers,
+  ArrowRight,
 } from 'lucide-react';
 
 const iconMap: { [key: string]: React.ElementType } = {
@@ -111,7 +115,11 @@ const iconMap: { [key: string]: React.ElementType } = {
   Workflow,
   Info,
   Keyboard,
-  List
+  List,
+  UserCheck,
+  Megaphone,
+  Layers,
+  ArrowRight,
 };
 
 const AppIcon = ({ name, size, color, className }: { name: string; size?: number; color?: string; className?: string }) => {
