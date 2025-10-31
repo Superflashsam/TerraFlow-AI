@@ -50,6 +50,29 @@ const bookSiteVisit = ai.defineTool(
   }
 );
 
+const createTask = ai.defineTool(
+    {
+        name: 'createTask',
+        description: 'Creates a new task with a due date and priority, and optionally links it to a lead or deal.',
+        inputSchema: z.object({
+            title: z.string().describe('The title of the task.'),
+            dueDate: z.string().describe('The due date for the task in ISO format.'),
+            priority: z.enum(['high', 'medium', 'low']).describe("The priority of the task."),
+            linkedTo: z.object({
+                leadId: z.string().optional().describe("The ID of the lead this task is associated with."),
+                dealId: z.string().optional().describe("The ID of the deal this task is associated with."),
+            }).optional(),
+        }),
+        outputSchema: z.string().describe('A confirmation message that the task was created.'),
+    },
+    async (input) => {
+        // In a real application, this would interact with a database to create a task.
+        console.log('Creating task:', input);
+        return `Task "${input.title}" has been created with a due date of ${input.dueDate}.`;
+    }
+);
+
+
 export async function aiLeadQualification(input: AiLeadQualificationInput): Promise<AiLeadQualificationOutput> {
   return aiLeadQualificationFlow(input);
 }
@@ -58,7 +81,7 @@ const prompt = ai.definePrompt({
   name: 'aiLeadQualificationPrompt',
   input: {schema: AiLeadQualificationInputSchema},
   output: {schema: AiLeadQualificationOutputSchema},
-  tools: [bookSiteVisit, searchLeads, sendEmail],
+  tools: [bookSiteVisit, searchLeads, sendEmail, createTask],
   prompt: `You are Terra, an AI chat assistant specializing in qualifying real estate leads and managing CRM data. 
   
   Your primary goals are:
@@ -66,11 +89,13 @@ const prompt = ai.definePrompt({
   2. Interact with the CRM by using the available tools to search for leads.
   3. Schedule site visits for qualified leads.
   4. Send emails to leads when requested.
+  5. Create tasks and reminders for follow-ups or other actions.
 
   Analyze the user's request. 
   - If the user is providing information about a potential lead, extract their budget, location, and timeline. If they seem qualified, use the bookSiteVisit tool.
   - If the user is asking to find leads (e.g., "find all hot leads", "show me investors in Pune"), use the searchLeads tool to find the information and summarize the results.
   - If the user asks you to send an email, use the sendEmail tool. You must have the recipient's email address, a subject, and a body for the email.
+  - If the user asks you to create a reminder or a task (e.g., "remind me to call Rajesh tomorrow", "create a task to send the brochure"), use the createTask tool.
   
   Finally, provide a concise summary of the outcome and output all the gathered information in the required JSON format.
 
