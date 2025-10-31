@@ -47,7 +47,15 @@ import {
   Globe,
   TestTube,
   Save,
-  Star
+  Star,
+  CheckSquare,
+  Pause,
+  Copy,
+  BarChart3,
+  Workflow,
+  Info,
+  Keyboard,
+  List,
 } from 'lucide-react';
 
 const iconMap: { [key: string]: React.ElementType } = {
@@ -95,7 +103,15 @@ const iconMap: { [key: string]: React.ElementType } = {
   Globe,
   TestTube,
   Save,
-  Star
+  Star,
+  CheckSquare,
+  Pause,
+  Copy,
+  BarChart3,
+  Workflow,
+  Info,
+  Keyboard,
+  List
 };
 
 const AppIcon = ({ name, size, color, className }: { name: string; size?: number; color?: string; className?: string }) => {

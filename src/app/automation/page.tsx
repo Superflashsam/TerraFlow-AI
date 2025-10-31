@@ -1,304 +1,314 @@
 "use client";
-import React, { useState, useCallback, useEffect } from 'react';
-
+import React, { useState, useEffect } from 'react';
 import { PageHeader } from "@/components/shared/page-header";
-import { CanvasToolbar } from '@/components/automation/CanvasToolbar';
-import { WorkflowCanvas } from '@/components/automation/WorkflowCanvas';
-import { NodeSelectorPanel } from '@/components/automation/NodeSelectorPanel';
-import { NodeConfigurationPanel } from '@/components/automation/NodeConfigurationPanel';
-import { Button } from '@/components/ui/button';
+import { CreateWorkflowButton } from '@/components/automation/dashboard/CreateWorkflowButton';
+import { WorkflowStats } from '@/components/automation/dashboard/WorkflowStats';
+import { WorkflowFilters } from '@/components/automation/dashboard/WorkflowFilters';
+import { BulkActionsToolbar } from '@/components/automation/dashboard/BulkActionsToolbar';
+import { WorkflowCard } from '@/components/automation/dashboard/WorkflowCard';
+import { EmptyState } from '@/components/automation/dashboard/EmptyState';
+import { WorkflowCreationMethodSelectionModal } from '@/components/automation/modal/WorkflowCreationMethodSelectionModal';
+import VisualCanvasBuilder from './visual-canvas/page';
 
-const VisualCanvasBuilder = () => {
-  // Canvas state
-  const [zoomLevel, setZoomLevel] = useState(1);
-  const [showGrid, setShowGrid] = useState(true);
-  
-  // Workflow state
-  const [workflowName, setWorkflowName] = useState("Customer Onboarding Flow");
-  const [saveStatus, setSaveStatus] = useState("saved");
-  const [lastSaved, setLastSaved] = useState("2 minutes ago");
-  
-  // Nodes and connections
-  const [nodes, setNodes] = useState([
+const MyWorkflowsDashboard = () => {
+  const [isCreationModalOpen, setIsCreationModalOpen] = useState(false);
+  const [isCanvasOpen, setIsCanvasOpen] = useState(false);
+  const [selectedWorkflows, setSelectedWorkflows] = useState<string[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [sortBy, setSortBy] = useState('lastModified');
+  const [viewMode, setViewMode] = useState('grid');
+
+  const [workflows, setWorkflows] = useState([
     {
-      id: 'node-1',
-      name: 'TerraLead Trigger',
-      description: 'Triggers when new leads are captured',
-      type: 'trigger',
-      service: 'TerraLead',
-      serviceIcon: 'Target',
-      color: 'emerald',
-      position: { x: 100, y: 200 },
-      status: 'configured',
-      config: {
-        triggerType: 'webhook',
-        name: 'New Lead Trigger'
-      }
+      id: 1,
+      name: "Customer Onboarding Automation",
+      description: "Automated workflow for new customer registration, email verification, and welcome sequence with personalized content delivery.",
+      status: "active",
+      lastModified: "2025-01-20T10:30:00Z",
+      executions: 1247,
+      tags: ["customer", "onboarding", "email"],
+      thumbnail: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=200&fit=crop"
     },
     {
-      id: 'node-2',
-      name: 'Filter Condition',
-      description: 'Filter leads by qualification criteria',
-      type: 'condition',
-      service: 'Filter',
-      serviceIcon: 'Filter',
-      color: 'amber',
-      position: { x: 400, y: 200 },
-      status: 'configured',
-      config: {
-        conditionType: 'equals',
-        field: 'lead_score',
-        value: '80'
-      }
+      id: 2,
+      name: "Lead Qualification Pipeline",
+      description: "Multi-step workflow that scores leads, assigns to sales reps, and triggers follow-up sequences based on engagement levels.",
+      status: "active",
+      lastModified: "2025-01-19T15:45:00Z",
+      executions: 892,
+      tags: ["sales", "leads", "crm"],
+      thumbnail: "https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?w=400&h=200&fit=crop"
     },
     {
-      id: 'node-3',
-      name: 'Send Welcome Email',
-      description: 'Send personalized welcome email to qualified leads',
-      type: 'action',
-      service: 'Gmail',
-      serviceIcon: 'Mail',
-      color: 'blue',
-      position: { x: 700, y: 150 },
-      status: 'pending',
-      config: {
-        actionType: 'send_email',
-        toEmail: '{{lead.email}}',
-        subject: 'Welcome to SmartFlow Studio!'
-      }
+      id: 3,
+      name: "Invoice Processing System",
+      description: "Automated invoice generation, approval workflow, and payment tracking with integration to accounting systems.",
+      status: "paused",
+      lastModified: "2025-01-18T09:15:00Z",
+      executions: 2156,
+      tags: ["finance", "invoicing", "accounting"],
+      thumbnail: "https://images.pixabay.com/photo/2016/11/27/21/42/stock-1863880_1280.jpg?w=400&h=200&fit=crop"
     },
     {
-      id: 'node-4',
-      name: 'Create HubSpot Contact',
-      description: 'Add qualified lead to HubSpot CRM',
-      type: 'action',
-      service: 'HubSpot',
-      serviceIcon: 'Users',
-      color: 'blue',
-      position: { x: 700, y: 300 },
-      status: 'configured',
-      config: {
-        actionType: 'create_record',
-        recordType: 'contact'
-      }
+      id: 4,
+      name: "Social Media Content Scheduler",
+      description: "Cross-platform content publishing workflow with approval gates, scheduling optimization, and performance tracking.",
+      status: "active",
+      lastModified: "2025-01-17T14:20:00Z",
+      executions: 634,
+      tags: ["marketing", "social media", "content"],
+      thumbnail: "https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=400&h=200&fit=crop"
+    },
+    {
+      id: 5,
+      name: "Employee Expense Approval",
+      description: "Streamlined expense report submission, manager approval, and reimbursement processing with receipt validation.",
+      status: "draft",
+      lastModified: "2025-01-16T11:30:00Z",
+      executions: 0,
+      tags: ["hr", "expenses", "approval"],
+      thumbnail: null
+    },
+    {
+      id: 6,
+      name: "Inventory Restocking Alert",
+      description: "Automated monitoring of inventory levels with supplier notifications and purchase order generation when stock runs low.",
+      status: "active",
+      lastModified: "2025-01-15T16:45:00Z",
+      executions: 423,
+      tags: ["inventory", "supply chain", "alerts"],
+      thumbnail: "https://images.pexels.com/photos/1267338/pexels-photo-1267338.jpeg?w=400&h=200&fit=crop"
+    },
+    {
+      id: 7,
+      name: "Customer Support Ticket Routing",
+      description: "Intelligent ticket classification and routing system with priority assignment and escalation workflows.",
+      status: "paused",
+      lastModified: "2025-01-14T13:10:00Z",
+      executions: 1789,
+      tags: ["support", "tickets", "routing"],
+      thumbnail: "https://images.pixabay.com/photo/2020/07/08/04/12/work-5382501_1280.jpg?w=400&h=200&fit=crop"
+    },
+    {
+      id: 8,
+      name: "Marketing Campaign Analytics",
+      description: "Comprehensive campaign performance tracking with automated reporting and ROI calculations across multiple channels.",
+      status: "active",
+      lastModified: "2025-01-13T08:25:00Z",
+      executions: 567,
+      tags: ["marketing", "analytics", "reporting"],
+      thumbnail: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=200&fit=crop"
     }
   ]);
-  
-  const [connections, setConnections] = useState([
-    { id: 'conn-1', from: 'node-1', to: 'node-2' },
-    { id: 'conn-2', from: 'node-2', to: 'node-3' },
-    { id: 'conn-3', from: 'node-2', to: 'node-4' }
-  ]);
-  
-  // Panel states
-  const [selectedNodeId, setSelectedNodeId] = useState(null);
-  const [isNodeSelectorOpen, setIsNodeSelectorOpen] = useState(false);
-  const [isConfigPanelOpen, setIsConfigPanelOpen] = useState(false);
-  const [nodeSelectorPosition, setNodeSelectorPosition] = useState({ x: 0, y: 0 });
-  
-  // History for undo/redo
-  const [history, setHistory] = useState([]);
-  const [historyIndex, setHistoryIndex] = useState(-1);
 
-  // Auto-save functionality
-  useEffect(() => {
-    const autoSaveInterval = setInterval(() => {
-      if (saveStatus === 'unsaved') {
-        handleSave();
+  const filteredWorkflows = workflows
+    .filter(workflow => {
+      const matchesSearch = workflow.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                           workflow.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                           workflow.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
+      const matchesStatus = statusFilter === 'all' || workflow.status === statusFilter;
+      return matchesSearch && matchesStatus;
+    })
+    .sort((a, b) => {
+      switch (sortBy) {
+        case 'name':
+          return a.name.localeCompare(b.name);
+        case 'executions':
+          return b.executions - a.executions;
+        case 'created':
+          return new Date(b.lastModified).getTime() - new Date(a.lastModified).getTime();
+        case 'lastModified':
+        default:
+          return new Date(b.lastModified).getTime() - new Date(a.lastModified).getTime();
       }
-    }, 30000); // Auto-save every 30 seconds
-
-    return () => clearInterval(autoSaveInterval);
-  }, [saveStatus]);
-
-  // Canvas controls
-  const handleZoomIn = useCallback(() => {
-    setZoomLevel(prev => Math.min(prev + 0.1, 2));
-  }, []);
-
-  const handleZoomOut = useCallback(() => {
-    setZoomLevel(prev => Math.max(prev - 0.1, 0.1));
-  }, []);
-
-  const handleZoomReset = useCallback(() => {
-    setZoomLevel(1);
-  }, []);
-
-  const handleFitToScreen = useCallback(() => {
-    // Calculate bounds of all nodes
-    if (nodes.length === 0) return;
-    
-    const bounds = nodes.reduce((acc, node) => ({
-      minX: Math.min(acc.minX, node.position.x),
-      maxX: Math.max(acc.maxX, node.position.x + 200),
-      minY: Math.min(acc.minY, node.position.y),
-      maxY: Math.max(acc.maxY, node.position.y + 100)
-    }), {
-      minX: Infinity,
-      maxX: -Infinity,
-      minY: Infinity,
-      maxY: -Infinity
     });
 
-    const padding = 100;
-    const canvasWidth = window.innerWidth;
-    const canvasHeight = window.innerHeight - 200; // Account for headers
-    
-    const contentWidth = bounds.maxX - bounds.minX + padding * 2;
-    const contentHeight = bounds.maxY - bounds.minY + padding * 2;
-    
-    const scaleX = canvasWidth / contentWidth;
-    const scaleY = canvasHeight / contentHeight;
-    
-    setZoomLevel(Math.min(scaleX, scaleY, 1));
-  }, [nodes]);
+  const handleCreateWorkflow = () => {
+    setIsCreationModalOpen(true);
+  };
 
-  const handleToggleGrid = useCallback(() => {
-    setShowGrid(prev => !prev);
-  }, []);
+  const handleSelectWorkflow = (workflowId: string) => {
+    setSelectedWorkflows(prev => 
+      prev.includes(workflowId)
+        ? prev.filter(id => id !== workflowId)
+        : [...prev, workflowId]
+    );
+  };
 
-  // Node operations
-  const handleNodeSelect = useCallback((nodeId) => {
-    setSelectedNodeId(nodeId);
-  }, []);
+  const handleSelectAll = () => {
+    setSelectedWorkflows(filteredWorkflows.map(w => w.id.toString()));
+  };
 
-  const handleNodeMove = useCallback((nodeId, newPosition) => {
-    setNodes(prev => prev.map(node => 
-      node.id === nodeId 
-        ? { ...node, position: newPosition }
-        : node
-    ));
-    setSaveStatus('unsaved');
-  }, []);
+  const handleDeselectAll = () => {
+    setSelectedWorkflows([]);
+  };
 
-  const handleNodeDelete = useCallback((nodeId) => {
-    setNodes(prev => prev.filter(node => node.id !== nodeId));
-    setConnections(prev => prev.filter(conn => 
-      conn.from !== nodeId && conn.to !== nodeId
-    ));
-    setSelectedNodeId(null);
-    setSaveStatus('unsaved');
-  }, []);
+  const handleEditWorkflow = (workflow: any) => {
+    setIsCanvasOpen(true);
+  };
 
-  const handleNodeConnect = useCallback((nodeId) => {
-    // Implementation for connecting nodes
-    console.log('Connect node:', nodeId);
-  }, []);
+  const handleDuplicateWorkflow = (workflow: any) => {
+    const duplicatedWorkflow = {
+      ...workflow,
+      id: Date.now(),
+      name: `${workflow.name} (Copy)`,
+      status: 'draft',
+      executions: 0,
+      lastModified: new Date().toISOString()
+    };
+    setWorkflows(prev => [duplicatedWorkflow, ...prev]);
+  };
 
-  const handleNodeConfigure = useCallback((nodeId) => {
-    setSelectedNodeId(nodeId);
-    setIsConfigPanelOpen(true);
-  }, []);
-
-  const handleUpdateNode = useCallback((nodeId, updatedNode) => {
-    setNodes(prev => prev.map(node => 
-      node.id === nodeId ? updatedNode : node
-    ));
-    setSaveStatus('unsaved');
-  }, []);
-
-  const handleAddNode = useCallback((position) => {
-    setNodeSelectorPosition(position);
-    setIsNodeSelectorOpen(true);
-  }, []);
-
-  const handleNodeSelectFromPanel = useCallback((newNode) => {
-    setNodes(prev => [...prev, newNode]);
-    setSaveStatus('unsaved');
-    setIsNodeSelectorOpen(false);
-  }, []);
-
-  const handleCanvasClick = useCallback((position) => {
-    setSelectedNodeId(null);
-    setIsConfigPanelOpen(false);
-  }, []);
-
-  // Save functionality
-  const handleSave = useCallback(() => {
-    setSaveStatus('saving');
-    
-    // Simulate save operation
-    setTimeout(() => {
-      setSaveStatus('saved');
-      setLastSaved('just now');
-    }, 1000);
-  }, []);
-
-  // History operations
-  const handleUndo = useCallback(() => {
-    if (historyIndex > 0) {
-      setHistoryIndex(prev => prev - 1);
-      // Restore previous state
+  const handleDeleteWorkflow = (workflow: any) => {
+    if (window.confirm(`Are you sure you want to delete "${workflow.name}"?`)) {
+      setWorkflows(prev => prev.filter(w => w.id !== workflow.id));
+      setSelectedWorkflows(prev => prev.filter(id => id !== workflow.id.toString()));
     }
-  }, [historyIndex]);
+  };
 
-  const handleRedo = useCallback(() => {
-    if (historyIndex < history.length - 1) {
-      setHistoryIndex(prev => prev + 1);
-      // Restore next state
+  const handleToggleStatus = (workflow: any) => {
+    const newStatus = workflow.status === 'active' ? 'paused' : 'active';
+    setWorkflows(prev => prev.map(w => 
+      w.id === workflow.id 
+        ? { ...w, status: newStatus, lastModified: new Date().toISOString() }
+        : w
+    ));
+  };
+
+  const handleViewAnalytics = (workflow: any) => {
+    console.log('View analytics for:', workflow.name);
+  };
+
+  const handleBulkActivate = () => {
+    setWorkflows(prev => prev.map(w => 
+      selectedWorkflows.includes(w.id.toString())
+        ? { ...w, status: 'active', lastModified: new Date().toISOString() }
+        : w
+    ));
+    setSelectedWorkflows([]);
+  };
+
+  const handleBulkPause = () => {
+    setWorkflows(prev => prev.map(w => 
+      selectedWorkflows.includes(w.id.toString())
+        ? { ...w, status: 'paused', lastModified: new Date().toISOString() }
+        : w
+    ));
+    setSelectedWorkflows([]);
+  };
+
+  const handleBulkDuplicate = () => {
+    const selectedWorkflowData = workflows.filter(w => selectedWorkflows.includes(w.id.toString()));
+    const duplicatedWorkflows = selectedWorkflowData.map(workflow => ({
+      ...workflow,
+      id: Date.now() + Math.random(),
+      name: `${workflow.name} (Copy)`,
+      status: 'draft',
+      executions: 0,
+      lastModified: new Date().toISOString()
+    }));
+    setWorkflows(prev => [...duplicatedWorkflows, ...prev]);
+    setSelectedWorkflows([]);
+  };
+
+  const handleBulkDelete = () => {
+    if (window.confirm(`Are you sure you want to delete ${selectedWorkflows.length} workflow(s)?`)) {
+      setWorkflows(prev => prev.filter(w => !selectedWorkflows.includes(w.id.toString())));
+      setSelectedWorkflows([]);
     }
-  }, [historyIndex, history]);
+  };
 
-  const selectedNode = selectedNodeId ? nodes.find(n => n.id === selectedNodeId) : null;
+  const handleClearFilters = () => {
+    setSearchQuery('');
+    setStatusFilter('all');
+  };
+
+  const hasFilters = searchQuery || statusFilter !== 'all';
+  const showEmptyState = filteredWorkflows.length === 0;
+
+  if (isCanvasOpen) {
+    return <VisualCanvasBuilder onBack={() => setIsCanvasOpen(false)} />;
+  }
 
   return (
-    <div className="flex flex-col h-full">
-      <PageHeader
-        title="Automation Workflows"
-        description="Build and manage automated workflows to streamline your process."
-      />
+    <div className="min-h-screen bg-background">
+      <main className="pb-8">
+        <PageHeader
+            title="My Workflows"
+            description="Manage and monitor your automation workflows"
+        >
+            <CreateWorkflowButton onClick={handleCreateWorkflow} />
+        </PageHeader>
+        <div className="mt-8">
+            {!showEmptyState && (
+                <>
+                <WorkflowStats workflows={workflows} />
+                <WorkflowFilters
+                    searchQuery={searchQuery}
+                    onSearchChange={setSearchQuery}
+                    statusFilter={statusFilter}
+                    onStatusFilterChange={setStatusFilter}
+                    sortBy={sortBy}
+                    onSortChange={setSortBy}
+                    viewMode={viewMode}
+                    onViewModeChange={setViewMode}
+                />
+                <BulkActionsToolbar
+                    selectedCount={selectedWorkflows.length}
+                    totalCount={filteredWorkflows.length}
+                    onSelectAll={handleSelectAll}
+                    onDeselectAll={handleDeselectAll}
+                    onBulkActivate={handleBulkActivate}
+                    onBulkPause={handleBulkPause}
+                    onBulkDuplicate={handleBulkDuplicate}
+                    onBulkDelete={handleBulkDelete}
+                />
+                </>
+            )}
+            {showEmptyState ? (
+                <EmptyState
+                onCreateWorkflow={handleCreateWorkflow}
+                hasFilters={hasFilters}
+                onClearFilters={handleClearFilters}
+                />
+            ) : (
+                <div className={`
+                ${viewMode === 'grid' ?'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6' :'space-y-4'
+                }
+                `}>
+                {filteredWorkflows.map((workflow) => (
+                    <WorkflowCard
+                    key={workflow.id}
+                    workflow={workflow}
+                    onEdit={handleEditWorkflow}
+                    onDuplicate={handleDuplicateWorkflow}
+                    onDelete={handleDeleteWorkflow}
+                    onToggleStatus={handleToggleStatus}
+                    onViewAnalytics={handleViewAnalytics}
+                    isSelected={selectedWorkflows.includes(workflow.id.toString())}
+                    onSelect={() => handleSelectWorkflow(workflow.id.toString())}
+                    />
+                ))}
+                </div>
+            )}
+        </div>
+      </main>
 
-      {/* Main Canvas Area */}
-      <div className="relative flex-1 mt-4" style={{ height: 'calc(100vh - 280px)' }}>
-        {/* Canvas */}
-        <WorkflowCanvas
-          nodes={nodes}
-          connections={connections}
-          selectedNodeId={selectedNodeId}
-          onNodeSelect={handleNodeSelect}
-          onNodeMove={handleNodeMove}
-          onNodeDelete={handleNodeDelete}
-          onNodeConnect={handleNodeConnect}
-          onNodeConfigure={handleNodeConfigure}
-          onAddNode={handleAddNode}
-          zoomLevel={zoomLevel}
-          showGrid={showGrid}
-          onCanvasClick={handleCanvasClick}
+      {isCreationModalOpen && (
+        <WorkflowCreationMethodSelectionModal
+          isOpen={isCreationModalOpen}
+          onClose={() => setIsCreationModalOpen(false)}
+          onSelectMethod={(method) => {
+            setIsCreationModalOpen(false);
+            if (method === 'visual-canvas') {
+                setIsCanvasOpen(true)
+            }
+          }}
         />
-
-        {/* Canvas Toolbar */}
-        <CanvasToolbar
-          zoomLevel={zoomLevel}
-          onZoomIn={handleZoomIn}
-          onZoomOut={handleZoomOut}
-          onZoomReset={handleZoomReset}
-          onFitToScreen={handleFitToScreen}
-          onToggleGrid={handleToggleGrid}
-          showGrid={showGrid}
-          onUndo={handleUndo}
-          onRedo={handleRedo}
-          canUndo={historyIndex > 0}
-          canRedo={historyIndex < history.length - 1}
-        />
-
-        {/* Node Selector Panel */}
-        <NodeSelectorPanel
-          isOpen={isNodeSelectorOpen}
-          onClose={() => setIsNodeSelectorOpen(false)}
-          onNodeSelect={handleNodeSelectFromPanel}
-          position={nodeSelectorPosition}
-        />
-
-        {/* Node Configuration Panel */}
-        <NodeConfigurationPanel
-          isOpen={isConfigPanelOpen}
-          onClose={() => setIsConfigPanelOpen(false)}
-          selectedNode={selectedNode}
-          onUpdateNode={handleUpdateNode}
-        />
-      </div>
+       )}
     </div>
   );
 };
 
-export default VisualCanvasBuilder;
+export default MyWorkflowsDashboard;
