@@ -17,64 +17,80 @@ import { LeadsManagement } from '@/components/leads/leads-management';
 import { cn } from '@/lib/utils';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { LineChart, Target } from 'lucide-react';
+import React, { useState } from "react";
+import { AddLeadModal } from "@/components/leads/add-lead-modal";
 
 export default function LeadsPage() {
-  return (
-    <div className="flex flex-col gap-4 h-full">
-      <div className="flex items-center justify-between">
-        <PageHeader
-            title="Leads"
-            description="Track, manage, and analyze your real estate leads with AI-powered insights."
-        />
-        <div className="flex items-center gap-2">
-            <Button variant="outline">
-                <Upload className="mr-2" />
-                Import Leads
-            </Button>
-            <Button>
-                <PlusCircle className="mr-2" />
-                Add New Lead
-            </Button>
-        </div>
-      </div>
+  const [isAddLeadModalOpen, setIsAddLeadModalOpen] = useState(false);
 
-      <Tabs defaultValue="pipeline" className="w-full flex-1 flex flex-col overflow-hidden">
-        <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 bg-transparent p-0 h-auto gap-2">
-          <TabsTrigger value="management" className={cn(
-              "flex items-center justify-center gap-2 rounded-lg p-4 font-semibold text-foreground/80 transition-all",
-              "data-[state=inactive]:bg-muted/50 data-[state=inactive]:shadow-inner data-[state=inactive]:hover:bg-muted",
-              "data-[state=active]:bg-card data-[state=active]:text-primary data-[state=active]:shadow-md"
-            )}>
-            <Table className="mr-2"/>
-            Leads Management
-          </TabsTrigger>
-          <TabsTrigger value="pipeline" className={cn(
-              "flex items-center justify-center gap-2 rounded-lg p-4 font-semibold text-foreground/80 transition-all",
-              "data-[state=inactive]:bg-muted/50 data-[state=inactive]:shadow-inner data-[state=inactive]:hover:bg-muted",
-              "data-[state=active]:bg-card data-[state=active]:text-primary data-[state=active]:shadow-md"
-            )}>
-            <Target className="mr-2"/>
-            Lead Pipeline
-          </TabsTrigger>
-          <TabsTrigger value="analytics" className={cn(
-              "flex items-center justify-center gap-2 rounded-lg p-4 font-semibold text-foreground/80 transition-all",
-              "data-[state=inactive]:bg-muted/50 data-[state=inactive]:shadow-inner data-[state=inactive]:hover:bg-muted",
-              "data-[state=active]:bg-card data-[state=active]:text-primary data-[state=active]:shadow-md"
-            )}>
-            <LineChart className="mr-2"/>
-            Lead Analytics
-          </TabsTrigger>
-        </TabsList>
-        <TabsContent value="management" className="mt-4 overflow-y-auto">
-            <LeadsManagement />
-        </TabsContent>
-        <TabsContent value="pipeline" className="flex-1 flex flex-col overflow-hidden mt-4">
-            <LeadPipelineManager />
-        </TabsContent>
-        <TabsContent value="analytics" className="mt-4 overflow-y-auto">
-            <LeadAnalyticsHub />
-        </TabsContent>
-      </Tabs>
-    </div>
+  const handleAddNewLead = (newLead: any) => {
+    console.log("New Lead Added:", newLead);
+    // Here you would typically handle the state update for leads
+  };
+
+  return (
+    <>
+      <div className="flex flex-col gap-4 h-full">
+        <div className="flex items-center justify-between">
+          <PageHeader
+              title="Leads"
+              description="Track, manage, and analyze your real estate leads with AI-powered insights."
+          />
+          <div className="flex items-center gap-2">
+              <Button variant="outline">
+                  <Upload className="mr-2" />
+                  Import Leads
+              </Button>
+              <Button onClick={() => setIsAddLeadModalOpen(true)}>
+                  <PlusCircle className="mr-2" />
+                  Add New Lead
+              </Button>
+          </div>
+        </div>
+
+        <Tabs defaultValue="pipeline" className="w-full flex-1 flex flex-col overflow-hidden">
+          <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 bg-transparent p-0 h-auto gap-2">
+            <TabsTrigger value="management" className={cn(
+                "flex items-center justify-center gap-2 rounded-lg p-4 font-semibold text-foreground/80 transition-all",
+                "data-[state=inactive]:bg-muted/50 data-[state=inactive]:shadow-inner data-[state=inactive]:hover:bg-muted",
+                "data-[state=active]:bg-card data-[state=active]:text-primary data-[state=active]:shadow-md"
+              )}>
+              <Table className="mr-2"/>
+              Leads Management
+            </TabsTrigger>
+            <TabsTrigger value="pipeline" className={cn(
+                "flex items-center justify-center gap-2 rounded-lg p-4 font-semibold text-foreground/80 transition-all",
+                "data-[state=inactive]:bg-muted/50 data-[state=inactive]:shadow-inner data-[state=inactive]:hover:bg-muted",
+                "data-[state=active]:bg-card data-[state=active]:text-primary data-[state=active]:shadow-md"
+              )}>
+              <Target className="mr-2"/>
+              Lead Pipeline
+            </TabsTrigger>
+            <TabsTrigger value="analytics" className={cn(
+                "flex items-center justify-center gap-2 rounded-lg p-4 font-semibold text-foreground/80 transition-all",
+                "data-[state=inactive]:bg-muted/50 data-[state=inactive]:shadow-inner data-[state=inactive]:hover:bg-muted",
+                "data-[state=active]:bg-card data-[state=active]:text-primary data-[state=active]:shadow-md"
+              )}>
+              <LineChart className="mr-2"/>
+              Lead Analytics
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent value="management" className="mt-4 overflow-y-auto">
+              <LeadsManagement />
+          </TabsContent>
+          <TabsContent value="pipeline" className="flex-1 flex flex-col overflow-hidden mt-4">
+              <LeadPipelineManager />
+          </TabsContent>
+          <TabsContent value="analytics" className="mt-4 overflow-y-auto">
+              <LeadAnalyticsHub />
+          </TabsContent>
+        </Tabs>
+      </div>
+      <AddLeadModal
+        isOpen={isAddLeadModalOpen}
+        onClose={() => setIsAddLeadModalOpen(false)}
+        onAddLead={handleAddNewLead}
+      />
+    </>
   );
 }
