@@ -27,7 +27,27 @@ import {
   Circle,
   ArrowUpDown,
   ArrowUp,
-  ArrowDown
+  ArrowDown,
+  Minus,
+  Maximize,
+  RotateCcw,
+  Grid,
+  Undo,
+  Redo,
+  Zap,
+  Play,
+  GitBranch,
+  Plug,
+  Wrench,
+  Webhook,
+  PenTool,
+  MessageSquare,
+  FileSpreadsheet,
+  Shuffle,
+  Globe,
+  TestTube,
+  Save,
+  Star
 } from 'lucide-react';
 
 const iconMap: { [key: string]: React.ElementType } = {
@@ -55,7 +75,27 @@ const iconMap: { [key: string]: React.ElementType } = {
   Circle,
   ArrowUpDown,
   ArrowUp,
-  ArrowDown
+  ArrowDown,
+  Minus,
+  Maximize,
+  RotateCcw,
+  Grid,
+  Undo,
+  Redo,
+  Zap,
+  Play,
+  GitBranch,
+  Plug,
+  Wrench,
+  Webhook,
+  PenTool,
+  MessageSquare,
+  FileSpreadsheet,
+  Shuffle,
+  Globe,
+  TestTube,
+  Save,
+  Star
 };
 
 const AppIcon = ({ name, size, color, className }: { name: string; size?: number; color?: string; className?: string }) => {
