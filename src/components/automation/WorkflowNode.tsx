@@ -15,9 +15,8 @@ const WorkflowNode = ({
   zoomLevel = 1
 }) => {
   const [isDragging, setIsDragging] = useState(false);
-  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
-  const nodeRef = useRef(null);
-
+  const nodeRef = useRef<HTMLDivElement>(null);
+  
   const nodeTypes = {
     trigger: {
       color: 'bg-green-500',
@@ -53,72 +52,62 @@ const WorkflowNode = ({
 
   const nodeStyle = nodeTypes[node.type] || nodeTypes.action;
 
-  const handleMouseDown = (e) => {
-    if (e.button !== 0) return; // Only left click
+  const handleMouseDown = (e: React.MouseEvent) => {
+    // Check if the click is on the node itself and not on a button
+    if (e.button !== 0 || (e.target as HTMLElement).closest('button')) return;
+    
     e.preventDefault();
     e.stopPropagation();
     
     setIsDragging(true);
-    setDragStart({
-      x: e.clientX - node.position.x,
-      y: e.clientY - node.position.y
-    });
-    
     onSelect(node.id);
-  };
-
-  const handleMouseMove = (e) => {
-    if (!isDragging) return;
     
-    const newPosition = {
-      x: (e.clientX - dragStart.x) / zoomLevel,
-      y: (e.clientY - dragStart.y) / zoomLevel
+    const startPos = { x: e.clientX, y: e.clientY };
+    const startNodePos = { ...node.position };
+
+    const handleMouseMove = (moveEvent: MouseEvent) => {
+        const dx = (moveEvent.clientX - startPos.x) / zoomLevel;
+        const dy = (moveEvent.clientY - startPos.y) / zoomLevel;
+        onMove(node.id, { x: startNodePos.x + dx, y: startNodePos.y + dy });
     };
-    
-    onMove(node.id, newPosition);
-  };
 
-  const handleMouseUp = () => {
-    setIsDragging(false);
-  };
-
-  React.useEffect(() => {
-    if (isDragging) {
-      document.addEventListener('mousemove', handleMouseMove);
-      document.addEventListener('mouseup', handleMouseUp);
-      
-      return () => {
+    const handleMouseUp = () => {
+        setIsDragging(false);
         document.removeEventListener('mousemove', handleMouseMove);
         document.removeEventListener('mouseup', handleMouseUp);
-      };
-    }
-  }, [isDragging, dragStart, zoomLevel, handleMouseMove, handleMouseUp]);
+    };
+
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+  };
 
   const handleDoubleClick = () => {
     onConfigure(node.id);
   };
 
-  const handleDeleteClick = (e) => {
+  const handleDeleteClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     onDelete(node.id);
   };
 
-  const handleConnectClick = (e) => {
+  const handleConnectClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     onConnect(node.id);
+  };
+  
+  const handleConfigureClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onConfigure(node.id);
   };
 
   return (
     <motion.div
       ref={nodeRef}
-      className={`
-        absolute cursor-move select-none
-        ${isDragging ? 'z-50' : 'z-10'}
-      `}
+      className={`absolute cursor-grab select-none ${isDragging ? 'z-50 cursor-grabbing' : 'z-10'}`}
       style={{
         left: node.position.x,
         top: node.position.y,
-        transform: `scale(${zoomLevel})`
+        width: 250,
       }}
       initial={{ scale: 0.8, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
@@ -126,11 +115,9 @@ const WorkflowNode = ({
       onMouseDown={handleMouseDown}
       onDoubleClick={handleDoubleClick}
     >
-      {/* Node Container */}
       <div className={`
         relative bg-card border-2 rounded-xl shadow-sm
-        min-w-[200px] max-w-[280px] p-4
-        transition-all duration-200 hover:shadow-md
+        p-4 transition-all duration-200 hover:shadow-md
         ${isSelected 
           ? `${nodeStyle.borderColor} ring-2 ring-primary/20` 
           : 'border-border hover:border-primary/50'
@@ -138,10 +125,7 @@ const WorkflowNode = ({
       `}>
         {/* Node Header */}
         <div className="flex items-center space-x-3 mb-3">
-          <div className={`
-            flex items-center justify-center w-10 h-10 rounded-lg
-            ${nodeStyle.color}
-          `}>
+          <div className={`flex items-center justify-center w-10 h-10 rounded-lg ${nodeStyle.color}`}>
             <AppIcon 
               name={node.serviceIcon || nodeStyle.icon} 
               size={20} 
@@ -158,67 +142,54 @@ const WorkflowNode = ({
           </div>
         </div>
 
-        {/* Node Description */}
         {node.description && (
-          <p className="text-xs text-muted-foreground mb-3 line-clamp-2">
+          <p className="text-xs text-muted-foreground mb-3 line-clamp-2 h-8">
             {node.description}
           </p>
         )}
 
         {/* Node Status */}
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between text-xs text-muted-foreground">
           <div className="flex items-center space-x-2">
-            <div className={`
-              w-2 h-2 rounded-full
-              ${node.status === 'configured' ? 'bg-green-500' : 
-                node.status === 'error' ? 'bg-destructive' : 'bg-yellow-500'}
-            `} />
-            <span className="text-xs text-muted-foreground capitalize">
-              {node.status || 'pending'}
-            </span>
+            <div className={`w-2 h-2 rounded-full ${node.status === 'configured' ? 'bg-green-500' : node.status === 'error' ? 'bg-destructive' : 'bg-yellow-500'}`} />
+            <span className="capitalize">{node.status || 'pending'}</span>
           </div>
           
           {node.executionTime && (
-            <span className="text-xs text-muted-foreground">
-              {node.executionTime}ms
-            </span>
+            <span>{node.executionTime}ms</span>
           )}
         </div>
 
         {/* Connection Points */}
-        <div className="absolute -left-2 top-1/2 transform -translate-y-1/2">
-          <div className="w-4 h-4 bg-card border-2 border-border rounded-full hover:border-primary transition-all duration-200" />
-        </div>
-        <div className="absolute -right-2 top-1/2 transform -translate-y-1/2">
-          <div className="w-4 h-4 bg-card border-2 border-border rounded-full hover:border-primary transition-all duration-200" />
-        </div>
+        <div className="absolute -left-2 top-1/2 -translate-y-1/2 w-4 h-4 bg-card border-2 border-border rounded-full hover:border-primary transition-all duration-200 pointer-events-auto" />
+        <div className="absolute -right-2 top-1/2 -translate-y-1/2 w-4 h-4 bg-card border-2 border-border rounded-full hover:border-primary transition-all duration-200 pointer-events-auto" />
 
         {/* Node Actions (visible on hover/selection) */}
         {isSelected && (
-          <div className="absolute -top-3 right-0 flex items-center space-x-1">
+          <div className="absolute -top-3 -right-3 flex items-center space-x-1">
             <Button
               variant="ghost"
-              size="sm"
-              onClick={handleConnectClick}
-              className="bg-card border border-border shadow-sm text-muted-foreground hover:text-foreground"
+              size="icon"
+              onClick={handleConfigureClick}
+              className="h-7 w-7 bg-card border border-border shadow-sm text-muted-foreground hover:text-foreground"
               title="Configure Node"
             >
               <AppIcon name="Settings" size={14} />
             </Button>
             <Button
               variant="ghost"
-              size="sm"
+              size="icon"
               onClick={handleConnectClick}
-              className="bg-card border border-border shadow-sm text-muted-foreground hover:text-foreground"
+              className="h-7 w-7 bg-card border border-border shadow-sm text-muted-foreground hover:text-foreground"
               title="Add Connection"
             >
               <AppIcon name="Plus" size={14} />
             </Button>
             <Button
               variant="ghost"
-              size="sm"
+              size="icon"
               onClick={handleDeleteClick}
-              className="bg-card border border-border shadow-sm text-destructive hover:text-destructive"
+              className="h-7 w-7 bg-card border border-border shadow-sm text-destructive hover:text-destructive"
               title="Delete Node"
             >
               <AppIcon name="Trash2" size={14} />

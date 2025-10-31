@@ -58,6 +58,7 @@ const VisualCanvasBuilder = ({ onBack }: { onBack: () => void }) => {
   ]);
 
   const canvasRef = useRef<HTMLDivElement>(null);
+  const [canvasOffset, setCanvasOffset] = useState({ x: 0, y: 0 });
   
   // Panel states
   const [selectedNodeId, setSelectedNodeId] = useState(null);
@@ -89,17 +90,17 @@ const VisualCanvasBuilder = ({ onBack }: { onBack: () => void }) => {
 
   const handleZoomReset = useCallback(() => {
     setZoomLevel(1);
+    setCanvasOffset({ x: 0, y: 0 });
   }, []);
 
   const handleFitToScreen = useCallback(() => {
-    // Calculate bounds of all nodes
-    if (nodes.length === 0) return;
+    if (nodes.length === 0 || !canvasRef.current) return;
     
     const bounds = nodes.reduce((acc, node) => ({
       minX: Math.min(acc.minX, node.position.x),
-      maxX: Math.max(acc.maxX, node.position.x + 200),
+      maxX: Math.max(acc.maxX, node.position.x + 250), // node width
       minY: Math.min(acc.minY, node.position.y),
-      maxY: Math.max(acc.maxY, node.position.y + 100)
+      maxY: Math.max(acc.maxY, node.position.y + 150)  // node height
     }), {
       minX: Infinity,
       maxX: -Infinity,
@@ -108,16 +109,27 @@ const VisualCanvasBuilder = ({ onBack }: { onBack: () => void }) => {
     });
 
     const padding = 100;
-    const canvasWidth = window.innerWidth - 320; // Account for sidebar
-    const canvasHeight = window.innerHeight - 200; // Account for headers
+    const canvasWidth = canvasRef.current.clientWidth;
+    const canvasHeight = canvasRef.current.clientHeight;
     
     const contentWidth = bounds.maxX - bounds.minX + padding * 2;
     const contentHeight = bounds.maxY - bounds.minY + padding * 2;
     
+    if (contentWidth <= 0 || contentHeight <= 0) return;
+
     const scaleX = canvasWidth / contentWidth;
     const scaleY = canvasHeight / contentHeight;
     
-    setZoomLevel(Math.min(scaleX, scaleY, 1));
+    const newZoom = Math.min(scaleX, scaleY, 1.5);
+    setZoomLevel(newZoom);
+
+    const centerX = (bounds.minX + bounds.maxX) / 2;
+    const centerY = (bounds.minY + bounds.maxY) / 2;
+    
+    const newOffsetX = canvasWidth / 2 - centerX * newZoom;
+    const newOffsetY = canvasHeight / 2 - centerY * newZoom;
+    
+    setCanvasOffset({ x: newOffsetX, y: newOffsetY });
   }, [nodes]);
 
   const handleToggleGrid = useCallback(() => {
@@ -167,23 +179,25 @@ const VisualCanvasBuilder = ({ onBack }: { onBack: () => void }) => {
   const handleDrop = (event: React.DragEvent) => {
     event.preventDefault();
     const nodeType = event.dataTransfer.getData('application/json');
-    if (nodeType) {
+    if (nodeType && canvasRef.current) {
         const newNodeData = JSON.parse(nodeType);
-        if (canvasRef.current) {
-            const rect = canvasRef.current.getBoundingClientRect();
-            const x = event.clientX - rect.left - 320; // Adjust for sidebar width
-            const y = event.clientY - rect.top;
+        const rect = canvasRef.current.getBoundingClientRect();
+        
+        // Adjust for canvas offset and zoom
+        const x = (event.clientX - rect.left - canvasOffset.x) / zoomLevel;
+        const y = (event.clientY - rect.top - canvasOffset.y) / zoomLevel;
 
-            const newNode = {
-                id: `${newNodeData.id}-${Date.now()}`,
-                ...newNodeData,
-                position: { x, y },
-                status: 'pending'
-            };
-            setNodes((nds) => nds.concat(newNode));
-        }
+        const newNode = {
+            id: `${newNodeData.id}-${Date.now()}`,
+            ...newNodeData,
+            position: { x, y },
+            status: 'pending'
+        };
+        setNodes((nds) => nds.concat(newNode));
+        setSaveStatus('unsaved');
     }
   };
+
 
   const handleDragOver = (event: React.DragEvent) => {
     event.preventDefault();
@@ -236,7 +250,7 @@ const VisualCanvasBuilder = ({ onBack }: { onBack: () => void }) => {
 
       <div className="flex flex-1 mt-4" style={{ height: 'calc(100vh - 220px)' }}>
         <WorkflowSidebar />
-        <div ref={canvasRef} onDrop={handleDrop} onDragOver={handleDragOver} className="relative flex-1">
+        <div ref={canvasRef} onDrop={handleDrop} onDragOver={handleDragOver} className="relative flex-1 bg-background overflow-hidden">
           <WorkflowCanvas
             nodes={nodes}
             connections={connections}
@@ -250,6 +264,8 @@ const VisualCanvasBuilder = ({ onBack }: { onBack: () => void }) => {
             zoomLevel={zoomLevel}
             showGrid={showGrid}
             onCanvasClick={handleCanvasClick}
+            canvasOffset={canvasOffset}
+            setCanvasOffset={setCanvasOffset}
           />
         </div>
       </div>
