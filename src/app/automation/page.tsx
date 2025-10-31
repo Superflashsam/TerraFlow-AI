@@ -10,6 +10,9 @@ import { EmptyState } from '@/components/automation/dashboard/EmptyState';
 import { WorkflowCreationMethodSelectionModal } from '@/components/automation/modal/WorkflowCreationMethodSelectionModal';
 import VisualCanvasBuilder from './visual-canvas/page';
 import WorkflowTemplates from '@/components/automation/WorkflowTemplates';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { LayoutGrid, Bot } from 'lucide-react';
+
 
 const MyWorkflowsDashboard = () => {
   const [isCreationModalOpen, setIsCreationModalOpen] = useState(false);
@@ -19,6 +22,7 @@ const MyWorkflowsDashboard = () => {
   const [statusFilter, setStatusFilter] = useState('all');
   const [sortBy, setSortBy] = useState('lastModified');
   const [viewMode, setViewMode] = useState('grid');
+  const [activeTab, setActiveTab] = useState("my-workflows");
 
   const [workflows, setWorkflows] = useState([
     {
@@ -245,80 +249,83 @@ const MyWorkflowsDashboard = () => {
     <div className="min-h-screen bg-background">
       <main className="pb-8">
         <PageHeader
-            title="My Workflows"
-            description="Manage and monitor your automation workflows"
-        >
-            <CreateWorkflowButton onClick={handleCreateWorkflow} />
-        </PageHeader>
-        <div className="mt-8">
-            {!showEmptyState && (
-                <>
-                <WorkflowStats workflows={workflows} />
-                <WorkflowFilters
-                    searchQuery={searchQuery}
-                    onSearchChange={setSearchQuery}
-                    statusFilter={statusFilter}
-                    onStatusFilterChange={setStatusFilter}
-                    sortBy={sortBy}
-                    onSortChange={setSortBy}
-                    viewMode={viewMode}
-                    onViewModeChange={setViewMode}
-                />
-                <BulkActionsToolbar
-                    selectedCount={selectedWorkflows.length}
-                    totalCount={filteredWorkflows.length}
-                    onSelectAll={handleSelectAll}
-                    onDeselectAll={handleDeselectAll}
-                    onBulkActivate={handleBulkActivate}
-                    onBulkPause={handleBulkPause}
-                    onBulkDuplicate={handleBulkDuplicate}
-                    onBulkDelete={handleBulkDelete}
-                />
-                </>
-            )}
-            {showEmptyState ? (
-                <EmptyState
-                onCreateWorkflow={handleCreateWorkflow}
-                hasFilters={hasFilters}
-                onClearFilters={handleClearFilters}
-                />
-            ) : (
-                <div className={`
-                ${viewMode === 'grid' ?'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6' :'space-y-4'
-                }
-                `}>
-                {filteredWorkflows.map((workflow) => (
-                    <WorkflowCard
-                    key={workflow.id}
-                    workflow={workflow}
-                    onEdit={handleEditWorkflow}
-                    onDuplicate={handleDuplicateWorkflow}
-                    onDelete={handleDeleteWorkflow}
-                    onToggleStatus={handleToggleStatus}
-                    onViewAnalytics={handleViewAnalytics}
-                    isSelected={selectedWorkflows.includes(workflow.id.toString())}
-                    onSelect={() => handleSelectWorkflow(workflow.id.toString())}
-                    />
-                ))}
-                </div>
-            )}
-        </div>
-      </main>
-
-      {isCreationModalOpen && (
-        <WorkflowCreationMethodSelectionModal
-          isOpen={isCreationModalOpen}
-          onClose={() => setIsCreationModalOpen(false)}
-          onSelectMethod={(method) => {
-            setIsCreationModalOpen(false);
-            if (method === 'visual-canvas') {
-                setCurrentView('canvas')
-            } else if (method === 'templates') {
-                setCurrentView('templates')
-            }
-          }}
+            title="Automation"
+            description="Create, manage, and monitor your automation workflows."
         />
-       )}
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="mt-8">
+            <div className="flex items-center justify-between">
+                <TabsList>
+                    <TabsTrigger value="my-workflows" className="flex items-center gap-2">
+                        <Bot size={16} />
+                        My Workflows
+                    </TabsTrigger>
+                    <TabsTrigger value="templates" className="flex items-center gap-2">
+                        <LayoutGrid size={16} />
+                        Templates
+                    </TabsTrigger>
+                </TabsList>
+                <CreateWorkflowButton onClick={() => setCurrentView('canvas')} />
+            </div>
+            
+            <TabsContent value="my-workflows" className="mt-6">
+                {!showEmptyState && (
+                    <>
+                    <WorkflowStats workflows={workflows} />
+                    <WorkflowFilters
+                        searchQuery={searchQuery}
+                        onSearchChange={setSearchQuery}
+                        statusFilter={statusFilter}
+                        onStatusFilterChange={setStatusFilter}
+                        sortBy={sortBy}
+                        onSortChange={setSortBy}
+                        viewMode={viewMode}
+                        onViewModeChange={setViewMode}
+                    />
+                    <BulkActionsToolbar
+                        selectedCount={selectedWorkflows.length}
+                        totalCount={filteredWorkflows.length}
+                        onSelectAll={handleSelectAll}
+                        onDeselectAll={handleDeselectAll}
+                        onBulkActivate={handleBulkActivate}
+                        onBulkPause={handleBulkPause}
+                        onBulkDuplicate={handleBulkDuplicate}
+                        onBulkDelete={handleBulkDelete}
+                    />
+                    </>
+                )}
+                {showEmptyState ? (
+                    <EmptyState
+                    onCreateWorkflow={() => setCurrentView('canvas')}
+                    hasFilters={hasFilters}
+                    onClearFilters={handleClearFilters}
+                    />
+                ) : (
+                    <div className={`
+                    ${viewMode === 'grid' ?'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6' :'space-y-4'
+                    }
+                    `}>
+                    {filteredWorkflows.map((workflow) => (
+                        <WorkflowCard
+                        key={workflow.id}
+                        workflow={workflow}
+                        onEdit={handleEditWorkflow}
+                        onDuplicate={handleDuplicateWorkflow}
+                        onDelete={handleDeleteWorkflow}
+                        onToggleStatus={handleToggleStatus}
+                        onViewAnalytics={handleViewAnalytics}
+                        isSelected={selectedWorkflows.includes(workflow.id.toString())}
+                        onSelect={() => handleSelectWorkflow(workflow.id.toString())}
+                        />
+                    ))}
+                    </div>
+                )}
+            </TabsContent>
+            <TabsContent value="templates" className="mt-6">
+                <WorkflowTemplates onSelectTemplate={handleSelectTemplate} onCreateFromScratch={() => setCurrentView('canvas')} />
+            </TabsContent>
+        </Tabs>
+
+      </main>
     </div>
   );
 };

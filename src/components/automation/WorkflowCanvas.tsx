@@ -19,32 +19,47 @@ const WorkflowCanvas = ({
   zoomLevel,
   showGrid,
   onCanvasClick
+}: {
+  nodes: any[],
+  connections: any[],
+  selectedNodeId: string | null,
+  onNodeSelect: (id: string) => void,
+  onNodeMove: (id: string, pos: {x: number, y: number}) => void,
+  onNodeDelete: (id: string) => void,
+  onNodeConnect: (id: string) => void,
+  onNodeConfigure: (id: string) => void,
+  onAddNode: (pos: {x: number, y: number}) => void,
+  zoomLevel: number,
+  showGrid: boolean,
+  onCanvasClick: (pos: {x: number, y: number}) => void
 }) => {
-  const canvasRef = useRef(null);
+  const canvasRef = useRef<HTMLDivElement>(null);
   const [isPanning, setIsPanning] = useState(false);
   const [panStart, setPanStart] = useState({ x: 0, y: 0 });
   const [canvasOffset, setCanvasOffset] = useState({ x: 0, y: 0 });
   const [draggedConnection, setDraggedConnection] = useState(null);
 
-  const handleCanvasMouseDown = (e) => {
+  const handleCanvasMouseDown = (e: React.MouseEvent) => {
     if (e.button !== 0) return; // Only left click
     
-    const rect = canvasRef.current.getBoundingClientRect();
-    const clickX = e.clientX - rect.left;
-    const clickY = e.clientY - rect.top;
-    
-    // Check if clicking on empty canvas
-    if (e.target === canvasRef.current || e.target.classList.contains('canvas-background')) {
-      setIsPanning(true);
-      setPanStart({
-        x: e.clientX - canvasOffset.x,
-        y: e.clientY - canvasOffset.y
-      });
-      onCanvasClick({ x: clickX, y: clickY });
+    if (canvasRef.current) {
+        const rect = canvasRef.current.getBoundingClientRect();
+        const clickX = e.clientX - rect.left;
+        const clickY = e.clientY - rect.top;
+        
+        // Check if clicking on empty canvas
+        if (e.target === canvasRef.current || (e.target as HTMLElement).classList.contains('canvas-background')) {
+          setIsPanning(true);
+          setPanStart({
+            x: e.clientX - canvasOffset.x,
+            y: e.clientY - canvasOffset.y
+          });
+          onCanvasClick({ x: clickX, y: clickY });
+        }
     }
   };
 
-  const handleCanvasMouseMove = useCallback((e) => {
+  const handleCanvasMouseMove = useCallback((e: MouseEvent) => {
     if (isPanning) {
       setCanvasOffset({
         x: e.clientX - panStart.x,
@@ -69,15 +84,15 @@ const WorkflowCanvas = ({
     }
   }, [isPanning, handleCanvasMouseMove, handleCanvasMouseUp]);
 
-  const handleNodeDoubleClick = (nodeId) => {
+  const handleNodeDoubleClick = (nodeId: string) => {
     onNodeConfigure(nodeId);
   };
 
-  const handleAddNodeBetween = (fromNodeId, toNodeId, position) => {
+  const handleAddNodeBetween = (fromNodeId: string, toNodeId: string, position: {x: number, y: number}) => {
     onAddNode(position);
   };
 
-  const getConnectionPath = (from, to) => {
+  const getConnectionPath = (from: {x: number, y: number}, to: {x: number, y: number}) => {
     const dx = to.x - from.x;
     const dy = to.y - from.y;
     const controlPointOffset = Math.abs(dx) * 0.5;
@@ -171,39 +186,38 @@ const WorkflowCanvas = ({
       `}
       onMouseDown={handleCanvasMouseDown}
       style={{
-        transform: `translate(${canvasOffset.x}px, ${canvasOffset.y}px) scale(${zoomLevel})`
+        transform: `translate(${canvasOffset.x}px, ${canvasOffset.y}px)`
       }}
     >
       {/* Grid Background */}
       <svg
         className="absolute inset-0 w-full h-full pointer-events-none canvas-background"
-        style={{ transform: `scale(${1/zoomLevel})` }}
+        style={{ transform: `scale(${zoomLevel})` }}
       >
         {renderGridPattern()}
         <rect width="100%" height="100%" fill="url(#grid)" />
       </svg>
+      
+      <div style={{ transform: `scale(${zoomLevel})`, transformOrigin: 'top left' }}>
+        {/* Connections Layer */}
+        <svg
+          className="absolute inset-0 w-full h-full pointer-events-none"
+          style={{ 
+              width: '200vw',
+              height: '200vh',
+          }}
+        >
+          {renderConnections()}
+        </svg>
 
-      {/* Connections Layer */}
-      <svg
-        className="absolute inset-0 w-full h-full pointer-events-none"
-        style={{ 
-          transform: `translate(${-canvasOffset.x}px, ${-canvasOffset.y}px) scale(${1/zoomLevel})`,
-          transformOrigin: '0 0'
-        }}
-      >
-        {renderConnections()}
-      </svg>
-
-      {/* Nodes Layer */}
-      <div
-        className="absolute inset-0 w-full h-full"
-        style={{
-          transform: `translate(${-canvasOffset.x}px, ${-canvasOffset.y}px) scale(${1/zoomLevel})`,
-          transformOrigin: '0 0'
-        }}
-      >
-        {renderNodes()}
+        {/* Nodes Layer */}
+        <div
+          className="absolute inset-0 w-full h-full"
+        >
+          {renderNodes()}
+        </div>
       </div>
+
 
       {/* Empty State */}
       {nodes.length === 0 && (
@@ -228,16 +242,8 @@ const WorkflowCanvas = ({
               Start Building Your Workflow
             </h3>
             <p className="text-muted-foreground mb-4 max-w-sm">
-              Click anywhere on the canvas to add your first node and begin creating your automation workflow.
+              Drag components from the sidebar onto the canvas to begin.
             </p>
-            <Button
-              variant="default"
-              onClick={() => onAddNode({ x: 400, y: 200 })}
-              className="pointer-events-auto"
-            >
-              <AppIcon name="Plus" className="mr-2" />
-              Add First Node
-            </Button>
           </div>
         </div>
       )}

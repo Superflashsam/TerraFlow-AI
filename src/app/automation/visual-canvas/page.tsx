@@ -1,10 +1,10 @@
 "use client";
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 
 import { PageHeader } from "@/components/shared/page-header";
 import { CanvasToolbar } from '@/components/automation/CanvasToolbar';
 import { WorkflowCanvas } from '@/components/automation/WorkflowCanvas';
-import { NodeSelectorPanel } from '@/components/automation/NodeSelectorPanel';
+import { WorkflowSidebar } from '@/components/automation/WorkflowSidebar';
 import { NodeConfigurationPanel } from '@/components/automation/NodeConfigurationPanel';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
@@ -29,8 +29,7 @@ const VisualCanvasBuilder = ({ onBack }: { onBack: () => void }) => {
       type: 'trigger',
       service: 'TerraLead',
       serviceIcon: 'Target',
-      color: 'emerald',
-      position: { x: 100, y: 200 },
+      position: { x: 350, y: 200 },
       status: 'configured',
       config: {
         triggerType: 'webhook',
@@ -44,8 +43,7 @@ const VisualCanvasBuilder = ({ onBack }: { onBack: () => void }) => {
       type: 'condition',
       service: 'Filter',
       serviceIcon: 'Filter',
-      color: 'amber',
-      position: { x: 400, y: 200 },
+      position: { x: 650, y: 200 },
       status: 'configured',
       config: {
         conditionType: 'equals',
@@ -53,50 +51,17 @@ const VisualCanvasBuilder = ({ onBack }: { onBack: () => void }) => {
         value: '80'
       }
     },
-    {
-      id: 'node-3',
-      name: 'Send Welcome Email',
-      description: 'Send personalized welcome email to qualified leads',
-      type: 'action',
-      service: 'Gmail',
-      serviceIcon: 'Mail',
-      color: 'blue',
-      position: { x: 700, y: 150 },
-      status: 'pending',
-      config: {
-        actionType: 'send_email',
-        toEmail: '{{lead.email}}',
-        subject: 'Welcome to SmartFlow Studio!'
-      }
-    },
-    {
-      id: 'node-4',
-      name: 'Create HubSpot Contact',
-      description: 'Add qualified lead to HubSpot CRM',
-      type: 'action',
-      service: 'HubSpot',
-      serviceIcon: 'Users',
-      color: 'blue',
-      position: { x: 700, y: 300 },
-      status: 'configured',
-      config: {
-        actionType: 'create_record',
-        recordType: 'contact'
-      }
-    }
   ]);
   
   const [connections, setConnections] = useState([
     { id: 'conn-1', from: 'node-1', to: 'node-2' },
-    { id: 'conn-2', from: 'node-2', to: 'node-3' },
-    { id: 'conn-3', from: 'node-2', to: 'node-4' }
   ]);
+
+  const canvasRef = useRef<HTMLDivElement>(null);
   
   // Panel states
   const [selectedNodeId, setSelectedNodeId] = useState(null);
-  const [isNodeSelectorOpen, setIsNodeSelectorOpen] = useState(false);
   const [isConfigPanelOpen, setIsConfigPanelOpen] = useState(false);
-  const [nodeSelectorPosition, setNodeSelectorPosition] = useState({ x: 0, y: 0 });
   
   // History for undo/redo
   const [history, setHistory] = useState<any[]>([]);
@@ -143,7 +108,7 @@ const VisualCanvasBuilder = ({ onBack }: { onBack: () => void }) => {
     });
 
     const padding = 100;
-    const canvasWidth = window.innerWidth;
+    const canvasWidth = window.innerWidth - 320; // Account for sidebar
     const canvasHeight = window.innerHeight - 200; // Account for headers
     
     const contentWidth = bounds.maxX - bounds.minX + padding * 2;
@@ -199,16 +164,30 @@ const VisualCanvasBuilder = ({ onBack }: { onBack: () => void }) => {
     setSaveStatus('unsaved');
   }, []);
 
-  const handleAddNode = useCallback((position: any) => {
-    setNodeSelectorPosition(position);
-    setIsNodeSelectorOpen(true);
-  }, []);
+  const handleDrop = (event: React.DragEvent) => {
+    event.preventDefault();
+    const nodeType = event.dataTransfer.getData('application/json');
+    if (nodeType) {
+        const newNodeData = JSON.parse(nodeType);
+        if (canvasRef.current) {
+            const rect = canvasRef.current.getBoundingClientRect();
+            const x = event.clientX - rect.left - 320; // Adjust for sidebar width
+            const y = event.clientY - rect.top;
 
-  const handleNodeSelectFromPanel = useCallback((newNode: any) => {
-    setNodes(prev => [...prev, newNode]);
-    setSaveStatus('unsaved');
-    setIsNodeSelectorOpen(false);
-  }, []);
+            const newNode = {
+                id: `${newNodeData.id}-${Date.now()}`,
+                ...newNodeData,
+                position: { x, y },
+                status: 'pending'
+            };
+            setNodes((nds) => nds.concat(newNode));
+        }
+    }
+  };
+
+  const handleDragOver = (event: React.DragEvent) => {
+    event.preventDefault();
+  };
 
   const handleCanvasClick = useCallback((position: any) => {
     setSelectedNodeId(null);
@@ -255,26 +234,26 @@ const VisualCanvasBuilder = ({ onBack }: { onBack: () => void }) => {
         </Button>
       </PageHeader>
 
-      {/* Main Canvas Area */}
-      <div className="relative flex-1 mt-4" style={{ height: 'calc(100vh - 280px)' }}>
-        {/* Canvas */}
-        <WorkflowCanvas
-          nodes={nodes}
-          connections={connections}
-          selectedNodeId={selectedNodeId}
-          onNodeSelect={handleNodeSelect}
-          onNodeMove={handleNodeMove}
-          onNodeDelete={handleNodeDelete}
-          onNodeConnect={handleNodeConnect}
-          onNodeConfigure={handleNodeConfigure}
-          onAddNode={handleAddNode}
-          zoomLevel={zoomLevel}
-          showGrid={showGrid}
-          onCanvasClick={handleCanvasClick}
-        />
-
-        {/* Canvas Toolbar */}
-        <CanvasToolbar
+      <div className="flex flex-1 mt-4" style={{ height: 'calc(100vh - 220px)' }}>
+        <WorkflowSidebar />
+        <div ref={canvasRef} onDrop={handleDrop} onDragOver={handleDragOver} className="relative flex-1">
+          <WorkflowCanvas
+            nodes={nodes}
+            connections={connections}
+            selectedNodeId={selectedNodeId}
+            onNodeSelect={handleNodeSelect}
+            onNodeMove={handleNodeMove}
+            onNodeDelete={handleNodeDelete}
+            onNodeConnect={handleNodeConnect}
+            onNodeConfigure={handleNodeConfigure}
+            onAddNode={() => {}}
+            zoomLevel={zoomLevel}
+            showGrid={showGrid}
+            onCanvasClick={handleCanvasClick}
+          />
+        </div>
+      </div>
+       <CanvasToolbar
           zoomLevel={zoomLevel}
           onZoomIn={handleZoomIn}
           onZoomOut={handleZoomOut}
@@ -287,23 +266,12 @@ const VisualCanvasBuilder = ({ onBack }: { onBack: () => void }) => {
           canUndo={historyIndex > 0}
           canRedo={historyIndex < history.length - 1}
         />
-
-        {/* Node Selector Panel */}
-        <NodeSelectorPanel
-          isOpen={isNodeSelectorOpen}
-          onClose={() => setIsNodeSelectorOpen(false)}
-          onNodeSelect={handleNodeSelectFromPanel}
-          position={nodeSelectorPosition}
-        />
-
-        {/* Node Configuration Panel */}
         <NodeConfigurationPanel
           isOpen={isConfigPanelOpen}
           onClose={() => setIsConfigPanelOpen(false)}
           selectedNode={selectedNode}
           onUpdateNode={handleUpdateNode}
         />
-      </div>
     </div>
   );
 };
