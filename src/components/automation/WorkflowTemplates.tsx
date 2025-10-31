@@ -131,16 +131,8 @@ const WorkflowTemplates = ({ onSelectTemplate, onCreateFromScratch }: { onSelect
         <div className="flex items-center justify-between mb-4">
           <div>
             <h2 className="text-2xl font-bold text-foreground">Workflow Templates</h2>
-            <p className="text-muted-foreground">Choose from pre-built templates or start from scratch</p>
+            <p className="text-muted-foreground">Choose from pre-built templates to get started</p>
           </div>
-          <Button
-            variant="default"
-            onClick={onCreateFromScratch}
-            iconName="Plus"
-            iconPosition="left"
-          >
-            Create from Scratch
-          </Button>
         </div>
 
         {/* Category Filter */}
