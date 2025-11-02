@@ -60,6 +60,19 @@ import {
   Megaphone,
   Layers,
   ArrowRight,
+  Camera,
+  AppWindow,
+  Share,
+  Share2,
+  Heart,
+  Edit,
+  School,
+  Hospital,
+  ShoppingCart,
+  Train,
+  Brain,
+  Wand2,
+  LayoutGrid,
 } from 'lucide-react';
 
 const iconMap: { [key: string]: React.ElementType } = {
@@ -120,6 +133,19 @@ const iconMap: { [key: string]: React.ElementType } = {
   Megaphone,
   Layers,
   ArrowRight,
+  Camera,
+  AppWindow,
+  Share,
+  Share2,
+  Heart,
+  Edit,
+  School,
+  Hospital,
+  ShoppingCart,
+  Train,
+  Brain,
+  Wand2,
+  LayoutGrid,
 };
 
 const AppIcon = ({ name, size, color, className }: { name: string; size?: number; color?: string; className?: string }) => {

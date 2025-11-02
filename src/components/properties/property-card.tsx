@@ -1,10 +1,13 @@
 "use client";
 
 import React from 'react';
+import { useRouter } from 'next/navigation';
 import { Camera, MapPin, Bed, Bath, AppWindow, Edit, BarChart3, Share, CheckSquare } from 'lucide-react';
 import { getImagePlaceholder } from '@/lib/placeholder-images';
 
 export const PropertyCard = ({ property, isSelected, onSelect, onEdit }: { property: any, isSelected: boolean, onSelect: any, onEdit: any }) => {
+  const router = useRouter();
+  
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'active': return 'bg-green-500 text-green-50';
@@ -28,11 +31,21 @@ export const PropertyCard = ({ property, isSelected, onSelect, onEdit }: { prope
     if (rate >= 5) return 'text-yellow-500';
     return 'text-muted-foreground';
   };
+  
+  const handleCardClick = (e: React.MouseEvent) => {
+    if ((e.target as HTMLElement).closest('button, input')) {
+        return;
+    }
+    router.push(`/property-detail?id=${property.id}`);
+  };
 
   return (
-    <div className={`bg-card rounded-lg border-2 transition-all duration-200 ${
-      isSelected ? 'border-primary shadow-lg' : 'border-border hover:border-border/80'
-    }`}>
+    <div 
+      className={`bg-card rounded-lg border-2 transition-all duration-200 cursor-pointer ${
+        isSelected ? 'border-primary shadow-lg' : 'border-border hover:border-border/80'
+      }`}
+      onClick={handleCardClick}
+    >
       <div className="relative">
         <img
           src={getImagePlaceholder(property.imageId)?.imageUrl || 'https://picsum.photos/seed/property/600/400'}
@@ -40,7 +53,7 @@ export const PropertyCard = ({ property, isSelected, onSelect, onEdit }: { prope
           className="w-full h-48 object-cover rounded-t-lg"
         />
         
-        <div className="absolute top-3 left-3">
+        <div className="absolute top-3 left-3" onClick={(e) => e.stopPropagation()}>
           <input
             type="checkbox"
             checked={isSelected}
@@ -117,7 +130,7 @@ export const PropertyCard = ({ property, isSelected, onSelect, onEdit }: { prope
             Agent: <span className="font-medium text-foreground">{property.agent}</span>
           </div>
           
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2" onClick={(e) => e.stopPropagation()}>
             <button onClick={onEdit} className="p-2 text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-md transition-colors" title="Edit Property">
               <Edit size={16} />
             </button>
