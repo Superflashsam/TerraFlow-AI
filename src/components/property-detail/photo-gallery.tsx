@@ -39,7 +39,7 @@ export const PhotoGallery = ({ images }: { images: any[] }) => {
               <div key={image.id} className="relative aspect-video rounded-lg overflow-hidden cursor-pointer group" onClick={() => openLightbox(index)}>
                 <Image
                   src={image.url}
-                  alt={image.alt}
+                  alt={image.alt || image.title}
                   layout="fill"
                   objectFit="cover"
                 />
@@ -57,7 +57,7 @@ export const PhotoGallery = ({ images }: { images: any[] }) => {
             <DialogContent className="max-w-4xl p-0 border-0 bg-transparent">
                 <Image
                     src={images[selectedImage].url}
-                    alt={images[selectedImage].alt}
+                    alt={images[selectedImage].alt || images[selectedImage].title}
                     width={1600}
                     height={900}
                     className="rounded-lg object-contain"

@@ -168,10 +168,10 @@ export const properties = [
         inquiryQuality: 'High'
       },
       images: [
-        { id: '1-1', url: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Living Room', isMain: true },
-        { id: '1-2', url: 'https://images.unsplash.com/photo-1600585152225-3579fe9d7ae2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Kitchen', isMain: false },
-        { id: '1-3', url: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Bedroom', isMain: false },
-        { id: '1-4', url: 'https://images.unsplash.com/photo-1600585153639-6e93545b7346?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Bathroom', isMain: false },
+        { id: '1-1', url: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Living Room', alt: 'Spacious living room', isMain: true },
+        { id: '1-2', url: 'https://images.unsplash.com/photo-1600585152225-3579fe9d7ae2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Kitchen', alt: 'Modern kitchen', isMain: false },
+        { id: '1-3', url: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Bedroom', alt: 'Cozy bedroom', isMain: false },
+        { id: '1-4', url: 'https://images.unsplash.com/photo-1600585153639-6e93545b7346?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Bathroom', alt: 'Elegant bathroom', isMain: false },
       ]
     },
     {
@@ -200,10 +200,10 @@ export const properties = [
         inquiryQuality: 'Very High'
       },
       images: [
-        { id: '2-1', url: 'https://images.unsplash.com/photo-1600585153492-f045d7b38a9a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Exterior', isMain: true },
-        { id: '2-2', url: 'https://images.unsplash.com/photo-1600607687920-40da0c4d4458?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Living Area', isMain: false },
-        { id: '2-3', url: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Garden View', isMain: false },
-        { id: '2-4', url: 'https://images.unsplash.com/photo-1600585152915-d208bec867a1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Master Suite', isMain: false },
+        { id: '2-1', url: 'https://images.unsplash.com/photo-1600585153492-f045d7b38a9a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Exterior', alt: 'Villa exterior', isMain: true },
+        { id: '2-2', url: 'https://images.unsplash.com/photo-1600607687920-40da0c4d4458?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Living Area', alt: 'Spacious living area', isMain: false },
+        { id: '2-3', url: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Garden View', alt: 'View of the garden', isMain: false },
+        { id: '2-4', url: 'https://images.unsplash.com/photo-1600585152915-d208bec867a1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Master Suite', alt: 'Luxurious master suite', isMain: false },
       ]
     },
     {
@@ -232,10 +232,10 @@ export const properties = [
         inquiryQuality: 'Medium'
       },
        images: [
-        { id: '3-1', url: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Building Front', isMain: true },
-        { id: '3-2', url: 'https://images.unsplash.com/photo-1505691723518-36a5ac3be353?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Interior', isMain: false },
-        { id: '3-3', url: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Living Space', isMain: false },
-        { id: '3-4', url: 'https://images.unsplash.com/photo-1556912173-3539f3c55b5f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Kitchenette', isMain: false },
+        { id: '3-1', url: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Building Front', alt: 'Front of the building', isMain: true },
+        { id: '3-2', url: 'https://images.unsplash.com/photo-1505691723518-36a5ac3be353?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Interior', alt: 'Apartment interior', isMain: false },
+        { id: '3-3', url: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Living Space', alt: 'Living space with sofa', isMain: false },
+        { id: '3-4', url: 'https://images.unsplash.com/photo-1556912173-3539f3c55b5f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Kitchenette', alt: 'Small modern kitchen', isMain: false },
       ]
     },
     {
@@ -264,10 +264,10 @@ export const properties = [
         inquiryQuality: 'Very High'
       },
        images: [
-        { id: '4-1', url: 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'View from Penthouse', isMain: true },
-        { id: '4-2', url: 'https://images.unsplash.com/photo-1613553507747-8914587a8f15?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Rooftop Terrace', isMain: false },
-        { id: '4-3', url: 'https://images.unsplash.com/photo-1617104679092-b25c3534a7f0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Entertainment Room', isMain: false },
-        { id: '4-4', url: 'https://images.unsplash.com/photo-1567016526105-6441b18aa34e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Grand Living Room', isMain: false },
+        { id: '4-1', url: 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'View from Penthouse', alt: 'Penthouse view', isMain: true },
+        { id: '4-2', url: 'https://images.unsplash.com/photo-1613553507747-8914587a8f15?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Rooftop Terrace', alt: 'Rooftop terrace with seating', isMain: false },
+        { id: '4-3', url: 'https://images.unsplash.com/photo-1617104679092-b25c3534a7f0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Entertainment Room', alt: 'Entertainment room with large screen', isMain: false },
+        { id: '4-4', url: 'https://images.unsplash.com/photo-1567016526105-6441b18aa34e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Grand Living Room', alt: 'Large living room with high ceilings', isMain: false },
       ]
     }
   ];
