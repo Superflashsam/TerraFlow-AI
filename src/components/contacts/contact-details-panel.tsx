@@ -80,7 +80,7 @@ export const ContactDetailsPanel = ({ contact, onClose }: { contact: any, onClos
           <div className="relative">
             <Image 
               src={contact?.profileImage} 
-              alt={contact?.alt}
+              alt={contact?.name}
               width={64}
               height={64}
               className="w-16 h-16 rounded-full object-cover"

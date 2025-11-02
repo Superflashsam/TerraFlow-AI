@@ -1,9 +1,11 @@
+
 "use client";
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { Camera, MapPin, Bed, Bath, AppWindow, Edit, BarChart3, Share, CheckSquare } from 'lucide-react';
 import { getImagePlaceholder } from '@/lib/placeholder-images';
+import Image from 'next/image';
 
 export const PropertyCard = ({ property, isSelected, onSelect, onEdit }: { property: any, isSelected: boolean, onSelect: any, onEdit: any }) => {
   const router = useRouter();
@@ -47,9 +49,11 @@ export const PropertyCard = ({ property, isSelected, onSelect, onEdit }: { prope
       onClick={handleCardClick}
     >
       <div className="relative">
-        <img
+        <Image
           src={getImagePlaceholder(property.imageId)?.imageUrl || 'https://picsum.photos/seed/property/600/400'}
           alt={property.alt || 'Property listing image'}
+          width={600}
+          height={400}
           className="w-full h-48 object-cover rounded-t-lg"
         />
         
