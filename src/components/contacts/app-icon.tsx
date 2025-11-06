@@ -78,6 +78,9 @@ import {
   AlertTriangle,
   Shield,
   ZoomIn,
+  Loader2,
+  Palette,
+  File,
 } from 'lucide-react';
 
 const iconMap: { [key: string]: React.ElementType } = {
@@ -110,6 +113,7 @@ const iconMap: { [key: string]: React.ElementType } = {
   Maximize,
   RotateCcw,
   Grid,
+  Grid3X3: Grid,
   Undo,
   Redo,
   Zap,
@@ -157,6 +161,10 @@ const iconMap: { [key: string]: React.ElementType } = {
   AlertTriangle,
   Shield,
   ZoomIn,
+  Loader2,
+  Palette,
+  File,
+  History: RotateCcw,
 };
 
 const AppIcon = ({ name, size, color, className }: { name: string; size?: number; color?: string; className?: string }) => {
