@@ -73,6 +73,11 @@ import {
   Brain,
   Wand2,
   LayoutGrid,
+  Map,
+  Package,
+  AlertTriangle,
+  Shield,
+  ZoomIn,
 } from 'lucide-react';
 
 const iconMap: { [key: string]: React.ElementType } = {
@@ -146,6 +151,12 @@ const iconMap: { [key: string]: React.ElementType } = {
   Brain,
   Wand2,
   LayoutGrid,
+  Map,
+  Package,
+  Activity: TrendingUp,
+  AlertTriangle,
+  Shield,
+  ZoomIn,
 };
 
 const AppIcon = ({ name, size, color, className }: { name: string; size?: number; color?: string; className?: string }) => {

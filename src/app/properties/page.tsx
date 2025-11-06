@@ -10,13 +10,16 @@ import { PhotoManager } from '@/components/properties/photo-manager';
 import { PerformanceDashboard } from '@/components/properties/performance-dashboard';
 import { AddPropertyModal } from '@/components/properties/add-property-modal';
 import { properties as mockPropertiesData } from '@/lib/placeholder-data';
-import { Home, BarChart3, Camera, Users, List, Table } from 'lucide-react';
+import { Home, BarChart3, Camera, Users, List, Table, Brain } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import MarketIntelligence from '@/components/properties/market-intelligence/MarketIntelligence';
+
 
 const tabs = [
   { id: 'listings', label: 'Property Listings', icon: Home },
   { id: 'analytics', label: 'Performance Dashboard', icon: BarChart3 },
-  { id: 'photos', label: 'Photo Manager', icon: Camera }
+  { id: 'photos', label: 'Photo Manager', icon: Camera },
+  { id: 'intelligence', label: 'Market Intelligence', icon: Brain },
 ];
 
 export default function PropertiesPage() {
@@ -283,6 +286,10 @@ export default function PropertiesPage() {
 
           {activeTab === 'photos' && (
             <PhotoManager properties={properties} />
+          )}
+
+          {activeTab === 'intelligence' && (
+            <MarketIntelligence />
           )}
         </div>
       </main>
