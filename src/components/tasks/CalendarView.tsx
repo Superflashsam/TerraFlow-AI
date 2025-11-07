@@ -1,17 +1,19 @@
+
 "use client";
 
 import { useState } from "react";
 import type { Task } from "@/types/task";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface CalendarViewProps {
   tasks: Task[];
   onTaskClick: (task: Task) => void;
+  onAddTaskClick: () => void;
 }
 
-export const CalendarView = ({ tasks, onTaskClick }: CalendarViewProps) => {
+export const CalendarView = ({ tasks, onTaskClick, onAddTaskClick }: CalendarViewProps) => {
   const [currentDate, setCurrentDate] = useState(new Date());
 
   const getDaysInMonth = (date: Date) => {
@@ -76,6 +78,10 @@ export const CalendarView = ({ tasks, onTaskClick }: CalendarViewProps) => {
           <Button variant="outline" size="sm" onClick={nextMonth}>
             <ChevronRight className="h-4 w-4" />
           </Button>
+           <Button onClick={onAddTaskClick} size="sm" className="bg-task-primary hover:bg-task-primary/90 text-white">
+              <Plus className="h-4 w-4 mr-2"/>
+              Add Task
+            </Button>
         </div>
       </div>
 

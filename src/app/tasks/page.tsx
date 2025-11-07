@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -5,7 +6,6 @@ import { DndContext, closestCenter, type DragEndEvent } from "@dnd-kit/core";
 import { arrayMove } from "@dnd-kit/sortable";
 import { initialTasks } from "@/lib/placeholder-data";
 import type { Task, TaskStatus } from "@/types/task";
-import { PageHeader } from "@/components/shared/page-header";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -27,7 +27,7 @@ import {
 import { TaskColumn } from "@/components/tasks/TaskColumn";
 import { CalendarView } from "@/components/tasks/CalendarView";
 import { AddTaskPanel } from "@/components/tasks/AddTaskPanel";
-import { TaskDetailModal } from "@/components/tasks/TaskDetailModal";
+import { TaskDetailPanel } from "@/components/tasks/TaskDetailPanel";
 import { cn } from "@/lib/utils";
 
 const TaskMetricCard = ({
@@ -71,7 +71,7 @@ export default function TasksPage() {
     assignee: "all",
   });
   const [sort, setSort] = useState("due-date");
-  const [isPanelOpen, setIsPanelOpen] = useState(false);
+  const [isAddPanelOpen, setIsAddPanelOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
 
   const handleAddTask = (newTask: Omit<Task, 'id' | 'createdDate'>) => {
@@ -81,7 +81,7 @@ export default function TasksPage() {
       createdDate: new Date().toISOString(),
     };
     setTasks(prev => [fullTask, ...prev]);
-    setIsPanelOpen(false);
+    setIsAddPanelOpen(false);
   };
   
   const handleEditTask = (updatedTask: Task) => {
@@ -139,7 +139,12 @@ export default function TasksPage() {
       const titleMatch = task.title.toLowerCase().includes(searchLower);
       const descMatch = task.description?.toLowerCase().includes(searchLower);
       const assigneeMatch = task.assignee.name.toLowerCase().includes(searchLower);
-      const linkedToMatch = task.linkedTo?.name.toLowerCase().includes(searchLower);
+      
+      let linkedToMatch = false;
+      if (task.linkedTo && task.linkedTo.name) {
+          linkedToMatch = task.linkedTo.name.toLowerCase().includes(searchLower);
+      }
+
 
       return (
         (titleMatch || descMatch || assigneeMatch || linkedToMatch) &&
@@ -199,14 +204,14 @@ export default function TasksPage() {
           </div>
           <div className="flex items-center gap-2">
             <div className="flex items-center bg-task-surface p-1 rounded-lg">
-              <Button
-                variant={viewMode === "list" ? "secondary" : "ghost"}
+               <Button
+                variant={viewMode === "board" ? "secondary" : "ghost"}
                 size="sm"
-                onClick={() => setViewMode("list")}
-                className={cn(viewMode === 'list' && 'bg-task-primary/20 text-task-primary')}
+                onClick={() => setViewMode("board")}
+                className={cn(viewMode === 'board' && 'bg-task-primary/20 text-task-primary')}
               >
-                <List className="mr-2 h-4 w-4" />
-                List View
+                <LayoutGrid className="mr-2 h-4 w-4" />
+                Board View
               </Button>
                <Button
                 variant={viewMode === "calendar" ? "secondary" : "ghost"}
@@ -217,17 +222,8 @@ export default function TasksPage() {
                 <Calendar className="mr-2 h-4 w-4" />
                 Calendar View
               </Button>
-               <Button
-                variant={viewMode === "board" ? "secondary" : "ghost"}
-                size="sm"
-                onClick={() => setViewMode("board")}
-                className={cn(viewMode === 'board' && 'bg-task-primary/20 text-task-primary')}
-              >
-                <LayoutGrid className="mr-2 h-4 w-4" />
-                Board View
-              </Button>
             </div>
-            <Button onClick={() => setIsPanelOpen(true)} className="bg-task-primary hover:bg-task-primary/90 text-white">
+            <Button onClick={() => setIsAddPanelOpen(true)} className="bg-task-primary hover:bg-task-primary/90 text-white">
               Add Task
             </Button>
           </div>
@@ -350,21 +346,18 @@ export default function TasksPage() {
             </div>
           )}
           {viewMode === "calendar" && (
-            <CalendarView tasks={filteredAndSortedTasks} onTaskClick={handleTaskClick} />
-          )}
-          {viewMode === "list" && (
-             <div className="text-center text-muted-foreground p-12">List view is coming soon.</div>
+            <CalendarView tasks={filteredAndSortedTasks} onTaskClick={handleTaskClick} onAddTaskClick={() => setIsAddPanelOpen(true)} />
           )}
         </main>
       </div>
       
       <AddTaskPanel 
-        isOpen={isPanelOpen} 
-        onClose={() => setIsPanelOpen(false)} 
+        isOpen={isAddPanelOpen} 
+        onClose={() => setIsAddPanelOpen(false)} 
         onAdd={handleAddTask}
       />
       
-      <TaskDetailModal
+      <TaskDetailPanel
         task={selectedTask}
         isOpen={!!selectedTask}
         onClose={() => setSelectedTask(null)}
