@@ -1,6 +1,7 @@
+
 "use client";
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Calendar, User, Building, MoreHorizontal, Edit, Trash2, ArrowRight } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -8,18 +9,20 @@ import { Button } from '@/components/ui/button';
 import { useDrag } from 'react-dnd';
 
 const priorityClasses = {
-  high: 'border-l-destructive',
-  medium: 'border-l-yellow-500',
-  low: 'border-l-muted-foreground',
+  high: 'border-l-task-high-priority',
+  medium: 'border-l-task-medium-priority',
+  low: 'border-l-task-low-priority',
 };
 
 const priorityDotClasses = {
-  high: 'bg-destructive',
-  medium: 'bg-yellow-500',
-  low: 'bg-muted-foreground',
+  high: 'bg-task-high-priority',
+  medium: 'bg-task-medium-priority',
+  low: 'bg-task-low-priority',
 };
 
 export const TaskCard = ({ task, onClick }: { task: any, onClick: () => void }) => {
+  const [formattedDate, setFormattedDate] = useState('');
+  
   const [{ isDragging }, drag] = useDrag(() => ({
     type: 'task',
     item: { id: task.id, status: task.status },
@@ -30,29 +33,35 @@ export const TaskCard = ({ task, onClick }: { task: any, onClick: () => void }) 
 
   const isOverdue = new Date(task.dueDate) < new Date() && task.status !== 'done';
   const isDone = task.status === 'done';
+  
+  useEffect(() => {
+    // This will only run on the client, after initial hydration
+    setFormattedDate(new Date(task.dueDate).toLocaleDateString('en-IN', { month: 'short', day: 'numeric' }));
+  }, [task.dueDate]);
+
 
   return (
     <div
       ref={drag}
       onClick={onClick}
-      className={`bg-card border rounded-lg p-4 group relative cursor-pointer hover:bg-muted/50 transition-all ${priorityClasses[task.priority as keyof typeof priorityClasses]} border-l-2 ${isDragging ? 'opacity-50' : 'opacity-100'}`}
+      className={`bg-task-surface border rounded-lg p-4 group relative cursor-pointer hover:bg-muted/50 transition-all ${priorityClasses[task.priority as keyof typeof priorityClasses]} border-l-2 ${isDragging ? 'opacity-50' : 'opacity-100'}`}
     >
       <div className="flex items-start gap-3">
         <Checkbox
           checked={isDone}
-          className="mt-1 border-border data-[state=checked]:bg-primary data-[state=checked]:border-primary"
+          className="mt-1 border-task-low-priority data-[state=checked]:bg-task-primary data-[state=checked]:border-task-primary"
           onClick={(e) => e.stopPropagation()} // Prevent card click
         />
         <div className="flex-1">
-          <p className={`font-semibold text-sm ${isDone ? 'line-through text-muted-foreground' : 'text-foreground'}`}>
+          <p className={`font-semibold text-sm ${isDone ? 'line-through text-task-text-secondary' : 'text-task-text-primary'}`}>
             <span className={`inline-block w-2 h-2 rounded-full mr-2 ${priorityDotClasses[task.priority as keyof typeof priorityDotClasses]}`}></span>
             {task.title}
           </p>
-          <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{task.description}</p>
-          <div className="mt-3 flex items-center justify-between text-xs text-muted-foreground">
+          <p className="text-xs text-task-text-secondary mt-1 line-clamp-2">{task.description}</p>
+          <div className="mt-3 flex items-center justify-between text-xs text-task-text-secondary">
             <div className="flex items-center gap-1">
-              <Calendar className={`h-3 w-3 ${isOverdue ? 'text-destructive' : ''}`} />
-              <span className={isOverdue ? 'text-destructive' : ''}>{new Date(task.dueDate).toLocaleDateString('en-IN', { month: 'short', day: 'numeric' })}</span>
+              <Calendar className={`h-3 w-3 ${isOverdue ? 'text-task-high-priority' : ''}`} />
+              <span className={isOverdue ? 'text-task-high-priority' : ''}>{formattedDate}</span>
             </div>
             {task.linkedTo && (
               <div className="flex items-center gap-1">
