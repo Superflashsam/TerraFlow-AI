@@ -10,6 +10,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
+        geist: ['Geist', 'Inter', 'sans-serif'],
         body: ['Inter', 'sans-serif'],
         headline: ['Inter', 'sans-serif'],
         code: ['monospace'],
@@ -55,6 +56,13 @@ export default {
           accent: "hsl(var(--sidebar-accent))",
           "accent-foreground": "hsl(var(--sidebar-accent-foreground))",
         },
+        charcoal: "hsl(var(--charcoal))",
+        surface: "hsl(var(--surface))",
+        'text-primary': "hsl(var(--text-primary))",
+        'text-secondary': "hsl(var(--text-secondary))",
+        'high-priority': "hsl(var(--high-priority))",
+        'medium-priority': "hsl(var(--medium-priority))",
+        'low-priority': "hsl(var(--low-priority))",
       },
       borderRadius: {
         lg: 'var(--radius)',
@@ -95,5 +103,5 @@ export default {
       }
     },
   },
-  plugins: [require('tailwindcss-animate')],
+  plugins: [require('tailwindcss-animate'), require('react-dnd'), require('react-dnd-html5-backend'), require('framer-motion')],
 } satisfies Config;

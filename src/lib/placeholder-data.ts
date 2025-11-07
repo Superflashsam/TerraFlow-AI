@@ -111,15 +111,16 @@ export const generatedContent = {
 
 // Inbox Page Data
 export const conversations = [
-  { id: 1, name: 'Alice', message: 'Hi, I saw your listing for the downtown apartment...', time: '2:45 PM', unread: 2, channel: 'WhatsApp' },
-  { id: 2, name: 'Bob', message: 'Can you send me more details about the property on Elm St?', time: '1:30 PM', unread: 0, channel: 'Email' },
-  { id: 3, name: 'Charlie', message: 'Is the open house still on for this Saturday?', time: '11:10 AM', unread: 0, channel: 'SMS' },
-  { id: 4, name: 'Diana', message: 'Thank you for the information! I will review and get back to you.', time: 'Yesterday', unread: 0, channel: 'Email' },
-  { id: 5, name: 'Ethan', message: '[Image] What do you think of this kitchen design?', time: 'Yesterday', unread: 1, channel: 'WhatsApp' },
+  { id: 1, name: 'Alice', message: 'Hi, I saw your listing for the downtown apartment...', time: '2:45 PM', unread: 2, channel: 'WhatsApp', avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&h=150&q=80' },
+  { id: 2, name: 'Bob', message: 'Can you send me more details about the property on Elm St?', time: '1:30 PM', unread: 0, channel: 'Email', avatar: 'https://images.unsplash.com/photo-1557862921-37829c790f19?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&h=150&q=80' },
+  { id: 3, name: 'Charlie', message: 'Is the open house still on for this Saturday?', time: '11:10 AM', unread: 0, channel: 'SMS', avatar: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&h=150&q=80' },
+  { id: 4, name: 'Diana', message: 'Thank you for the information! I will review and get back to you.', time: 'Yesterday', unread: 0, channel: 'Email', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&h=150&q=80' },
+  { id: 5, name: 'Ethan', message: '[Image] What do you think of this kitchen design?', time: 'Yesterday', unread: 1, channel: 'WhatsApp', avatar: 'https://images.unsplash.com/photo-1564564321837-a57b7070ac4f?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&h=150&q=80' },
 ];
 
 export const selectedConversation = {
   name: 'Alice',
+  avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&h=150&q=80',
   messages: [
     { from: 'Alice', text: 'Hi, I saw your listing for the downtown apartment and I\'m very interested. Is it still available?', time: '2:45 PM' },
     { from: 'Agent', text: 'Hello Alice! Yes, it is. It\'s a beautiful 2-bedroom with great city views. Are you free for a viewing this week?', time: '2:46 PM' },
@@ -168,10 +169,10 @@ export const properties = [
         inquiryQuality: 'High'
       },
       images: [
-        { id: '1-1', url: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Living Room', alt: 'Spacious living room', isMain: true },
-        { id: '1-2', url: 'https://images.unsplash.com/photo-1600585152225-3579fe9d7ae2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Kitchen', alt: 'Modern kitchen', isMain: false },
-        { id: '1-3', url: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Bedroom', alt: 'Cozy bedroom', isMain: false },
-        { id: '1-4', url: 'https://images.unsplash.com/photo-1600585153639-6e93545b7346?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Bathroom', alt: 'Elegant bathroom', isMain: false },
+        { id: '1-1', url: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Living Room', alt: 'Spacious living room with modern furniture', isMain: true },
+        { id: '1-2', url: 'https://images.unsplash.com/photo-1600585152225-3579fe9d7ae2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Kitchen', alt: 'Modern kitchen with island', isMain: false },
+        { id: '1-3', url: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Bedroom', alt: 'Cozy bedroom with large bed', isMain: false },
+        { id: '1-4', url: 'https://images.unsplash.com/photo-1600585153639-6e93545b7346?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Bathroom', alt: 'Elegant bathroom with bathtub', isMain: false },
       ]
     },
     {
@@ -200,10 +201,10 @@ export const properties = [
         inquiryQuality: 'Very High'
       },
       images: [
-        { id: '2-1', url: 'https://images.unsplash.com/photo-1600585153492-f045d7b38a9a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Exterior', alt: 'Villa exterior', isMain: true },
-        { id: '2-2', url: 'https://images.unsplash.com/photo-1600607687920-40da0c4d4458?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Living Area', alt: 'Spacious living area', isMain: false },
-        { id: '2-3', url: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Garden View', alt: 'View of the garden', isMain: false },
-        { id: '2-4', url: 'https://images.unsplash.com/photo-1600585152915-d208bec867a1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Master Suite', alt: 'Luxurious master suite', isMain: false },
+        { id: '2-1', url: 'https://images.unsplash.com/photo-1600585153492-f045d7b38a9a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Exterior', alt: 'Modern villa exterior', isMain: true },
+        { id: '2-2', url: 'https://images.unsplash.com/photo-1600607687920-40da0c4d4458?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Living Area', alt: 'Spacious living area with high ceilings', isMain: false },
+        { id: '2-3', url: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Garden View', alt: 'Lush green garden view from inside', isMain: false },
+        { id: '2-4', url: 'https://images.unsplash.com/photo-1600585152915-d208bec867a1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Master Suite', alt: 'Luxurious master suite with balcony', isMain: false },
       ]
     },
     {
@@ -232,10 +233,10 @@ export const properties = [
         inquiryQuality: 'Medium'
       },
        images: [
-        { id: '3-1', url: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Building Front', alt: 'Front of the building', isMain: true },
-        { id: '3-2', url: 'https://images.unsplash.com/photo-1505691723518-36a5ac3be353?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Interior', alt: 'Apartment interior', isMain: false },
-        { id: '3-3', url: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Living Space', alt: 'Living space with sofa', isMain: false },
-        { id: '3-4', url: 'https://images.unsplash.com/photo-1556912173-3539f3c55b5f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Kitchenette', alt: 'Small modern kitchen', isMain: false },
+        { id: '3-1', url: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Building Front', alt: 'Front view of apartment building', isMain: true },
+        { id: '3-2', url: 'https://images.unsplash.com/photo-1505691723518-36a5ac3be353?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Interior', alt: 'Bright apartment interior', isMain: false },
+        { id: '3-3', url: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Living Space', alt: 'Cozy living space with a sofa', isMain: false },
+        { id: '3-4', url: 'https://images.unsplash.com/photo-1556912173-3539f3c55b5f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Kitchenette', alt: 'Small and modern kitchen area', isMain: false },
       ]
     },
     {
@@ -264,10 +265,10 @@ export const properties = [
         inquiryQuality: 'Very High'
       },
        images: [
-        { id: '4-1', url: 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'View from Penthouse', alt: 'Penthouse view', isMain: true },
-        { id: '4-2', url: 'https://images.unsplash.com/photo-1613553507747-8914587a8f15?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Rooftop Terrace', alt: 'Rooftop terrace with seating', isMain: false },
-        { id: '4-3', url: 'https://images.unsplash.com/photo-1617104679092-b25c3534a7f0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Entertainment Room', alt: 'Entertainment room with large screen', isMain: false },
-        { id: '4-4', url: 'https://images.unsplash.com/photo-1567016526105-6441b18aa34e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Grand Living Room', alt: 'Large living room with high ceilings', isMain: false },
+        { id: '4-1', url: 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'View from Penthouse', alt: 'Stunning city view from penthouse', isMain: true },
+        { id: '4-2', url: 'https://images.unsplash.com/photo-1613553507747-8914587a8f15?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Rooftop Terrace', alt: 'Spacious rooftop terrace with seating', isMain: false },
+        { id: '4-3', url: 'https://images.unsplash.com/photo-1617104679092-b25c3534a7f0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Entertainment Room', alt: 'Modern entertainment room with a large screen', isMain: false },
+        { id: '4-4', url: 'https://images.unsplash.com/photo-1567016526105-6441b18aa34e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', title: 'Grand Living Room', alt: 'Expansive living room with high ceilings', isMain: false },
       ]
     }
   ];
@@ -277,4 +278,127 @@ export const analyticsReports = [
   { id: 2, title: "Agent Conversion Rates", description: "Individual agent performance from lead to deal.", icon: Percent },
   { id: 3, title: "Property Sales by Type", description: "Sales volume categorized by property type (Villa, Apartment, etc.).", icon: Building2 },
   { id: 4, title: "Q3 Revenue Report", description: "Detailed financial report for the third quarter.", icon: DollarSign },
+];
+
+export const initialTasks = [
+  {
+    id: '1',
+    title: "Follow-up with Rajesh Kumar",
+    description: "Discuss property options in Bandra. High potential client.",
+    status: 'todo',
+    priority: 'high',
+    dueDate: '2025-10-31T15:00:00Z',
+    createdDate: '2025-10-30T09:00:00Z',
+    linkedTo: { type: 'lead', name: 'Rajesh Kumar' },
+    tags: ['Follow-up', 'High-Priority'],
+    assignee: { name: 'Priya Sharma', avatar: 'https://images.unsplash.com/photo-1590649880765-91b1956b8276?w=100&h=100&fit=crop' }
+  },
+  {
+    id: '2',
+    title: "Send property brochure to Priya Sharma",
+    description: "Client is interested in 2BHK apartments in Juhu.",
+    status: 'todo',
+    priority: 'medium',
+    dueDate: '2025-11-01T18:00:00Z',
+    createdDate: '2025-10-30T11:00:00Z',
+    linkedTo: { type: 'lead', name: 'Priya Sharma' },
+    tags: ['Site Visit'],
+    assignee: { name: 'Rajesh Kumar', avatar: 'https://images.unsplash.com/photo-1653566031535-bcf33e1c2893?w=100&h=100&fit=crop' }
+  },
+  {
+    id: '3',
+    title: "RERA documentation check",
+    description: "Verify all RERA compliance documents for the Whitefield Villa deal.",
+    status: 'todo',
+    priority: 'low',
+    dueDate: '2025-11-10T23:59:00Z',
+    createdDate: '2025-10-29T14:00:00Z',
+    linkedTo: { type: 'deal', name: 'Whitefield Villa' },
+    tags: ['Legal', 'Documentation'],
+    assignee: { name: 'Amit Patel', avatar: 'https://images.unsplash.com/photo-1580130379601-1a28f2e8df4a?w=100&h=100&fit=crop' }
+  },
+  {
+    id: '4',
+    title: "Site visit preparation - Sobha property",
+    description: "Arrange keys and prepare property showcase for Amit Patel's visit.",
+    status: 'in-progress',
+    priority: 'high',
+    dueDate: '2025-10-31T17:00:00Z',
+    createdDate: '2025-10-31T10:00:00Z',
+    linkedTo: { type: 'lead', name: 'Amit Patel' },
+    tags: ['Site Visit'],
+    assignee: { name: 'Me', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop' }
+  },
+  {
+    id: '5',
+    title: "Finalize mortgage pre-approval for Kavya Reddy",
+    description: "Coordinate with bank representative and client.",
+    status: 'in-progress',
+    priority: 'medium',
+    dueDate: '2025-11-01T23:59:00Z',
+    createdDate: '2025-10-28T16:00:00Z',
+    linkedTo: { type: 'deal', name: 'Prestige Lakeside' },
+    tags: ['Finance'],
+    assignee: { name: 'Deepa Nair', avatar: 'https://images.unsplash.com/photo-1498200705497-2c9e717e5ab8?w=100&h=100&fit=crop' }
+  },
+  {
+    id: '6',
+    title: "Call with Anjali Singh regarding budget",
+    description: "Client call completed, budget confirmed.",
+    status: 'done',
+    priority: 'high',
+    dueDate: '2025-10-31T11:00:00Z',
+    createdDate: '2025-10-30T18:00:00Z',
+    linkedTo: { type: 'lead', name: 'Anjali Singh' },
+    tags: ['Follow-up'],
+    assignee: { name: 'Vikram Rao', avatar: 'https://images.unsplash.com/photo-1564564321837-a57b7070ac4f?w=100&h=100&fit=crop' }
+  },
+   {
+    id: '7',
+    title: "Draft sale agreement for Arjun Mehta",
+    description: "Initial draft for the commercial space in BKC.",
+    status: 'todo',
+    priority: 'medium',
+    dueDate: '2025-11-03T18:00:00Z',
+    createdDate: '2025-10-31T12:00:00Z',
+    linkedTo: { type: 'deal', name: 'BKC Office Deal' },
+    tags: ['Legal', 'Documentation'],
+    assignee: { name: 'Amit Patel', avatar: 'https://images.unsplash.com/photo-1580130379601-1a28f2e8df4a?w=100&h=100&fit=crop' }
+  },
+  {
+    id: '8',
+    title: "Price negotiation call with Suresh Iyer",
+    description: "Scheduled call to discuss the final offer for the Juhu apartment.",
+    status: 'in-progress',
+    priority: 'high',
+    dueDate: '2025-10-31T16:00:00Z',
+    createdDate: '2025-10-30T17:00:00Z',
+    linkedTo: { type: 'lead', name: 'Suresh Iyer' },
+    tags: ['Negotiation'],
+    assignee: { name: 'Me', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop' }
+  },
+  {
+    id: '9',
+    title: "Send updated property list to Neha Gupta",
+    description: "Client requested more options in the Lower Parel area.",
+    status: 'todo',
+    priority: 'medium',
+    dueDate: '2025-11-02T14:00:00Z',
+    createdDate: '2025-10-31T09:30:00Z',
+    linkedTo: { type: 'lead', name: 'Neha Gupta' },
+    tags: ['Follow-up'],
+    assignee: { name: 'Priya Sharma', avatar: 'https://images.unsplash.com/photo-1590649880765-91b1956b8276?w=100&h=100&fit=crop' }
+  },
+  {
+    id: '10',
+    title: "Onboard new agent Vikram Rao",
+    description: "Training session and system walkthrough.",
+    status: 'done',
+    priority: 'low',
+    dueDate: '2025-10-30T18:00:00Z',
+    createdDate: '2025-10-28T10:00:00Z',
+    linkedTo: null,
+    tags: ['Internal'],
+    assignee: { name: 'Me', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop' }
+  }
 ];

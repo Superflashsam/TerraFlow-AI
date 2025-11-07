@@ -44,6 +44,16 @@
     --chart-5: 27 87% 67%;
 
     --app-background: 225 33% 97%;
+    
+    --charcoal: 240 2% 12%;
+    --surface: 240 2% 15%;
+    --text-primary: 240 5% 95%;
+    --text-secondary: 240 2% 55%;
+    --high-priority: 358 100% 67%;
+    --medium-priority: 15 76% 63%;
+    --low-priority: 210 3% 40%;
+    --primary-tasks: 188 64% 48%;
+
 
     --sidebar-background: 0 0% 100%;
     --sidebar-foreground: 195 10% 20%;
@@ -65,8 +75,8 @@
     --popover: 213 20% 11%;
     --popover-foreground: 212 43% 93%;
 
-    --primary: 160 100% 35%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 188 64% 48%;
+    --primary-foreground: 240 5% 95%;
 
     --secondary: 207 70% 53%;
     --secondary-foreground: 0 0% 100%;
@@ -85,7 +95,7 @@
 
     --border: 214 12% 20%;
     --input: 214 12% 20%;
-    --ring: 160 100% 35%;
+    --ring: 188 64% 48%;
 
     --chart-1: 160 100% 35%;
     --chart-2: 207 70% 53%;
@@ -94,6 +104,15 @@
     --chart-5: 27 87% 67%;
     
     --app-background: 213 20% 7%;
+
+    --charcoal: 240 2% 12%;
+    --surface: 240 2% 15%;
+    --text-primary: 240 5% 95%;
+    --text-secondary: 240 2% 55%;
+    --high-priority: 358 100% 67%;
+    --medium-priority: 15 76% 63%;
+    --low-priority: 210 3% 40%;
+    --primary-tasks: 188 64% 48%;
 
     --sidebar-background: 0 0% 0%;
     --sidebar-foreground: 212 43% 93%;
@@ -113,4 +132,19 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+@layer utilities {
+    .bg-charcoal {
+        background-color: hsl(var(--charcoal));
+    }
+    .bg-surface {
+        background-color: hsl(var(--surface));
+    }
+    .text-text-primary {
+        color: hsl(var(--text-primary));
+    }
+    .text-text-secondary {
+        color: hsl(var(--text-secondary));
+    }
 }
