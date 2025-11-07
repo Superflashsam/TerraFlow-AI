@@ -49,28 +49,28 @@ export const TaskPanel = ({ isOpen, onClose, task, onSave, assignees }: { isOpen
           animate={{ x: 0 }}
           exit={{ x: "100%" }}
           transition={{ type: "spring", stiffness: 300, damping: 30 }}
-          className="fixed top-0 right-0 h-full w-full max-w-md bg-surface border-l border-white/10 shadow-lg z-50 flex flex-col font-geist"
+          className="fixed top-0 right-0 h-full w-full max-w-md bg-card border-l z-50 flex flex-col"
         >
-          <div className="p-6 flex items-center justify-between border-b border-white/10">
-            <h2 className="text-lg font-semibold text-text-primary">{task ? 'Edit Task' : 'Add New Task'}</h2>
-            <Button variant="ghost" size="icon" onClick={onClose} className="text-text-secondary hover:text-text-primary">
+          <div className="p-6 flex items-center justify-between border-b">
+            <h2 className="text-lg font-semibold text-foreground">{task ? 'Edit Task' : 'Add New Task'}</h2>
+            <Button variant="ghost" size="icon" onClick={onClose} className="text-muted-foreground hover:text-foreground">
               <X className="h-5 w-5" />
             </Button>
           </div>
           <div className="flex-1 p-6 space-y-6 overflow-y-auto">
             <div>
-              <Label htmlFor="title" className="text-text-secondary">Task Title</Label>
-              <Input id="title" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} className="bg-charcoal border-white/10 mt-1" />
+              <Label htmlFor="title" className="text-muted-foreground">Task Title</Label>
+              <Input id="title" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} className="bg-background border-border mt-1" />
             </div>
             <div>
-              <Label htmlFor="description" className="text-text-secondary">Description</Label>
-              <Textarea id="description" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} className="bg-charcoal border-white/10 mt-1" rows={3} />
+              <Label htmlFor="description" className="text-muted-foreground">Description</Label>
+              <Textarea id="description" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} className="bg-background border-border mt-1" rows={3} />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label className="text-text-secondary">Priority</Label>
+                <Label className="text-muted-foreground">Priority</Label>
                 <Select value={formData.priority} onValueChange={v => setFormData({...formData, priority: v})}>
-                  <SelectTrigger className="bg-charcoal border-white/10 mt-1"><SelectValue /></SelectTrigger>
+                  <SelectTrigger className="bg-background border-border mt-1"><SelectValue /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="high">High</SelectItem>
                     <SelectItem value="medium">Medium</SelectItem>
@@ -79,9 +79,9 @@ export const TaskPanel = ({ isOpen, onClose, task, onSave, assignees }: { isOpen
                 </Select>
               </div>
               <div>
-                 <Label htmlFor="assignee" className="text-text-secondary">Assign to</Label>
+                 <Label htmlFor="assignee" className="text-muted-foreground">Assign to</Label>
                 <Select value={formData.assignee.name} onValueChange={v => setFormData({...formData, assignee: { name: v, avatar: ''}})}>
-                  <SelectTrigger className="bg-charcoal border-white/10 mt-1"><SelectValue /></SelectTrigger>
+                  <SelectTrigger className="bg-background border-border mt-1"><SelectValue /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="Me">Me</SelectItem>
                      {assignees.map(a => <SelectItem key={a} value={a}>{a}</SelectItem>)}
@@ -91,18 +91,18 @@ export const TaskPanel = ({ isOpen, onClose, task, onSave, assignees }: { isOpen
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="due-date" className="text-text-secondary">Due Date</Label>
-                <Input id="due-date" type="date" value={formData.dueDate} onChange={e => setFormData({...formData, dueDate: e.target.value})} className="bg-charcoal border-white/10 mt-1" />
+                <Label htmlFor="due-date" className="text-muted-foreground">Due Date</Label>
+                <Input id="due-date" type="date" value={formData.dueDate} onChange={e => setFormData({...formData, dueDate: e.target.value})} className="bg-background border-border mt-1" />
               </div>
               <div>
-                <Label htmlFor="due-time" className="text-text-secondary">Due Time</Label>
-                <Input id="due-time" type="time" value={formData.dueTime} onChange={e => setFormData({...formData, dueTime: e.target.value})} className="bg-charcoal border-white/10 mt-1" />
+                <Label htmlFor="due-time" className="text-muted-foreground">Due Time</Label>
+                <Input id="due-time" type="time" value={formData.dueTime} onChange={e => setFormData({...formData, dueTime: e.target.value})} className="bg-background border-border mt-1" />
               </div>
             </div>
             <div>
-              <Label className="text-text-secondary">Link to</Label>
+              <Label className="text-muted-foreground">Link to</Label>
                <Select onValueChange={v => setFormData({...formData, linkedTo: {type: 'lead', name: v}})}>
-                  <SelectTrigger className="bg-charcoal border-white/10 mt-1"><SelectValue placeholder="Select a Lead or Deal..." /></SelectTrigger>
+                  <SelectTrigger className="bg-background border-border mt-1"><SelectValue placeholder="Select a Lead or Deal..." /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="Rajesh Kumar">Lead: Rajesh Kumar</SelectItem>
                     <SelectItem value="Priya Sharma">Lead: Priya Sharma</SelectItem>
@@ -111,14 +111,14 @@ export const TaskPanel = ({ isOpen, onClose, task, onSave, assignees }: { isOpen
                 </Select>
             </div>
             <div>
-              <Label className="text-text-secondary">Tags</Label>
+              <Label className="text-muted-foreground">Tags</Label>
               <div className="flex flex-wrap gap-2 mt-2">
                 {allTags.map(tag => (
                   <Button
                     key={tag}
                     variant={formData.tags.includes(tag) ? 'secondary' : 'outline'}
                     size="sm"
-                    className={`border-white/10 ${formData.tags.includes(tag) ? 'bg-primary text-black' : 'bg-surface text-text-secondary'}`}
+                    className={`border-border ${formData.tags.includes(tag) ? 'bg-primary text-primary-foreground' : 'bg-background text-muted-foreground'}`}
                     onClick={() => {
                       const newTags = formData.tags.includes(tag)
                         ? formData.tags.filter((t: string) => t !== tag)
@@ -132,9 +132,9 @@ export const TaskPanel = ({ isOpen, onClose, task, onSave, assignees }: { isOpen
               </div>
             </div>
           </div>
-          <div className="p-6 flex items-center justify-end gap-3 border-t border-white/10">
-            <Button variant="ghost" onClick={onClose} className="text-text-secondary hover:text-text-primary">Cancel</Button>
-            <Button onClick={handleSave} className="bg-primary hover:bg-primary/90 text-black font-semibold">
+          <div className="p-6 flex items-center justify-end gap-3 border-t">
+            <Button variant="ghost" onClick={onClose} className="text-muted-foreground hover:text-foreground">Cancel</Button>
+            <Button onClick={handleSave} className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold">
               {task ? 'Save Changes' : 'Create Task'}
             </Button>
           </div>
