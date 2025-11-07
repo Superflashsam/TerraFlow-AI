@@ -1,4 +1,3 @@
-
 "use client";
 
 import { Task } from "@/types/task";
@@ -21,6 +20,11 @@ interface TaskCardProps {
 export const TaskCard = ({ task, onComplete, onMove, onTaskClick }: TaskCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const [formattedDate, setFormattedDate] = useState("");
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id: task.id,
@@ -59,6 +63,8 @@ export const TaskCard = ({ task, onComplete, onMove, onTaskClick }: TaskCardProp
     }
   };
 
+  const dndProps = isClient ? { ...listeners, ...attributes } : {};
+
   return (
     <div
       ref={setNodeRef}
@@ -70,8 +76,7 @@ export const TaskCard = ({ task, onComplete, onMove, onTaskClick }: TaskCardProp
       )}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      {...listeners}
-      {...attributes}
+      {...dndProps}
     >
       <div className="flex items-start gap-3">
         <div onClick={(e) => e.stopPropagation()}>
@@ -85,8 +90,10 @@ export const TaskCard = ({ task, onComplete, onMove, onTaskClick }: TaskCardProp
         <div 
           className="flex-1 min-w-0 cursor-pointer"
           onClick={(e) => {
-            e.stopPropagation();
-            onTaskClick();
+            if (!(e.target instanceof HTMLButtonElement || e.target instanceof HTMLInputElement)) {
+               e.stopPropagation();
+               onTaskClick();
+            }
           }}
         >
           <div className="flex items-start gap-2 mb-2">
