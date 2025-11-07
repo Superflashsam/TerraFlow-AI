@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Task } from "@/types/task";
@@ -6,7 +7,7 @@ import { Calendar, User, Building2, Edit, Trash2, MoveRight } from "lucide-react
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 
@@ -19,10 +20,30 @@ interface TaskCardProps {
 
 export const TaskCard = ({ task, onComplete, onMove, onTaskClick }: TaskCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [formattedDate, setFormattedDate] = useState("");
 
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id: task.id,
   });
+
+  useEffect(() => {
+    const formatDate = (dateStr: string) => {
+      const date = new Date(dateStr);
+      const today = new Date();
+      const tomorrow = new Date(today);
+      tomorrow.setDate(tomorrow.getDate() + 1);
+
+      if (date.toDateString() === today.toDateString()) {
+        return "Today";
+      } else if (date.toDateString() === tomorrow.toDateString()) {
+        return "Tomorrow";
+      } else {
+        return date.toLocaleDateString("en-IN", { month: "short", day: "numeric" });
+      }
+    };
+    setFormattedDate(formatDate(task.dueDate));
+  }, [task.dueDate]);
+
 
   const style = {
     transform: CSS.Translate.toString(transform),
@@ -30,21 +51,6 @@ export const TaskCard = ({ task, onComplete, onMove, onTaskClick }: TaskCardProp
 
   const isOverdue = new Date(task.dueDate) < new Date() && task.status !== "done";
   
-  const formatDate = (dateStr: string) => {
-    const date = new Date(dateStr);
-    const today = new Date();
-    const tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    
-    if (date.toDateString() === today.toDateString()) {
-      return "Today";
-    } else if (date.toDateString() === tomorrow.toDateString()) {
-      return "Tomorrow";
-    } else {
-      return date.toLocaleDateString("en-IN", { month: "short", day: "numeric" });
-    }
-  };
-
   const getPriorityColor = () => {
     switch (task.priority) {
       case "high": return "bg-task-high-priority";
@@ -103,7 +109,7 @@ export const TaskCard = ({ task, onComplete, onMove, onTaskClick }: TaskCardProp
               isOverdue ? "text-task-high-priority" : "text-task-text-secondary"
             )}>
               <Calendar className="h-3 w-3" />
-              <span>{formatDate(task.dueDate)}</span>
+              <span>{formattedDate}</span>
               {task.dueTime && <span className="ml-1">{task.dueTime}</span>}
             </div>
             
