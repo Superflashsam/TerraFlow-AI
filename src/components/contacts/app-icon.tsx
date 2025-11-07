@@ -1,4 +1,3 @@
-
 "use client";
 
 import React from 'react';
@@ -81,6 +80,11 @@ import {
   Loader2,
   Palette,
   File,
+  Building2,
+  MoveRight,
+  Clipboard,
+  AlertCircle,
+  CheckCircle,
 } from 'lucide-react';
 
 const iconMap: { [key: string]: React.ElementType } = {
@@ -101,6 +105,7 @@ const iconMap: { [key: string]: React.ElementType } = {
   Phone,
   Mail,
   Building,
+  Building2,
   Key,
   Download,
   Trash2,
@@ -165,6 +170,10 @@ const iconMap: { [key: string]: React.ElementType } = {
   Palette,
   File,
   History: RotateCcw,
+  MoveRight,
+  Clipboard,
+  AlertCircle,
+  CheckCircle,
 };
 
 const AppIcon = ({ name, size, color, className }: { name: string; size?: number; color?: string; className?: string }) => {
