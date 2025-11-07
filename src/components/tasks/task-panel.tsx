@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useEffect } from 'react';
@@ -11,28 +12,23 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 
 export const TaskPanel = ({ isOpen, onClose, task, onSave, assignees }: { isOpen: boolean, onClose: () => void, task: any, onSave: (task: any) => void, assignees: string[] }) => {
 
-  const [formData, setFormData] = useState(task || {
-    title: '',
-    description: '',
-    priority: 'medium',
-    dueDate: new Date().toISOString().split('T')[0],
-    dueTime: '',
-    linkedTo: null,
-    assignee: { name: 'Me', avatar: '' },
-    tags: []
+  const getInitialFormData = () => ({
+    title: task?.title || '',
+    description: task?.description || '',
+    priority: task?.priority || 'medium',
+    dueDate: task?.dueDate ? new Date(task.dueDate).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
+    dueTime: task?.dueTime || '',
+    linkedTo: task?.linkedTo || null,
+    assignee: task?.assignee || { name: 'Me', avatar: '' },
+    tags: task?.tags || []
   });
 
+  const [formData, setFormData] = useState(getInitialFormData());
+
   useEffect(() => {
-    setFormData(task || {
-      title: '',
-      description: '',
-      priority: 'medium',
-      dueDate: new Date().toISOString().split('T')[0],
-      dueTime: '',
-      linkedTo: null,
-      assignee: { name: 'Me', avatar: '' },
-      tags: []
-    });
+    if (isOpen) {
+      setFormData(getInitialFormData());
+    }
   }, [task, isOpen]);
   
   const handleSave = () => {
