@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState } from 'react';
@@ -132,112 +133,99 @@ const Step2 = () => {
         { name: 'Vikram Singh', email: 'vikram.s@example.com', score: 82 },
     ];
     return (
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div className="space-y-6">
-          <Card>
-            <CardHeader><CardTitle className="text-base">Lead Attributes</CardTitle></CardHeader>
-            <CardContent className="space-y-4">
-                <div className="space-y-2">
-                    <Label>Lead Score</Label>
-                    <div className="flex items-center gap-4">
-                        <Slider value={[score]} onValueChange={(val) => setScore(val[0])} max={100} step={1} />
-                        <span className="text-sm font-medium w-24 text-right">{score} and above</span>
-                    </div>
-                </div>
-                <div className="space-y-2">
-                    <Label>Lead Stage</Label>
-                    <div className="grid grid-cols-3 gap-2">
-                        {['New', 'Contacted', 'Qualified', 'Proposal', 'Negotiation'].map(stage => (
-                            <div key={stage} className="flex items-center space-x-2">
-                                <Checkbox id={`stage-${stage}`} />
-                                <Label htmlFor={`stage-${stage}`} className="text-sm font-normal">{stage}</Label>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="space-y-6">
+                <Card>
+                    <CardHeader><CardTitle className="text-base">Lead Attributes</CardTitle></CardHeader>
+                    <CardContent className="space-y-4">
+                        <div className="space-y-2">
+                            <Label>Lead Score</Label>
+                            <div className="flex items-center gap-4">
+                                <Slider value={[score]} onValueChange={(val) => setScore(val[0])} max={100} step={1} />
+                                <span className="text-sm font-medium w-24 text-right">{score} and above</span>
                             </div>
-                        ))}
-                    </div>
+                        </div>
+                        <div className="space-y-2">
+                            <Label>Lead Stage</Label>
+                            <div className="grid grid-cols-3 gap-2">
+                                {['New', 'Contacted', 'Qualified', 'Proposal', 'Negotiation'].map(stage => (
+                                    <div key={stage} className="flex items-center space-x-2">
+                                        <Checkbox id={`stage-${stage}`} />
+                                        <Label htmlFor={`stage-${stage}`} className="text-sm font-normal">{stage}</Label>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </CardContent>
+                </Card>
+
+                <Card>
+                    <CardHeader><CardTitle className="text-base">Behavior & Source</CardTitle></CardHeader>
+                    <CardContent className="space-y-4">
+                        <div className="space-y-2">
+                            <Label>Engagement Level</Label>
+                            <RadioGroup defaultValue="active" className="flex space-x-4">
+                                <div className="flex items-center space-x-2"><RadioGroupItem value="active" id="active" /><Label htmlFor="active" className="font-normal">Active</Label></div>
+                                <div className="flex items-center space-x-2"><RadioGroupItem value="inactive-30" id="inactive-30" /><Label htmlFor="inactive-30" className="font-normal">Inactive (30d)</Label></div>
+                                <div className="flex items-center space-x-2"><RadioGroupItem value="inactive-90" id="inactive-90" /><Label htmlFor="inactive-90" className="font-normal">Inactive (90d+)</Label></div>
+                            </RadioGroup>
+                        </div>
+                        <div className="space-y-2">
+                            <Label>Lead Source</Label>
+                            <Input placeholder="e.g. 99acres, Website" />
+                        </div>
+                    </CardContent>
+                </Card>
+
+                <Card>
+                    <CardHeader><CardTitle className="text-base">Exclusions</CardTitle></CardHeader>
+                    <CardContent className="space-y-2">
+                        <div className="flex items-center space-x-2"><Checkbox id="exclude-previous" /><Label htmlFor="exclude-previous" className="font-normal">Exclude recipients of last 3 campaigns</Label></div>
+                        <div className="flex items-center space-x-2"><Checkbox id="exclude-unsubscribed" defaultChecked disabled /><Label htmlFor="exclude-unsubscribed" className="font-normal">Exclude unsubscribed contacts</Label></div>
+                    </CardContent>
+                </Card>
+            </div>
+
+            <div className="space-y-4">
+                <Card className="bg-muted/50">
+                    <CardHeader className="flex-row items-center justify-between">
+                        <CardTitle className="text-base">Audience Preview</CardTitle>
+                        <div className="flex items-center gap-2">
+                            <Users className="h-5 w-5 text-primary" />
+                            <p className="text-xl font-bold text-primary">892</p>
+                            <p className="text-sm text-muted-foreground">leads match</p>
+                        </div>
+                    </CardHeader>
+                    <CardContent>
+                        <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead>Name</TableHead>
+                                    <TableHead>Email</TableHead>
+                                    <TableHead className="text-right">Score</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {sampleLeads.map(lead => (
+                                    <TableRow key={lead.email}>
+                                        <TableCell>{lead.name}</TableCell>
+                                        <TableCell>{lead.email}</TableCell>
+                                        <TableCell className="text-right">{lead.score}</TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </CardContent>
+                </Card>
+                <div className="flex items-center space-x-2 pt-4">
+                    <Checkbox id="save-segment" />
+                    <Label htmlFor="save-segment" className="font-normal">Save this audience as a new segment</Label>
                 </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader><CardTitle className="text-base">Property & Location</CardTitle></CardHeader>
-            <CardContent className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                  <Label>Property Interest</Label>
-                  <Input placeholder="e.g. 3BHK, Villa" />
-              </div>
-              <div className="space-y-2">
-                  <Label>Location</Label>
-                  <Input placeholder="e.g. Whitefield, KR Puram" />
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-              <CardHeader><CardTitle className="text-base">Behavior & Source</CardTitle></CardHeader>
-              <CardContent className="space-y-4">
-                  <div className="space-y-2">
-                      <Label>Engagement Level</Label>
-                      <RadioGroup defaultValue="active" className="flex space-x-4">
-                          <div className="flex items-center space-x-2"><RadioGroupItem value="active" id="active" /><Label htmlFor="active" className="font-normal">Active</Label></div>
-                          <div className="flex items-center space-x-2"><RadioGroupItem value="inactive-30" id="inactive-30" /><Label htmlFor="inactive-30" className="font-normal">Inactive (30d)</Label></div>
-                          <div className="flex items-center space-x-2"><RadioGroupItem value="inactive-90" id="inactive-90" /><Label htmlFor="inactive-90" className="font-normal">Inactive (90d+)</Label></div>
-                      </RadioGroup>
-                  </div>
-                  <div className="space-y-2">
-                      <Label>Lead Source</Label>
-                      <Input placeholder="e.g. 99acres, Website" />
-                  </div>
-              </CardContent>
-          </Card>
-          
-          <Card>
-              <CardHeader><CardTitle className="text-base">Exclusions</CardTitle></CardHeader>
-              <CardContent className="space-y-2">
-                    <div className="flex items-center space-x-2"><Checkbox id="exclude-previous" /><Label htmlFor="exclude-previous" className="font-normal">Exclude recipients of last 3 campaigns</Label></div>
-                  <div className="flex items-center space-x-2"><Checkbox id="exclude-unsubscribed" defaultChecked disabled /><Label htmlFor="exclude-unsubscribed" className="font-normal">Exclude unsubscribed contacts</Label></div>
-              </CardContent>
-          </Card>
+            </div>
         </div>
-
-        <div className="space-y-4">
-          <Card className="bg-muted/50">
-              <CardHeader className="flex-row items-center justify-between">
-                  <CardTitle className="text-base">Audience Preview</CardTitle>
-                  <div className="flex items-center gap-2">
-                      <Users className="h-5 w-5 text-primary" />
-                      <p className="text-xl font-bold text-primary">892</p>
-                      <p className="text-sm text-muted-foreground">leads match</p>
-                  </div>
-              </CardHeader>
-              <CardContent>
-                    <Table>
-                      <TableHeader>
-                          <TableRow>
-                              <TableHead>Name</TableHead>
-                              <TableHead>Email</TableHead>
-                              <TableHead className="text-right">Score</TableHead>
-                          </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                          {sampleLeads.map(lead => (
-                              <TableRow key={lead.email}>
-                                  <TableCell>{lead.name}</TableCell>
-                                  <TableCell>{lead.email}</TableCell>
-                                  <TableCell className="text-right">{lead.score}</TableCell>
-                              </TableRow>
-                          ))}
-                      </TableBody>
-                  </Table>
-              </CardContent>
-          </Card>
-          <div className="flex items-center space-x-2 pt-4">
-              <Checkbox id="save-segment" />
-              <Label htmlFor="save-segment" className="font-normal">Save this audience as a new segment</Label>
-          </div>
-        </div>
-      </div>
     );
 };
+
 
 const Step3 = () => {
     const [view, setView] = useState('desktop');
@@ -253,55 +241,71 @@ const Step3 = () => {
     ];
 
     return (
-        <div className="flex gap-6 h-[60vh]">
-            {/* Components Sidebar */}
-            <div className="w-48 bg-muted/50 p-4 rounded-lg flex-shrink-0">
-                <h4 className="font-semibold mb-4 text-sm">Components</h4>
-                <div className="space-y-2">
-                    {builderComponents.map(comp => (
-                        <div key={comp.name} className="flex items-center p-2 rounded-md bg-background border hover:bg-accent cursor-grab">
-                            <comp.icon className="w-4 h-4 mr-2 text-muted-foreground" />
-                            <span className="text-sm">{comp.name}</span>
-                        </div>
-                    ))}
-                </div>
+        <div className="space-y-4">
+            <div className="space-y-2">
+                <Label htmlFor="template-selector">Start with a template</Label>
+                <Select>
+                    <SelectTrigger id="template-selector">
+                        <SelectValue placeholder="Select a template" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="blank">Blank Canvas</SelectItem>
+                        <SelectItem value="showcase">Property Showcase</SelectItem>
+                        <SelectItem value="newsletter">Newsletter</SelectItem>
+                        <SelectItem value="promotional">Promotional Offer</SelectItem>
+                    </SelectContent>
+                </Select>
             </div>
-
-            {/* Email Canvas */}
-            <div className="flex-1 space-y-4">
-                <Card>
-                    <CardContent className="p-4 space-y-2">
-                        <Label>Subject Line</Label>
-                        <Input placeholder="Your amazing email subject" />
-                        <Label>Preview Text</Label>
-                        <Input placeholder="A catchy preview to grab attention" />
-                    </CardContent>
-                </Card>
-                <Card className="flex-1">
-                    <CardContent className="p-4 bg-gray-100 dark:bg-gray-900 h-full">
-                        <div className="bg-white dark:bg-black p-6 mx-auto max-w-lg shadow-lg">
-                            <p className="text-center mb-4">Email Canvas Area</p>
-                            <div className="border border-dashed border-border rounded-lg p-8 text-center text-muted-foreground">
-                                Drag components here
+            <div className="flex gap-6 h-[60vh]">
+                {/* Components Sidebar */}
+                <div className="w-48 bg-muted/50 p-4 rounded-lg flex-shrink-0">
+                    <h4 className="font-semibold mb-4 text-sm">Components</h4>
+                    <div className="space-y-2">
+                        {builderComponents.map(comp => (
+                            <div key={comp.name} className="flex items-center p-2 rounded-md bg-background border hover:bg-accent cursor-grab">
+                                <comp.icon className="w-4 h-4 mr-2 text-muted-foreground" />
+                                <span className="text-sm">{comp.name}</span>
                             </div>
-                        </div>
-                    </CardContent>
-                </Card>
-            </div>
+                        ))}
+                    </div>
+                </div>
 
-            {/* Preview & Settings Sidebar */}
-            <div className="w-72 bg-muted/50 p-4 rounded-lg flex-shrink-0">
-                <h4 className="font-semibold mb-4 text-sm">Preview</h4>
-                <div className="flex items-center justify-center gap-2 mb-4 bg-background p-1 rounded-md">
-                    <Button size="sm" variant={view === 'desktop' ? 'secondary' : 'ghost'} onClick={() => setView('desktop')}><AppWindow className="h-4 w-4" /></Button>
-                    <Button size="sm" variant={view === 'mobile' ? 'secondary' : 'ghost'} onClick={() => setView('mobile')}><Smartphone className="h-4 w-4" /></Button>
-                    <Button size="sm" variant={view === 'dark' ? 'secondary' : 'ghost'} onClick={() => setView('dark')}><Moon className="h-4 w-4" /></Button>
+                {/* Email Canvas */}
+                <div className="flex-1 space-y-4">
+                    <Card>
+                        <CardContent className="p-4 space-y-2">
+                            <Label>Subject Line</Label>
+                            <Input placeholder="Your amazing email subject" />
+                            <Label>Preview Text</Label>
+                            <Input placeholder="A catchy preview to grab attention" />
+                        </CardContent>
+                    </Card>
+                    <Card className="flex-1">
+                        <CardContent className="p-4 bg-gray-100 dark:bg-gray-900 h-full">
+                            <div className="bg-white dark:bg-black p-6 mx-auto max-w-lg shadow-lg">
+                                <p className="text-center mb-4">Email Canvas Area</p>
+                                <div className="border border-dashed border-border rounded-lg p-8 text-center text-muted-foreground">
+                                    Drag components here
+                                </div>
+                            </div>
+                        </CardContent>
+                    </Card>
                 </div>
-                <div className="border rounded-lg p-2 bg-background aspect-[9/16] max-w-[250px] mx-auto overflow-y-auto">
-                   <p className="text-xs text-center text-muted-foreground">Live email preview</p>
-                </div>
-                 <div className="mt-4">
-                    <Button variant="outline" className="w-full"><Send className="mr-2 h-4 w-4" /> Send Test Email</Button>
+
+                {/* Preview & Settings Sidebar */}
+                <div className="w-72 bg-muted/50 p-4 rounded-lg flex-shrink-0">
+                    <h4 className="font-semibold mb-4 text-sm">Preview</h4>
+                    <div className="flex items-center justify-center gap-2 mb-4 bg-background p-1 rounded-md">
+                        <Button size="sm" variant={view === 'desktop' ? 'secondary' : 'ghost'} onClick={() => setView('desktop')}><AppWindow className="h-4 w-4" /></Button>
+                        <Button size="sm" variant={view === 'mobile' ? 'secondary' : 'ghost'} onClick={() => setView('mobile')}><Smartphone className="h-4 w-4" /></Button>
+                        <Button size="sm" variant={view === 'dark' ? 'secondary' : 'ghost'} onClick={() => setView('dark')}><Moon className="h-4 w-4" /></Button>
+                    </div>
+                    <div className="border rounded-lg p-2 bg-background aspect-[9/16] max-w-[250px] mx-auto overflow-y-auto">
+                    <p className="text-xs text-center text-muted-foreground">Live email preview</p>
+                    </div>
+                    <div className="mt-4">
+                        <Button variant="outline" className="w-full"><Send className="mr-2 h-4 w-4" /> Send Test Email</Button>
+                    </div>
                 </div>
             </div>
         </div>
