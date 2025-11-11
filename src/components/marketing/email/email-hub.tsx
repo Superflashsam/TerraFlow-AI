@@ -5,6 +5,8 @@ import { PageHeader } from '@/components/shared/page-header';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { EmailMetrics } from './email-metrics';
 import { CampaignsTab } from './campaigns-tab';
+import { TemplatesTab } from './templates-tab';
+import { DripSequencesTab } from './drip-sequences-tab';
 import { Mail, Send, Repeat, LayoutTemplate, BarChart } from 'lucide-react';
 
 export const EmailMarketingHub = () => {
@@ -28,11 +30,7 @@ export const EmailMarketingHub = () => {
                     <CampaignsTab />
                 </TabsContent>
                 <TabsContent value="sequences" className="mt-4">
-                    <div className="text-center py-16">
-                        <Repeat size={48} className="mx-auto text-muted-foreground mb-4" />
-                        <h3 className="text-xl font-semibold">Drip Sequences</h3>
-                        <p className="text-muted-foreground">This feature is coming soon.</p>
-                    </div>
+                    <DripSequencesTab />
                 </TabsContent>
                 <TabsContent value="templates" className="mt-4">
                     <div className="text-center py-16">
