@@ -1,7 +1,9 @@
+
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { MessageCircle, Send, TrendingUp, CheckCircle, Progress } from 'lucide-react';
+import { MessageCircle, Send, TrendingUp, CheckCircle } from 'lucide-react';
+import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 
 export const WhatsappMetrics = () => {
