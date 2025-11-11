@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState } from 'react';
@@ -74,10 +75,10 @@ export const BulkMessagingTab = () => {
                              <Label htmlFor="csv-upload" className="w-full">
                                 <Input id="csv-upload-text" readOnly placeholder={fileName || "No file chosen"} className="cursor-pointer flex-1" />
                             </Label>
-                            <Button asChild variant="outline">
-                               <Label htmlFor="csv-upload" className='cursor-pointer'>
-                                <Upload className="mr-2 h-4 w-4" />
-                                Upload
+                            <Button variant="outline" asChild>
+                                <Label htmlFor="csv-upload" className="cursor-pointer flex items-center">
+                                    <Upload className="mr-2 h-4 w-4" />
+                                    Upload
                                 </Label>
                             </Button>
                             <input type="file" id="csv-upload" className="hidden" onChange={handleFileChange} accept=".csv" />
