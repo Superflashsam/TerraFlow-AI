@@ -1,4 +1,3 @@
-
 "use client";
 
 import React from 'react';
@@ -98,7 +97,9 @@ import {
   FileSignature,
   Upload,
   ListFilter,
-  Bot
+  Bot,
+  RefreshCw,
+  ToggleLeft
 } from 'lucide-react';
 
 const iconMap: { [key: string]: React.ElementType } = {
@@ -198,7 +199,9 @@ const iconMap: { [key: string]: React.ElementType } = {
   FileSignature,
   Upload,
   ListFilter,
-  Bot
+  Bot,
+  RefreshCw,
+  ToggleLeft
 };
 
 const AppIcon = ({ name, size, color, className }: { name: string; size?: number; color?: string; className?: string }) => {

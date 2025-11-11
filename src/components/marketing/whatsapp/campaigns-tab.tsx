@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { PlusCircle, MoreVertical, Edit, Copy, BarChart, Trash2, List, LayoutGrid, Search } from 'lucide-react';
+import { PlusCircle, MoreVertical, Edit, Copy, BarChart, Trash2, List, LayoutGrid, Search, Play, Pause } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { CreateCampaignModal } from './create-campaign-modal';
@@ -79,6 +79,13 @@ const StatusBadge = ({ status }: { status: string }) => {
 export const CampaignsTab = () => {
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [viewMode, setViewMode] = useState('grid');
+    const [campaigns, setCampaigns] = useState(mockCampaigns);
+
+    const toggleStatus = (id: number) => {
+        setCampaigns(campaigns.map(c => 
+            c.id === id ? {...c, status: c.status === 'Active' ? 'Paused' : 'Active'} : c
+        ));
+    };
 
     return (
         <div className="space-y-4">
@@ -100,7 +107,7 @@ export const CampaignsTab = () => {
             </div>
             {viewMode === 'grid' ? (
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  {mockCampaigns.map(campaign => (
+                  {campaigns.map(campaign => (
                       <Card key={campaign.id} className="flex flex-col">
                           <CardContent className="p-6 flex-1 flex flex-col">
                             <div className="flex justify-between items-start mb-4">
@@ -114,22 +121,14 @@ export const CampaignsTab = () => {
                                         </Button>
                                       </DropdownMenuTrigger>
                                       <DropdownMenuContent align="end">
-                                        <DropdownMenuItem>
-                                          <Edit className="mr-2 h-4 w-4" />
-                                          Edit
+                                        <DropdownMenuItem><Edit className="mr-2 h-4 w-4" />Edit</DropdownMenuItem>
+                                        <DropdownMenuItem><Copy className="mr-2 h-4 w-4" />Duplicate</DropdownMenuItem>
+                                        <DropdownMenuItem><BarChart className="mr-2 h-4 w-4" />View Report</DropdownMenuItem>
+                                        <DropdownMenuItem onClick={() => toggleStatus(campaign.id)}>
+                                            {campaign.status === 'Active' ? <Pause className="mr-2 h-4 w-4"/> : <Play className="mr-2 h-4 w-4"/>}
+                                            {campaign.status === 'Active' ? 'Pause' : 'Resume'}
                                         </DropdownMenuItem>
-                                        <DropdownMenuItem>
-                                          <Copy className="mr-2 h-4 w-4" />
-                                          Duplicate
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem>
-                                          <BarChart className="mr-2 h-4 w-4" />
-                                          View Report
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem className="text-destructive">
-                                          <Trash2 className="mr-2 h-4 w-4" />
-                                          Delete
-                                        </DropdownMenuItem>
+                                        <DropdownMenuItem className="text-destructive"><Trash2 className="mr-2 h-4 w-4" />Delete</DropdownMenuItem>
                                       </DropdownMenuContent>
                                     </DropdownMenu>
                                   </div>
@@ -180,7 +179,10 @@ export const CampaignsTab = () => {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {mockCampaigns.map((campaign) => (
+                    {campaigns.map((campaign) => {
+                       const openRate = campaign.performance.sent > 0 ? (campaign.performance.opened / campaign.performance.sent * 100).toFixed(1) : 0;
+                       const clickRate = campaign.performance.opened > 0 ? (campaign.performance.clicked / campaign.performance.opened * 100).toFixed(1) : 0;
+                       return (
                       <TableRow key={campaign.id}>
                         <TableCell className="font-medium">{campaign.name}</TableCell>
                         <TableCell><StatusBadge status={campaign.status} /></TableCell>
@@ -196,32 +198,22 @@ export const CampaignsTab = () => {
                         <TableCell className="text-right">
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" size="icon" className="h-8 w-8">
-                                <MoreVertical className="text-muted-foreground" />
-                              </Button>
+                              <Button variant="ghost" size="icon" className="h-8 w-8"><MoreVertical className="text-muted-foreground" /></Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
-                              <DropdownMenuItem>
-                                <Edit className="mr-2 h-4 w-4" />
-                                Edit
+                              <DropdownMenuItem><Edit className="mr-2 h-4 w-4" />Edit</DropdownMenuItem>
+                              <DropdownMenuItem><Copy className="mr-2 h-4 w-4" />Duplicate</DropdownMenuItem>
+                              <DropdownMenuItem><BarChart className="mr-2 h-4 w-4" />View Report</DropdownMenuItem>
+                              <DropdownMenuItem onClick={() => toggleStatus(campaign.id)}>
+                                {campaign.status === 'Active' ? <Pause className="mr-2 h-4 w-4"/> : <Play className="mr-2 h-4 w-4"/>}
+                                {campaign.status === 'Active' ? 'Pause' : 'Resume'}
                               </DropdownMenuItem>
-                              <DropdownMenuItem>
-                                <Copy className="mr-2 h-4 w-4" />
-                                Duplicate
-                              </DropdownMenuItem>
-                              <DropdownMenuItem>
-                                <BarChart className="mr-2 h-4 w-4" />
-                                View Report
-                              </DropdownMenuItem>
-                              <DropdownMenuItem className="text-destructive">
-                                <Trash2 className="mr-2 h-4 w-4" />
-                                Delete
-                              </DropdownMenuItem>
+                              <DropdownMenuItem className="text-destructive"><Trash2 className="mr-2 h-4 w-4" />Delete</DropdownMenuItem>
                             </DropdownMenuContent>
                           </DropdownMenu>
                         </TableCell>
                       </TableRow>
-                    ))}
+                    )})}
                   </TableBody>
                 </Table>
               </Card>
