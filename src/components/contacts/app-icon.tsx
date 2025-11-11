@@ -85,6 +85,12 @@ import {
   Clipboard,
   AlertCircle,
   CheckCircle,
+  Folder,
+  ChevronDown,
+  Link2,
+  FolderPlus,
+  MoreVertical,
+  History
 } from 'lucide-react';
 
 const iconMap: { [key: string]: React.ElementType } = {
@@ -169,12 +175,16 @@ const iconMap: { [key: string]: React.ElementType } = {
   Loader2,
   Palette,
   File,
-  History: RotateCcw,
   MoveRight,
   Clipboard,
   AlertCircle,
   CheckCircle,
-  Report: FileText,
+  Folder,
+  ChevronDown,
+  Link2,
+  FolderPlus,
+  MoreVertical,
+  History
 };
 
 const AppIcon = ({ name, size, color, className }: { name: string; size?: number; color?: string; className?: string }) => {

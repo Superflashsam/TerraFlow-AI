@@ -1,95 +1,117 @@
 "use client";
 
-import React, { useState } from 'react';
-import { DocumentSidebar } from '@/components/documents/sidebar';
-import { DocumentFilters } from '@/components/documents/filter-bar';
-import { DocumentGrid } from '@/components/documents/grid-view';
-import { DocumentList } from '@/components/documents/list-view';
-import { DocumentDetailsPanel } from '@/components/documents/detail-panel';
-import { Button } from '@/components/ui/button';
-import { Grid, List, Upload, Folder, Plus } from 'lucide-react';
-import { documents as mockDocuments } from '@/lib/placeholder-data';
-import { BulkActionsToolbar } from '@/components/documents/bulk-actions';
-import { UploadModal } from '@/components/documents/upload-modal';
-import { PageHeader } from '@/components/shared/page-header';
+import { useState } from "react";
+import { DocumentsSidebar } from "@/components/documents/sidebar";
+import { DocumentsTopBar } from "@/components/documents/top-bar";
+import { FilterBar } from "@/components/documents/filter-bar";
+import { DocumentGrid } from "@/components/documents/grid-view";
+import { DocumentList } from "@/components/documents/list-view";
+import { DocumentDetailPanel } from "@/components/documents/detail-panel";
+import { UploadModal } from "@/components/documents/upload-modal";
+import { BulkActionsBar } from "@/components/documents/bulk-actions";
+import { documents as mockDocuments } from "@/lib/placeholder-data";
 
-export default function DocumentsPage() {
-  const [documents, setDocuments] = useState(mockDocuments);
-  const [viewMode, setViewMode] = useState('grid');
-  const [selectedDocument, setSelectedDocument] = useState<any>(null);
-  const [selectedDocuments, setSelectedDocuments] = useState<string[]>([]);
+export type ViewMode = "grid" | "list";
+export type Document = typeof mockDocuments[0];
+
+const DocumentsPage = () => {
+  const [viewMode, setViewMode] = useState<ViewMode>("grid");
+  const [selectedDocument, setSelectedDocument] = useState<Document | null>(null);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+  const [selectedDocumentIds, setSelectedDocumentIds] = useState<string[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [fileTypeFilter, setFileTypeFilter] = useState("all");
+  const [modifiedFilter, setModifiedFilter] = useState("any");
+  const [sizeFilter, setSizeFilter] = useState("any");
 
-  const handleSelectDocument = (doc: any) => {
+  const filteredDocuments = mockDocuments.filter((doc) => {
+    const matchesSearch = doc.name.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesFileType = fileTypeFilter === "all" || doc.type.toLowerCase() === fileTypeFilter.toLowerCase();
+    return matchesSearch && matchesFileType;
+  });
+
+  const handleDocumentSelect = (doc: Document) => {
     setSelectedDocument(doc);
   };
 
-  const handleCheckboxChange = (docId: string, isChecked: boolean) => {
-    setSelectedDocuments(prev => 
-      isChecked ? [...prev, docId] : prev.filter(id => id !== docId)
+  const handleCheckboxToggle = (docId: string) => {
+    setSelectedDocumentIds((prev) =>
+      prev.includes(docId) ? prev.filter((id) => id !== docId) : [...prev, docId]
     );
   };
-  
-  const handleSelectAll = (isChecked: boolean) => {
-    setSelectedDocuments(isChecked ? documents.map(d => d.id) : []);
-  };
 
-  const handleUpload = (files: File[]) => {
-    console.log('Uploading files:', files);
-    setIsUploadModalOpen(false);
+  const handleClearSelection = () => {
+    setSelectedDocumentIds([]);
   };
-
 
   return (
-    <div className="h-full flex flex-col bg-background text-foreground">
-        <PageHeader
-            title="Documents"
-            description="Centralized document storage and management"
-        >
-             <div className="flex items-center space-x-2">
-                <div className="flex items-center bg-muted p-1 rounded-lg">
-                    <Button variant={viewMode === 'grid' ? 'secondary' : 'ghost'} size="sm" onClick={() => setViewMode('grid')}><Grid className="h-4 w-4" /></Button>
-                    <Button variant={viewMode === 'list' ? 'secondary' : 'ghost'} size="sm" onClick={() => setViewMode('list')}><List className="h-4 w-4" /></Button>
-                </div>
-                <Button variant="outline" onClick={() => setIsUploadModalOpen(true)}>
-                    <Upload className="mr-2 h-4 w-4" />
-                    Upload
-                </Button>
-                <Button>
-                    <Plus className="mr-2 h-4 w-4" />
-                    New Folder
-                </Button>
-            </div>
-        </PageHeader>
-        
-        <div className="flex-1 flex mt-6 overflow-hidden gap-6">
-            <DocumentSidebar />
-            <div className="flex-1 flex flex-col overflow-hidden">
-                <DocumentFilters onFilterChange={() => {}} onSortChange={() => {}} />
-                
-                <div className="flex-1 overflow-y-auto mt-4 pr-6">
-                    {viewMode === 'grid' ? (
-                        <DocumentGrid 
-                            documents={documents} 
-                            onSelect={handleSelectDocument}
-                            onCheckboxChange={handleCheckboxChange}
-                            selectedDocuments={selectedDocuments}
-                        />
-                    ) : (
-                        <DocumentList
-                             documents={documents} 
-                             onSelect={handleSelectDocument}
-                             onCheckboxChange={handleCheckboxChange}
-                             selectedDocuments={selectedDocuments}
-                             onSelectAll={handleSelectAll}
-                        />
-                    )}
-                </div>
-            </div>
-            {selectedDocument && <DocumentDetailsPanel document={selectedDocument} onClose={() => setSelectedDocument(null)} />}
+    <div className="flex h-screen w-full bg-background">
+      {/* Left Sidebar */}
+      <DocumentsSidebar />
+
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        <DocumentsTopBar
+          viewMode={viewMode}
+          onViewModeChange={setViewMode}
+          onUploadClick={() => setIsUploadModalOpen(true)}
+        />
+
+        <FilterBar
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
+          fileTypeFilter={fileTypeFilter}
+          onFileTypeChange={setFileTypeFilter}
+          modifiedFilter={modifiedFilter}
+          onModifiedChange={setModifiedFilter}
+          sizeFilter={sizeFilter}
+          onSizeChange={setSizeFilter}
+        />
+
+        {/* Documents Display */}
+        <div className="flex-1 overflow-auto">
+          {viewMode === "grid" ? (
+            <DocumentGrid
+              documents={filteredDocuments}
+              onDocumentSelect={handleDocumentSelect}
+              selectedDocumentIds={selectedDocumentIds}
+              onCheckboxToggle={handleCheckboxToggle}
+            />
+          ) : (
+            <DocumentList
+              documents={filteredDocuments}
+              onDocumentSelect={handleDocumentSelect}
+              selectedDocumentIds={selectedDocumentIds}
+              onCheckboxToggle={handleCheckboxToggle}
+            />
+          )}
         </div>
-        {selectedDocuments.length > 0 && <BulkActionsToolbar selectedCount={selectedDocuments.length} onClear={() => setSelectedDocuments([])} />}
-        <UploadModal isOpen={isUploadModalOpen} onClose={() => setIsUploadModalOpen(false)} onUpload={handleUpload} />
+
+        {/* Bulk Actions Bar */}
+        {selectedDocumentIds.length > 0 && (
+          <BulkActionsBar
+            selectedCount={selectedDocumentIds.length}
+            onClearSelection={handleClearSelection}
+          />
+        )}
+      </div>
+
+      {/* Right Detail Panel */}
+      {selectedDocument && (
+        <DocumentDetailPanel
+          document={selectedDocument}
+          onClose={() => setSelectedDocument(null)}
+        />
+      )}
+
+      {/* Upload Modal */}
+      <UploadModal
+        isOpen={isUploadModalOpen}
+        onClose={() => setIsUploadModalOpen(false)}
+        onUpload={() => {}}
+      />
     </div>
   );
-}
+};
+
+export default DocumentsPage;

@@ -1,57 +1,154 @@
 "use client";
 
-import React from 'react';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Download, Share2, Star, MoreVertical, Link2 } from "lucide-react";
+import type { Document } from "@/app/documents/page";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Download, MoreHorizontal, Share, Star } from 'lucide-react';
-import { getImagePlaceholder } from '@/lib/placeholder-images';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
-export const DocumentList = ({ documents, onSelect, onCheckboxChange, selectedDocuments, onSelectAll }: { documents: any[]; onSelect: (doc: any) => void; onCheckboxChange: (docId: string, isChecked: boolean) => void; selectedDocuments: string[]; onSelectAll: (checked: boolean) => void; }) => {
-    const isAllSelected = documents.length > 0 && selectedDocuments.length === documents.length;
-    return (
-        <Table>
-            <TableHeader>
-                <TableRow>
-                    <TableHead className="w-[50px]"><Checkbox checked={isAllSelected} onCheckedChange={(checked) => onSelectAll(!!checked)} /></TableHead>
-                    <TableHead>Name</TableHead>
-                    <TableHead>Type</TableHead>
-                    <TableHead>Size</TableHead>
-                    <TableHead>Modified</TableHead>
-                    <TableHead>Uploaded by</TableHead>
-                    <TableHead>Linked to</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-            </TableHeader>
-            <TableBody>
-                {documents.map(doc => (
-                    <TableRow key={doc.id} onClick={() => onSelect(doc)} className="cursor-pointer">
-                        <TableCell onClick={(e) => e.stopPropagation()}>
-                            <Checkbox 
-                                checked={selectedDocuments.includes(doc.id)} 
-                                onCheckedChange={(checked) => onCheckboxChange(doc.id, !!checked)}
-                            />
-                        </TableCell>
-                        <TableCell className="font-medium">{doc.name}</TableCell>
-                        <TableCell>{doc.type}</TableCell>
-                        <TableCell>{doc.size}</TableCell>
-                        <TableCell>{doc.modified}</TableCell>
-                        <TableCell>
-                            <Avatar className="h-6 w-6">
-                                <AvatarImage src={getImagePlaceholder(doc.uploadedBy.avatarId)?.imageUrl} />
-                                <AvatarFallback>{doc.uploadedBy.name.charAt(0)}</AvatarFallback>
-                            </Avatar>
-                        </TableCell>
-                        <TableCell>{doc.linkedTo.name}</TableCell>
-                        <TableCell className="text-right">
-                           <Button variant="ghost" size="icon"><Download className="h-4 w-4"/></Button>
-                           <Button variant="ghost" size="icon"><Share className="h-4 w-4"/></Button>
-                           <Button variant="ghost" size="icon"><MoreHorizontal className="h-4 w-4"/></Button>
-                        </TableCell>
-                    </TableRow>
-                ))}
-            </TableBody>
-        </Table>
-    )
+interface DocumentListProps {
+  documents: Document[];
+  onDocumentSelect: (doc: Document) => void;
+  selectedDocumentIds: string[];
+  onCheckboxToggle: (docId: string) => void;
 }
+
+const getTypeColor = (type: string) => {
+  switch (type.toLowerCase()) {
+    case "pdf":
+      return "text-red-500";
+    case "docx":
+    case "doc":
+      return "text-blue-500";
+    case "xlsx":
+    case "xls":
+      return "text-green-500";
+    case "jpg":
+    case "jpeg":
+    case "png":
+      return "text-purple-500";
+    default:
+      return "text-gray-500";
+  }
+};
+
+export const DocumentList = ({
+  documents,
+  onDocumentSelect,
+  selectedDocumentIds,
+  onCheckboxToggle,
+}: DocumentListProps) => {
+  return (
+    <div className="p-6">
+      <Table>
+        <TableHeader>
+          <TableRow className="border-border hover:bg-transparent">
+            <TableHead className="w-12">
+              <Checkbox />
+            </TableHead>
+            <TableHead>Name</TableHead>
+            <TableHead className="w-24">Type</TableHead>
+            <TableHead className="w-24">Size</TableHead>
+            <TableHead className="w-40">Modified</TableHead>
+            <TableHead className="w-40">Uploaded By</TableHead>
+            <TableHead className="w-48">Linked To</TableHead>
+            <TableHead className="w-32 text-right">Actions</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {documents.map((doc) => (
+            <TableRow
+              key={doc.id}
+              className="border-border hover:bg-card/50 cursor-pointer group"
+              onClick={() => onDocumentSelect(doc)}
+            >
+              <TableCell>
+                <Checkbox
+                  checked={selectedDocumentIds.includes(doc.id)}
+                  onCheckedChange={() => onCheckboxToggle(doc.id)}
+                  onClick={(e) => e.stopPropagation()}
+                />
+              </TableCell>
+              <TableCell>
+                <div className="flex items-center gap-3">
+                  {doc.starred && <Star className="h-4 w-4 fill-primary text-primary" />}
+                  <span className="font-medium text-foreground">{doc.name}</span>
+                </div>
+              </TableCell>
+              <TableCell>
+                <span className={`font-medium ${getTypeColor(doc.type)}`}>{doc.type}</span>
+              </TableCell>
+              <TableCell className="text-muted-foreground">{doc.size}</TableCell>
+              <TableCell className="text-muted-foreground">{doc.modified}</TableCell>
+              <TableCell>
+                <div className="flex items-center gap-2">
+                  <Avatar className="h-6 w-6">
+                    <AvatarFallback className="text-xs">
+                      {doc.uploadedBy.name.split(" ").map((n: string) => n[0]).join("")}
+                    </AvatarFallback>
+                  </Avatar>
+                  <span className="text-sm text-muted-foreground">{doc.uploadedBy.name}</span>
+                </div>
+              </TableCell>
+              <TableCell>
+                {doc.linkedTo && (
+                  <div className="flex items-center gap-2 text-sm text-primary">
+                    <Link2 className="h-3 w-3" />
+                    <span className="truncate">{doc.linkedTo.name}</span>
+                  </div>
+                )}
+              </TableCell>
+              <TableCell>
+                <div className="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    className="h-8 w-8"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <Download className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    className="h-8 w-8"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <Share2 className="h-4 w-4" />
+                  </Button>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
+                      <Button size="icon" variant="ghost" className="h-8 w-8">
+                        <MoreVertical className="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem>Rename</DropdownMenuItem>
+                      <DropdownMenuItem>Move</DropdownMenuItem>
+                      <DropdownMenuItem>Delete</DropdownMenuItem>
+                      <DropdownMenuItem>Preview</DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
+  );
+};

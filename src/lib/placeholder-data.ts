@@ -1,4 +1,4 @@
-import { Users, Briefcase, CheckSquare, DollarSign, Percent, BarChart, FileText, Bot, Building2 } from 'lucide-react';
+import { Users, Briefcase, CheckSquare, DollarSign, Percent, BarChart3, FileText, Bot, Building2 } from 'lucide-react';
 
 // Main Dashboard Data
 export const kpiData = [
@@ -150,7 +150,8 @@ export const documents = [
         versions: [
             { version: 2, date: 'Oct 17, 4:15 PM', user: 'Priya Sharma' },
             { version: 1, date: 'Oct 15, 2:30 PM', user: 'Priya Sharma' },
-        ]
+        ],
+        starred: true,
     },
     { 
         id: '2', name: 'Floor-Plan-3BHK.jpg', type: 'JPG', size: '1.8 MB', modified: 'Yesterday', 
@@ -163,7 +164,8 @@ export const documents = [
         ],
         versions: [
             { version: 1, date: 'Oct 16, 11:20 AM', user: 'Rajesh Kumar' },
-        ]
+        ],
+        starred: false,
     },
     { 
         id: '3', name: 'Sale-Agreement-Draft.docx', type: 'DOCX', size: '245 KB', modified: '3 days ago', 
@@ -177,7 +179,8 @@ export const documents = [
         ],
         versions: [
             { version: 1, date: 'Oct 14, 9:00 AM', user: 'Amit Patel' },
-        ]
+        ],
+        starred: true,
     },
     { 
         id: '4', name: 'KYC-Aadhar-Rajesh.pdf', type: 'PDF', size: '890 KB', modified: '1 week ago', 
@@ -188,7 +191,8 @@ export const documents = [
         sharedWith: [],
         versions: [
             { version: 1, date: 'Oct 10, 3:00 PM', user: 'Kavya Reddy' },
-        ]
+        ],
+        starred: false,
     },
      { 
         id: '5', name: 'Property-Comparison.xlsx', type: 'XLSX', size: '456 KB', modified: '2 weeks ago', 
@@ -199,7 +203,8 @@ export const documents = [
         sharedWith: [],
         versions: [
             { version: 1, date: 'Oct 3, 5:00 PM', user: 'Neha Gupta' },
-        ]
+        ],
+        starred: false,
     }
 ];
 
@@ -335,7 +340,7 @@ export const properties = [
   ];
 
 export const analyticsReports = [
-  { id: 1, title: "Lead Source Performance", description: "Breakdown of leads by source channel over the last quarter.", icon: BarChart },
+  { id: 1, title: "Lead Source Performance", description: "Breakdown of leads by source channel over the last quarter.", icon: BarChart3 },
   { id: 2, title: "Agent Conversion Rates", description: "Individual agent performance from lead to deal.", icon: Percent },
   { id: 3, title: "Property Sales by Type", description: "Sales volume categorized by property type (Villa, Apartment, etc.).", icon: Building2 },
   { id: 4, title: "Q3 Revenue Report", description: "Detailed financial report for the third quarter.", icon: DollarSign },

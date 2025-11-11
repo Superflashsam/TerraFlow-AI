@@ -5,15 +5,15 @@ import { Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
-export const DocumentFilters = ({ onFilterChange, onSortChange }: { onFilterChange: (filters: any) => void; onSortChange: (sort: any) => void; }) => {
+export const FilterBar = ({ onFilterChange, onSortChange }: { onFilterChange: (filters: any) => void; onSortChange: (sort: any) => void; }) => {
     return (
-        <div className="flex items-center gap-4 p-4 bg-card rounded-lg border border-border">
+        <div className="flex items-center gap-4 px-6 py-3 border-b border-border bg-card">
             <div className="relative flex-1">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input placeholder="Search documents..." className="pl-10" />
+                <Input placeholder="Search documents..." className="pl-10 bg-background" />
             </div>
              <Select defaultValue="all">
-                <SelectTrigger className="w-[180px]"><SelectValue /></SelectTrigger>
+                <SelectTrigger className="w-[180px] bg-background"><SelectValue placeholder="All Types"/></SelectTrigger>
                 <SelectContent>
                     <SelectItem value="all">All File Types</SelectItem>
                     <SelectItem value="pdf">PDF</SelectItem>
@@ -24,7 +24,7 @@ export const DocumentFilters = ({ onFilterChange, onSortChange }: { onFilterChan
                 </SelectContent>
             </Select>
             <Select defaultValue="anytime">
-                <SelectTrigger className="w-[180px]"><SelectValue /></SelectTrigger>
+                <SelectTrigger className="w-[180px] bg-background"><SelectValue placeholder="Any Time"/></SelectTrigger>
                 <SelectContent>
                     <SelectItem value="anytime">Any time</SelectItem>
                     <SelectItem value="today">Today</SelectItem>
@@ -33,7 +33,7 @@ export const DocumentFilters = ({ onFilterChange, onSortChange }: { onFilterChan
                 </SelectContent>
             </Select>
              <Select defaultValue="any">
-                <SelectTrigger className="w-[180px]"><SelectValue /></SelectTrigger>
+                <SelectTrigger className="w-[180px] bg-background"><SelectValue placeholder="Any Size"/></SelectTrigger>
                 <SelectContent>
                     <SelectItem value="any">Any Size</SelectItem>
                     <SelectItem value="sm">{'<1MB'}</SelectItem>
@@ -43,7 +43,7 @@ export const DocumentFilters = ({ onFilterChange, onSortChange }: { onFilterChan
                 </SelectContent>
             </Select>
              <Select defaultValue="modified">
-                <SelectTrigger className="w-[180px]"><SelectValue /></SelectTrigger>
+                <SelectTrigger className="w-[180px] bg-background"><SelectValue placeholder="Sort By"/></SelectTrigger>
                 <SelectContent>
                     <SelectItem value="modified">Sort by Last Modified</SelectItem>
                     <SelectItem value="name">Sort by Name</SelectItem>
