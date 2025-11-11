@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { ArrowLeft, Share2, Heart, Edit } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { properties } from '@/lib/placeholder-data';
+import { properties as allProperties } from '@/lib/placeholder-data';
 import { Skeleton } from '@/components/ui/skeleton';
 import { PropertySummaryCard } from '@/components/property-detail/property-summary-card';
 import { PhotoGallery } from '@/components/property-detail/photo-gallery';
@@ -25,10 +25,15 @@ const PropertyDetailPage = () => {
 
   useEffect(() => {
     if (propertyId) {
-      const foundProperty = properties.find(p => p.id === propertyId);
+      const foundProperty = allProperties.find(p => p.id === propertyId);
       setProperty(foundProperty);
     }
   }, [propertyId]);
+  
+  const handleUpdatePropertyDetails = (updatedDetails: any) => {
+    setProperty((prev: any) => ({...prev, ...updatedDetails}));
+    // Here you would typically also make an API call to save the changes
+  };
 
   if (!property) {
     return (
@@ -49,34 +54,35 @@ const PropertyDetailPage = () => {
   }
 
   return (
-    <div className="p-6">
-      <div className="flex items-center justify-between mb-6">
+    <div className="p-4 sm:p-6">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
         <div>
           <Button variant="outline" onClick={() => router.back()} className="mb-2">
-            <ArrowLeft className="mr-2" /> Back to Listings
+            <ArrowLeft className="mr-2 h-4 w-4" /> Back to Listings
           </Button>
-          <h1 className="text-3xl font-bold text-foreground">{property.title}</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-foreground">{property.title}</h1>
           <p className="text-muted-foreground">{property.address}</p>
         </div>
-        <div className="flex items-center space-x-2">
-          <Button variant="outline"><Heart className="mr-2"/> Favorite</Button>
-          <Button variant="outline"><Share2 className="mr-2"/> Share</Button>
-          <Button><Edit className="mr-2"/> Edit Listing</Button>
+        <div className="flex items-center space-x-2 shrink-0">
+          <Button variant="outline" size="sm"><Heart className="mr-2 h-4 w-4"/> Favorite</Button>
+          <Button variant="outline" size="sm"><Share2 className="mr-2 h-4 w-4"/> Share</Button>
+          <Button size="sm"><Edit className="mr-2 h-4 w-4"/> Edit Listing</Button>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Main Content Column */}
         <div className="lg:col-span-2 space-y-6">
-            <PropertySummaryCard property={property} />
             <PhotoGallery images={property.images} />
             <PropertyDetails property={property} />
-             <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-                <LocationMap location={property.address} />
-                <AdditionalDetails property={property} />
-                <SimilarProperties currentPropertyId={property.id} />
-            </div>
+            <LocationMap location={property.address} />
+            <AdditionalDetails property={property} onUpdate={handleUpdatePropertyDetails} />
+            <SimilarProperties currentPropertyId={property.id} />
         </div>
+        
+        {/* Sidebar Column */}
         <div className="space-y-6">
+            <PropertySummaryCard property={property} />
             <TerraScribePanel property={property} />
             <AgentInfo agentName={property.agent} />
             <FinancialsCalculator price={parseInt(property.price.replace(/[^0-9]/g, ''), 10)} />

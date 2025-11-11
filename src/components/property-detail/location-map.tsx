@@ -1,7 +1,8 @@
+
 "use client";
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { MapPin, School, Hospital, ShoppingCart, Train } from 'lucide-react';
+import { School, Hospital, ShoppingCart, Train } from 'lucide-react';
 import Image from 'next/image';
 
 export const LocationMap = ({ location }: { location: string }) => {
@@ -17,7 +18,7 @@ export const LocationMap = ({ location }: { location: string }) => {
         <CardTitle>Location & Nearby</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="relative w-full h-64 rounded-lg overflow-hidden mb-6">
+        <div className="relative w-full h-80 rounded-lg overflow-hidden mb-6">
            <Image
                 src="https://res.cloudinary.com/dvic0tda9/image/upload/v1721950485/map_z2v1m9.png"
                 alt="Map showing property location"
@@ -27,12 +28,12 @@ export const LocationMap = ({ location }: { location: string }) => {
         </div>
         <div>
             <h4 className="font-semibold mb-3">What's Nearby?</h4>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {nearbyPlaces.map(place => {
                     const Icon = place.icon;
                     return (
-                         <div key={place.name} className="flex items-center space-x-2">
-                            <Icon size={16} className="text-muted-foreground"/>
+                         <div key={place.name} className="flex items-center space-x-3 p-2 bg-muted/50 rounded-lg">
+                            <Icon size={20} className="text-primary"/>
                             <div>
                                 <p className="text-sm font-medium">{place.name}</p>
                                 <p className="text-xs text-muted-foreground">{place.distance}</p>
