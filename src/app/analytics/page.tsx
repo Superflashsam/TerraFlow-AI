@@ -16,6 +16,10 @@ import { PropertyPerformanceChart } from "@/components/analytics/property-perfor
 import { ResponseTimeChart } from "@/components/analytics/response-time-chart";
 import { AiInsights } from "@/components/analytics/ai-insights";
 import { CustomReports } from "@/components/analytics/custom-reports";
+import { PropertyTypeDistribution } from "@/components/analytics/property-type-distribution";
+import { AvgPriceByLocation } from "@/components/analytics/avg-price-by-location";
+import { SalesVelocityChart } from "@/components/analytics/sales-velocity-chart";
+
 
 export default function AnalyticsPage() {
   const [filters, setFilters] = useState({});
@@ -114,7 +118,16 @@ export default function AnalyticsPage() {
            <ResponseTimeChart />
         </TabsContent>
          <TabsContent value="properties" className="mt-4 space-y-6">
-            <PropertyPerformanceChart />
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <PropertyTypeDistribution />
+                <div className="lg:col-span-2">
+                  <AvgPriceByLocation />
+                </div>
+            </div>
+             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <PropertyPerformanceChart />
+                <SalesVelocityChart />
+            </div>
         </TabsContent>
          <TabsContent value="leads" className="mt-4">
             <p>Detailed lead analytics will be displayed here.</p>
