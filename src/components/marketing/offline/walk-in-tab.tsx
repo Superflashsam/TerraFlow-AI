@@ -22,9 +22,9 @@ const walkInLeaderboard = [
 ];
 
 const formTemplates = [
-    { id: 'quick', name: 'Quick Lead Capture', fields: 'Name, Phone', icon: FileText },
-    { id: 'detailed', name: 'Detailed Walk-in', fields: '10 fields', icon: FileText },
-    { id: 'event', name: 'Event Registration', fields: 'Name, Phone, Email, Company', icon: FileText }
+    { id: 'quick', name: 'Quick Lead Capture', fields: 'Name, Phone', icon: FileText, description: 'Property Site: Prestige Lakeside' },
+    { id: 'detailed', name: 'Detailed Walk-in', fields: '10 fields', icon: FileText, description: 'For capturing comprehensive lead data' },
+    { id: 'event', name: 'Event Registration', fields: 'Name, Phone, Email, Company', icon: FileText, description: 'Property Expo 2025' }
 ]
 
 const rankMedals: { [key: number]: string } = {
@@ -41,6 +41,8 @@ export const WalkInTab = () => {
         console.log("New template created:", templateData);
         // Here you would typically update a state with the new template
     };
+    
+    const currentTemplate = formTemplates.find(t => t.id === selectedTemplate);
 
     return (
         <div className="space-y-6">
@@ -71,8 +73,8 @@ export const WalkInTab = () => {
                     <CardContent className="flex items-center justify-center bg-muted p-4 rounded-lg">
                         <div className="w-full max-w-sm bg-background p-6 rounded-2xl shadow-lg border">
                              <div className="text-center mb-4">
-                                <h3 className="font-semibold text-lg">Walk-in Lead Capture</h3>
-                                <p className="text-sm text-muted-foreground">Property Site: Prestige Lakeside</p>
+                                <h3 className="font-semibold text-lg">{currentTemplate?.name || 'Walk-in Lead Capture'}</h3>
+                                <p className="text-sm text-muted-foreground">{currentTemplate?.description || 'Property Site: Prestige Lakeside'}</p>
                             </div>
                             <div className="space-y-4">
                                  <div className="space-y-1">
