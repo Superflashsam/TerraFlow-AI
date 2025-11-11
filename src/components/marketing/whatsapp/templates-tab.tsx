@@ -1,10 +1,11 @@
 "use client";
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { PlusCircle, Edit, Copy, Trash2, Eye } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { CreateTemplateModal } from './create-template-modal';
 
 const mockTemplates = [
   { id: 1, name: 'Property Launch Announcement', status: 'Approved', category: 'Marketing', language: 'English', usage: 12 },
@@ -28,10 +29,11 @@ const StatusBadge = ({ status }: { status: string }) => {
 };
 
 export const TemplatesTab = () => {
+    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     return (
         <div className="space-y-4">
              <div className="flex justify-end">
-                <Button>
+                <Button onClick={() => setIsCreateModalOpen(true)}>
                     <PlusCircle className="mr-2 h-4 w-4" />
                     Create Template
                 </Button>
@@ -59,6 +61,7 @@ export const TemplatesTab = () => {
                     </Card>
                 ))}
             </div>
+            <CreateTemplateModal isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)} />
         </div>
     )
 }
