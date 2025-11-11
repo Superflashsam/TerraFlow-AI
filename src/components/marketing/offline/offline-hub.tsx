@@ -7,6 +7,7 @@ import { QrCode, Scan, UserPlus, Calendar } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { QrCampaignsTab } from './qr-campaigns-tab';
+import { WalkInTab } from './walk-in-tab';
 
 const kpiData = [
   { title: "Active QR Campaigns", value: "12", icon: QrCode, change: "3 events, 9 print", changeType: 'neutral' },
@@ -54,7 +55,7 @@ export const OfflineHub = () => {
                     <QrCampaignsTab />
                 </TabsContent>
                 <TabsContent value="walk-in" className="mt-4">
-                    <div className="text-center py-16"><p className="text-muted-foreground">Walk-in form builder coming soon.</p></div>
+                    <WalkInTab />
                 </TabsContent>
                 <TabsContent value="analytics" className="mt-4">
                     <div className="text-center py-16"><p className="text-muted-foreground">Offline analytics dashboard coming soon.</p></div>
