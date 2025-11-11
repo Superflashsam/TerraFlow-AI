@@ -1,22 +1,21 @@
-
 "use client";
 
 import React, { useState, useRef } from 'react';
-import { DndProvider, useDrag, useDrop, DragPreviewImage } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Check, ChevronLeft, ChevronRight, Mail, Users, HardDrive, Share2, Move, Image as ImageIcon, Type, Divide, AppWindow, Smartphone, Sun, Moon, Eye, Send, Code, Rows, Plus, GripVertical, Trash2, LayoutGrid } from 'lucide-react';
+import { Check, ChevronLeft, ChevronRight, Mail, Users, HardDrive, Share2, Move, ImageIcon, Type, Divide, AppWindow, Smartphone, Sun, Moon, Eye, Send, Code, Rows, Plus, GripVertical, Trash2, Sparkles } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Slider } from '@/components/ui/slider';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHeader, TableHead, TableRow } from '@/components/ui/table';
 import { Textarea } from '@/components/ui/textarea';
-
+import { generatePropertyDescription } from '@/ai/flows/generate-property-description'; // We'll adapt this for email generation
+import { useToast } from '@/hooks/use-toast';
+import { cn } from '@/lib/utils';
 
 const steps = [
     { id: 1, title: 'Campaign Setup' },
@@ -43,7 +42,7 @@ export const CreateCampaignModal = ({ isOpen, onClose }: { isOpen: boolean, onCl
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent className="max-w-4xl max-h-[90vh] flex flex-col">
+            <DialogContent className="max-w-7xl max-h-[90vh] flex flex-col">
                 <DialogHeader>
                     <DialogTitle className="flex items-center gap-2"><Mail /> Create Email Campaign</DialogTitle>
                     <DialogDescription>Step {currentStep} of {steps.length}: {steps[currentStep-1].title}</DialogDescription>
@@ -135,12 +134,11 @@ const Step2 = () => {
         { name: 'Vikram Singh', email: 'vikram.s@example.com', score: 82 },
     ];
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-             <div className="space-y-6">
+         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Left Side - Filters */}
+            <div className="space-y-6">
                 <Card>
-                    <CardHeader>
-                        <CardTitle className="text-base">Lead Attributes</CardTitle>
-                    </CardHeader>
+                    <CardHeader><CardTitle className="text-base">Lead Attributes</CardTitle></CardHeader>
                     <CardContent className="space-y-4">
                         <div className="space-y-2">
                             <Label>Lead Score</Label>
@@ -160,11 +158,11 @@ const Step2 = () => {
                                 ))}
                             </div>
                         </div>
-                         <div className="space-y-2">
+                        <div className="space-y-2">
                             <Label>Property Interest</Label>
                             <Input placeholder="e.g. 3BHK, Villa" />
                         </div>
-                        <div className="space-y-2">
+                         <div className="space-y-2">
                             <Label>Location</Label>
                             <Input placeholder="e.g. Whitefield, KR Puram" />
                         </div>
@@ -189,7 +187,7 @@ const Step2 = () => {
                     </CardContent>
                 </Card>
 
-                 <Card>
+                <Card>
                     <CardHeader><CardTitle className="text-base">Exclusions</CardTitle></CardHeader>
                     <CardContent className="space-y-2">
                         <div className="flex items-center space-x-2"><Checkbox id="exclude-previous" /><Label htmlFor="exclude-previous" className="font-normal">Exclude recipients of last 3 campaigns</Label></div>
@@ -198,8 +196,9 @@ const Step2 = () => {
                 </Card>
             </div>
 
+            {/* Right Side - Preview */}
             <div className="space-y-4">
-                 <Card className="bg-muted/50">
+                <Card className="bg-muted/50">
                     <CardHeader className="flex-row items-center justify-between">
                         <CardTitle className="text-base">Audience Preview</CardTitle>
                         <div className="flex items-center gap-2">
@@ -239,56 +238,154 @@ const Step2 = () => {
 };
 
 const Step3 = () => {
+    const { toast } = useToast();
+    const [emailContent, setEmailContent] = useState<any[]>([]);
+    const [subject, setSubject] = useState("Exclusive NEO 3BHK Launch in Whitefield");
+    const [view, setView] = useState('desktop');
+    const [isLoading, setIsLoading] = useState(false);
+
+    const components = [
+        { id: 'text', type: 'text', icon: Type, label: 'Text', defaultContent: 'This is a new text block.' },
+        { id: 'image', type: 'image', icon: ImageIcon, label: 'Image', defaultContent: 'https://picsum.photos/600/300' },
+        { id: 'button', type: 'button', icon: AppWindow, label: 'Button', defaultContent: 'Click Me' },
+        { id: 'divider', type: 'divider', icon: Divide, label: 'Divider' },
+        { id: 'property', type: 'property', icon: Rows, label: 'Property Card' },
+    ];
+    
+    const addComponent = (type: string, defaultContent?: string) => {
+      setEmailContent(prev => [...prev, { id: Date.now(), type, content: defaultContent || '' }]);
+    };
+
+    const handleGenerate = async () => {
+      setIsLoading(true);
+      try {
+        const result = await generatePropertyDescription({
+          propertyType: "3BHK Apartment",
+          location: "Whitefield",
+          bedrooms: 3,
+          bathrooms: 2,
+          squareFootage: 1500,
+          amenities: "Pool, Gym",
+          uniqueFeatures: "Smart home enabled",
+          targetAudience: "Young Professionals",
+          style: "Luxurious",
+          socialMediaPlatform: "Email"
+        });
+        setEmailContent([{ id: Date.now(), type: 'text', content: result.description }]);
+        toast({ title: "Content Generated!", description: "AI has drafted your email content." });
+      } catch (error) {
+        toast({ variant: "destructive", title: "Generation Failed", description: "Could not generate content." });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
     return (
-      <div className="max-w-2xl mx-auto space-y-6">
-        <div className="space-y-2">
-          <Label htmlFor="template-selector">Email Template</Label>
-          <Select defaultValue="showcase">
-            <SelectTrigger id="template-selector">
-              <SelectValue placeholder="Select a template" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="blank">Blank Canvas</SelectItem>
-              <SelectItem value="showcase">Property Showcase</SelectItem>
-              <SelectItem value="newsletter">Newsletter</SelectItem>
-              <SelectItem value="promotional">Promotional Offer</SelectItem>
-            </SelectContent>
-          </Select>
+        <div className="grid grid-cols-12 gap-6 h-full">
+            {/* Left: Editor */}
+            <div className="col-span-8 space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                        <Label htmlFor="subject-line">Subject Line</Label>
+                        <Input id="subject-line" value={subject} onChange={(e) => setSubject(e.target.value)} />
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="preview-text">Preview Text</Label>
+                        <Input id="preview-text" placeholder="Short preview of your email..." />
+                    </div>
+                </div>
+                 <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                        <Label htmlFor="from-name">From Name</Label>
+                        <Input id="from-name" placeholder="TerraFlow Realty" />
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="from-email">From Email</Label>
+                        <Input id="from-email" placeholder="noreply@terraflow.ai" />
+                    </div>
+                </div>
+
+                <Card>
+                    <CardHeader>
+                        <CardTitle className="text-base flex justify-between items-center">
+                            <span>Email Body</span>
+                            <Button onClick={handleGenerate} size="sm" variant="outline" disabled={isLoading}>
+                                <Sparkles className="mr-2 h-4 w-4"/>
+                                {isLoading ? "Generating..." : "Generate with AI"}
+                            </Button>
+                        </CardTitle>
+                         <p className="text-xs text-muted-foreground">
+                            Click components on the right to add them. Use &#123;&#123;first_name&#125;&#125; for personalization.
+                        </p>
+                    </CardHeader>
+                    <CardContent className="border-t pt-4">
+                        <div className="bg-muted min-h-[200px] rounded-lg p-4 space-y-4">
+                             {emailContent.length === 0 ? (
+                                <div className="text-center text-muted-foreground py-10">
+                                    Click a component to start building your email.
+                                </div>
+                             ) : (
+                                emailContent.map((item) => (
+                                    <div key={item.id} className="bg-background p-2 rounded">
+                                        {item.type === 'text' && <Textarea defaultValue={item.content} />}
+                                        {item.type === 'image' && <img src={item.content} alt="preview" className="w-full rounded"/>}
+                                        {item.type === 'button' && <Button className="w-full">{item.content}</Button>}
+                                        {item.type === 'divider' && <hr className="border-border"/>}
+                                        {/* Placeholder for property card */}
+                                        {item.type === 'property' && <div className="p-4 border rounded-lg text-sm text-muted-foreground">Property Card Placeholder</div>}
+                                    </div>
+                                ))
+                             )}
+                        </div>
+                    </CardContent>
+                </Card>
+            </div>
+            {/* Right: Components & Preview */}
+            <div className="col-span-4 space-y-4">
+                <Card>
+                    <CardHeader><CardTitle className="text-base">Components</CardTitle></CardHeader>
+                    <CardContent className="grid grid-cols-2 gap-2">
+                        {components.map(c => {
+                            const Icon = c.icon;
+                            return (
+                                <Button key={c.id} variant="outline" className="flex flex-col h-auto p-2" onClick={() => addComponent(c.type, c.defaultContent)}>
+                                    <Icon className="h-6 w-6 mb-1"/>
+                                    <span className="text-xs">{c.label}</span>
+                                </Button>
+                            )
+                        })}
+                    </CardContent>
+                </Card>
+                <Card>
+                    <CardHeader className="flex-row justify-between items-center">
+                        <CardTitle className="text-base">Live Preview</CardTitle>
+                        <div className="flex items-center bg-muted p-1 rounded-lg">
+                            <Button size="xs" variant={view === 'desktop' ? 'secondary' : 'ghost'} onClick={() => setView('desktop')}><AppWindow/></Button>
+                            <Button size="xs" variant={view === 'mobile' ? 'secondary' : 'ghost'} onClick={()={() => setView('mobile')}><Smartphone/></Button>
+                        </div>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="flex-1 border rounded-lg p-2 bg-background overflow-hidden">
+                            <div className={cn("mx-auto transition-all", view === 'mobile' ? 'max-w-[320px] h-full' : 'w-full h-full')}>
+                                <div className="w-full h-[400px] overflow-y-auto rounded-md p-4 bg-white text-black">
+                                    <p className="font-bold text-sm">{subject}</p>
+                                    <hr className="my-2"/>
+                                    {emailContent.map((item, index) => {
+                                        switch(item.type) {
+                                            case 'text': return <p key={index} className="text-sm my-2">{item.content}</p>;
+                                            case 'image': return <img key={index} src={item.content} alt="preview" className="w-full rounded my-2"/>;
+                                            case 'button': return <div key={index} className="my-2 text-center"><a href="#" className="bg-blue-600 text-white px-4 py-2 rounded text-sm no-underline">{item.content}</a></div>;
+                                            case 'divider': return <hr key={index} className="my-4"/>;
+                                            case 'property': return <div key={index} className="p-2 border rounded text-xs my-2">Property Card</div>
+                                            default: return null;
+                                        }
+                                    })}
+                                </div>
+                            </div>
+                        </div>
+                    </CardContent>
+                </Card>
+            </div>
         </div>
-  
-        <div className="space-y-2">
-          <Label htmlFor="subject-line">Subject Line</Label>
-          <Input id="subject-line" placeholder="Exclusive NEO 3PHK launch in white field." />
-        </div>
-  
-        <div className="space-y-2">
-          <Label htmlFor="preview-text">Preview Text</Label>
-          <Input id="preview-text" placeholder="How are you feeling? Can you please go and go and" />
-        </div>
-  
-        <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Label htmlFor="from-name">From Name</Label>
-            <Input id="from-name" placeholder="TerraFlow reality." />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="from-email">From Email</Label>
-            <Input id="from-email" placeholder="Or reply at Trae.ai." />
-          </div>
-        </div>
-  
-        <div className="space-y-2">
-          <Label htmlFor="email-content">Email Content</Label>
-          <Textarea
-            id="email-content"
-            rows={10}
-            placeholder="Write your email content here... Use {{first_name}}, {{property_name}}, etc. for personalization"
-          />
-          <p className="text-xs text-muted-foreground">
-            Tip: Use double curly braces for dynamic content like &#123;&#123;first_name&#125;&#125; or &#123;&#123;property_name&#125;&#125;
-          </p>
-        </div>
-      </div>
     );
 };
-
