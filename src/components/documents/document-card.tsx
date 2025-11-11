@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -21,6 +22,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
+import { useDraggable } from "@dnd-kit/core";
+import { CSS } from "@dnd-kit/utilities";
 
 interface DocumentCardProps {
   document: Document;
@@ -56,10 +59,23 @@ export const DocumentCard = ({
 }: DocumentCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isStarred, setIsStarred] = useState(document.starred);
+  
+  const { attributes, listeners, setNodeRef, transform } = useDraggable({
+    id: document.id,
+    data: { document },
+  });
+
+  const style = {
+    transform: CSS.Translate.toString(transform),
+  };
 
   return (
     <div
-      className="relative bg-card border border-border rounded-lg p-4 hover:border-primary/50 transition-all cursor-pointer group"
+      ref={setNodeRef}
+      style={style}
+      {...listeners}
+      {...attributes}
+      className="relative bg-card border border-border rounded-lg p-4 hover:border-primary/50 transition-all cursor-pointer group touch-none"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={() => onSelect(document)}

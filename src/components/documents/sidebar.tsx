@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -5,6 +6,8 @@ import { FileText, Star, Clock, Trash2, Folder, ChevronRight, ChevronDown } from
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
+import { useDroppable } from "@dnd-kit/core";
+import { cn } from "@/lib/utils";
 
 interface FolderItem {
   name: string;
@@ -63,9 +66,15 @@ const folders: FolderItem[] = [
 
 const FolderTree = ({ folder, level = 0 }: { folder: FolderItem; level?: number }) => {
   const [isExpanded, setIsExpanded] = useState(level === 0);
+  const { setNodeRef, isOver } = useDroppable({
+    id: folder.name,
+  });
 
   return (
-    <div>
+    <div
+      ref={setNodeRef}
+      className={cn("rounded-md", isOver && "bg-primary/10 ring-2 ring-primary/50")}
+    >
       <button
         onClick={() => setIsExpanded(!isExpanded)}
         className="flex items-center gap-2 w-full px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-card rounded-md transition-colors"
