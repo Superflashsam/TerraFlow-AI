@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -18,7 +19,7 @@ export function DateRangePicker({
   className,
 }: React.HTMLAttributes<HTMLDivElement>) {
   const [date, setDate] = React.useState<DateRange | undefined>({
-    from: new Date(2025, 0, 20),
+    from: new Date(new Date().setDate(new Date().getDate() - 29)),
     to: new Date(),
   })
 
