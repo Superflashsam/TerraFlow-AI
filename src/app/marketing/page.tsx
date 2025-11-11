@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { Sparkles, Save, Bot, MessageCircle, Mail, BarChart, FileSignature, Settings } from 'lucide-react';
+import { Sparkles, Save, Bot, MessageCircle, Mail, BarChart, FileSignature, Settings, Map, Compass, PenTool } from 'lucide-react';
 import { PageHeader } from '@/components/shared/page-header';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -11,43 +11,34 @@ import { WhatsappHub } from '@/components/marketing/whatsapp/whatsapp-hub';
 const MarketingPage = () => {
   const [activeTab, setActiveTab] = useState("whatsapp");
 
+  const navItems = [
+    { id: 'content-templates', label: 'Content Templates', icon: FileSignature },
+    { id: 'whatsapp', label: 'WhatsApp Campaigns', icon: MessageCircle },
+    { id: 'email', label: 'Email Marketing', icon: Mail },
+    { id: 'offline', label: 'Offline Tracking', icon: Map },
+    { id: 'assistant', label: 'AI Assistant', icon: Bot },
+    { id: 'content-generator', label: 'AI Content Generator', icon: PenTool }
+  ];
+
   return (
     <div className="flex flex-col h-full">
       <PageHeader
-        title="Marketing Hub"
-        description="Your central command for content creation, campaigns, and analytics."
+        title="Marketing & Automation"
+        description="Manage campaigns, automate workflows, and track performance."
       />
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col mt-6">
-        <TabsList className="grid w-full grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6">
-          <TabsTrigger value="content" className="flex items-center gap-2">
-            <Sparkles size={16} />
-            Content Studio
-          </TabsTrigger>
-          <TabsTrigger value="whatsapp" className="flex items-center gap-2">
-             <MessageCircle size={16} />
-            WhatsApp
-          </TabsTrigger>
-          <TabsTrigger value="email" className="flex items-center gap-2">
-            <Mail size={16} />
-            Email
-          </TabsTrigger>
-           <TabsTrigger value="analytics" className="flex items-center gap-2">
-            <BarChart size={16} />
-            Analytics
-          </TabsTrigger>
-          <TabsTrigger value="assistant" className="flex items-center gap-2">
-            <Bot size={16} />
-            AI Assistant
-          </TabsTrigger>
-           <TabsTrigger value="settings" className="flex items-center gap-2">
-            <Settings size={16} />
-            Settings
-          </TabsTrigger>
+        <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+          {navItems.map((item) => (
+            <TabsTrigger key={item.id} value={item.id} className="flex items-center gap-2">
+              <item.icon size={16} />
+              {item.label}
+            </TabsTrigger>
+          ))}
         </TabsList>
 
-        <TabsContent value="content" className="flex-1 mt-4">
-          <ContentGenerator />
+        <TabsContent value="content-templates" className="flex-1 mt-4">
+           <ContentGenerator />
         </TabsContent>
         <TabsContent value="whatsapp" className="flex-1 mt-4">
           <WhatsappHub />
@@ -59,10 +50,10 @@ const MarketingPage = () => {
             <p className="text-muted-foreground">This feature is coming soon.</p>
           </div>
         </TabsContent>
-        <TabsContent value="analytics" className="flex-1 mt-4">
+        <TabsContent value="offline" className="flex-1 mt-4">
           <div className="text-center py-16">
-            <BarChart size={48} className="mx-auto text-muted-foreground mb-4" />
-            <h3 className="text-xl font-semibold">Campaign Analytics</h3>
+            <Map size={48} className="mx-auto text-muted-foreground mb-4" />
+            <h3 className="text-xl font-semibold">Offline Tracking</h3>
             <p className="text-muted-foreground">This feature is coming soon.</p>
           </div>
         </TabsContent>
@@ -73,10 +64,10 @@ const MarketingPage = () => {
             <p className="text-muted-foreground">This feature is coming soon.</p>
           </div>
         </TabsContent>
-        <TabsContent value="settings" className="flex-1 mt-4">
+         <TabsContent value="content-generator" className="flex-1 mt-4">
           <div className="text-center py-16">
-            <Settings size={48} className="mx-auto text-muted-foreground mb-4" />
-            <h3 className="text-xl font-semibold">Marketing Settings</h3>
+            <PenTool size={48} className="mx-auto text-muted-foreground mb-4" />
+            <h3 className="text-xl font-semibold">AI Content Generator</h3>
             <p className="text-muted-foreground">This feature is coming soon.</p>
           </div>
         </TabsContent>

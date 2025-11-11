@@ -1,4 +1,3 @@
-
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -13,14 +12,13 @@ export const WhatsappMetrics = () => {
       value: '24',
       icon: MessageCircle,
       badge: '12 active',
-      badgeColor: 'bg-green-500/10 text-green-600',
+      badgeColor: 'bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300',
     },
     {
       title: 'Messages Sent',
       value: '12,847',
       icon: Send,
-      badge: '+23% vs last month',
-      badgeColor: 'bg-primary/10 text-primary',
+      change: '+23% vs last month',
     },
     {
       title: 'Response Rate',
@@ -32,8 +30,7 @@ export const WhatsappMetrics = () => {
       title: 'Conversions',
       value: '342',
       icon: CheckCircle,
-      badge: '₹2.1Cr value',
-      badgeColor: 'bg-purple-500/10 text-purple-600'
+      change: '₹2.1Cr value',
     },
   ];
 
@@ -55,6 +52,9 @@ export const WhatsappMetrics = () => {
                   <p className={`text-xs font-medium px-2 py-1 rounded-full inline-block mt-2 ${metric.badgeColor}`}>
                     {metric.badge}
                   </p>
+                )}
+                 {metric.change && (
+                  <p className="text-xs text-muted-foreground mt-1">{metric.change}</p>
                 )}
                 {metric.progress !== undefined && (
                    <Progress value={metric.progress} className="mt-2 h-2" />
