@@ -4,8 +4,7 @@ import React from 'react';
 import { Bar, BarChart, CartesianGrid, Legend, Line, LineChart, Tooltip, XAxis, YAxis, ResponsiveContainer } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
-import { Check, Info, Lightbulb, MessageCircle, Send, TrendingUp } from 'lucide-react';
+import { Check, Info, Lightbulb } from 'lucide-react';
 
 const analyticsData = {
   kpi: [
