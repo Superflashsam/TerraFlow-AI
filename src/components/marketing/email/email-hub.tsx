@@ -7,6 +7,7 @@ import { EmailMetrics } from './email-metrics';
 import { CampaignsTab } from './campaigns-tab';
 import { TemplatesTab } from './templates-tab';
 import { DripSequencesTab } from './drip-sequences-tab';
+import { AnalyticsTab } from './analytics-tab';
 import { Mail, Send, Repeat, LayoutTemplate, BarChart } from 'lucide-react';
 
 export const EmailMarketingHub = () => {
@@ -36,11 +37,7 @@ export const EmailMarketingHub = () => {
                     <TemplatesTab />
                 </TabsContent>
                 <TabsContent value="analytics" className="mt-4">
-                     <div className="text-center py-16">
-                        <BarChart size={48} className="mx-auto text-muted-foreground mb-4" />
-                        <h3 className="text-xl font-semibold">Email Analytics</h3>
-                        <p className="text-muted-foreground">This feature is coming soon.</p>
-                    </div>
+                     <AnalyticsTab />
                 </TabsContent>
             </Tabs>
         </div>
