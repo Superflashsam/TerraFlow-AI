@@ -1,4 +1,4 @@
-import { Users, Briefcase, CheckSquare, DollarSign, Percent, BarChart, FileText, Bot, Building2, Report } from 'lucide-react';
+import { Users, Briefcase, CheckSquare, DollarSign, Percent, BarChart, FileText, Bot, Building2 } from 'lucide-react';
 
 // Main Dashboard Data
 export const kpiData = [
@@ -279,7 +279,7 @@ export const analyticsReports = [
   { id: 3, title: "Property Sales by Type", description: "Sales volume categorized by property type (Villa, Apartment, etc.).", icon: Building2 },
   { id: 4, title: "Q3 Revenue Report", description: "Detailed financial report for the third quarter.", icon: DollarSign },
   { id: 5, title: "Task Completion Analysis", description: "Productivity metrics for team task management.", icon: CheckSquare },
-  { id: 6, title: "Custom Report Builder", description: "Create and save your own custom report templates.", icon: Report },
+  { id: 6, title: "Custom Report Builder", description: "Create and save your own custom report templates.", icon: FileText },
 ];
 
 export const teamMembers = [
