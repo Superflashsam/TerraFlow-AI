@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { QrCampaignsTab } from './qr-campaigns-tab';
 import { WalkInTab } from './walk-in-tab';
 import { AnalyticsTab } from './analytics-tab';
+import { SettingsTab } from './settings-tab';
 
 const kpiData = [
   { title: "Active QR Campaigns", value: "12", icon: QrCode, change: "3 events, 9 print", changeType: 'neutral' },
@@ -62,7 +63,7 @@ export const OfflineHub = () => {
                     <AnalyticsTab />
                 </TabsContent>
                  <TabsContent value="settings" className="mt-4">
-                    <div className="text-center py-16"><p className="text-muted-foreground">Offline settings coming soon.</p></div>
+                    <SettingsTab />
                 </TabsContent>
             </Tabs>
         </div>
