@@ -14,6 +14,7 @@ import { FinancialsCalculator } from '@/components/property-detail/financials-ca
 import { AgentInfo } from '@/components/property-detail/agent-info';
 import { TerraScribePanel } from '@/components/property-detail/terra-scribe-panel';
 import { SimilarProperties } from '@/components/property-detail/similar-properties';
+import { AdditionalDetails } from '@/components/property-detail/additional-details';
 
 
 const PropertyDetailPage = () => {
@@ -69,8 +70,9 @@ const PropertyDetailPage = () => {
             <PropertySummaryCard property={property} />
             <PhotoGallery images={property.images} />
             <PropertyDetails property={property} />
-             <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+             <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
                 <LocationMap location={property.address} />
+                <AdditionalDetails property={property} />
                 <SimilarProperties currentPropertyId={property.id} />
             </div>
         </div>
