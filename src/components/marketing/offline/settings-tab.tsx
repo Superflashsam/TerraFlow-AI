@@ -9,14 +9,23 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { CheckCircle, AlertCircle, Edit, Trash2, Merge } from 'lucide-react';
+import { CheckCircle, AlertCircle, Edit, Trash2, Merge, PlusCircle, RefreshCw } from 'lucide-react';
 
-const StatusIndicator = ({ status }: { status: 'configured' | 'pending' }) => (
-    <div className={`flex items-center gap-2 ${status === 'configured' ? 'text-green-500' : 'text-yellow-500'}`}>
-        {status === 'configured' ? <CheckCircle size={16}/> : <AlertCircle size={16}/>}
-        <span className="font-medium capitalize">{status}</span>
-    </div>
-);
+const StatusIndicator = ({ status }: { status: 'configured' | 'pending' | 'disconnected' }) => {
+    const config = {
+        configured: { icon: CheckCircle, color: 'text-green-500', text: 'Configured' },
+        pending: { icon: AlertCircle, color: 'text-yellow-500', text: 'Pending Setup' },
+        disconnected: { icon: AlertCircle, color: 'text-destructive', text: 'Disconnected' }
+    };
+    const { icon: Icon, color, text } = config[status];
+
+    return (
+        <div className={`flex items-center gap-2 ${color}`}>
+            <Icon size={16}/>
+            <span className="font-medium capitalize">{text}</span>
+        </div>
+    )
+}
 
 const mockSources = [
     { name: 'Print Media', subSources: 5, leads: 1245 },
