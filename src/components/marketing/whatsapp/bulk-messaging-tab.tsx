@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState } from 'react';
@@ -7,6 +6,8 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Upload, Send } from 'lucide-react';
+import { Label } from '@/components/ui/label';
+
 
 const mockBroadcasts = [
   {
@@ -45,32 +46,39 @@ export const BulkMessagingTab = () => {
                 <CardContent className="space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-2">
-                            <label className="text-sm font-medium">Audience Segment</label>
+                            <Label>Audience Segment</Label>
                             <Select>
                                 <SelectTrigger><SelectValue placeholder="Select segment" /></SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value="hot-leads">Hot Leads</SelectItem>
                                     <SelectItem value="investors-pune">Investors (Pune)</SelectItem>
+                                    <SelectItem value="all-contacts">All Contacts</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
                         <div className="space-y-2">
-                            <label className="text-sm font-medium">Template</label>
+                            <Label>Template</Label>
                             <Select>
                                 <SelectTrigger><SelectValue placeholder="Select template" /></SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value="template1">Property Launch (Approved)</SelectItem>
+                                    <SelectItem value="template2">Festive Offer (Approved)</SelectItem>
+                                    <SelectItem value="template3">Site Visit Reminder (Approved)</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
                     </div>
                     <div className="space-y-2">
-                        <label className="text-sm font-medium">Upload Contact List with Variables (CSV)</label>
+                        <Label>Upload Contact List with Variables (CSV)</Label>
                         <div className="flex items-center gap-2">
-                            <Input id="csv-upload-text" readOnly placeholder={fileName || "No file chosen"} className="cursor-pointer flex-1" onClick={() => document.getElementById('csv-upload')?.click()} />
-                            <Button variant="outline" onClick={() => document.getElementById('csv-upload')?.click()}>
+                             <Label htmlFor="csv-upload" className="w-full">
+                                <Input id="csv-upload-text" readOnly placeholder={fileName || "No file chosen"} className="cursor-pointer flex-1" />
+                            </Label>
+                            <Button asChild variant="outline">
+                               <Label htmlFor="csv-upload" className='cursor-pointer'>
                                 <Upload className="mr-2 h-4 w-4" />
                                 Upload
+                                </Label>
                             </Button>
                             <input type="file" id="csv-upload" className="hidden" onChange={handleFileChange} accept=".csv" />
                         </div>

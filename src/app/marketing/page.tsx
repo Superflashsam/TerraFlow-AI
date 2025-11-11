@@ -12,12 +12,12 @@ const MarketingPage = () => {
   const [activeTab, setActiveTab] = useState("whatsapp");
 
   const navItems = [
-    { id: 'content-templates', label: 'Content Templates', icon: FileSignature },
+    { id: 'content-generator', label: 'AI Content Generator', icon: PenTool },
     { id: 'whatsapp', label: 'WhatsApp Campaigns', icon: MessageCircle },
     { id: 'email', label: 'Email Marketing', icon: Mail },
     { id: 'offline', label: 'Offline Tracking', icon: Map },
     { id: 'assistant', label: 'AI Assistant', icon: Bot },
-    { id: 'content-generator', label: 'AI Content Generator', icon: PenTool }
+    { id: 'content-templates', label: 'Content Templates', icon: FileSignature },
   ];
 
   return (
@@ -37,7 +37,7 @@ const MarketingPage = () => {
           ))}
         </TabsList>
 
-        <TabsContent value="content-templates" className="flex-1 mt-4">
+        <TabsContent value="content-generator" className="flex-1 mt-4">
            <ContentGenerator />
         </TabsContent>
         <TabsContent value="whatsapp" className="flex-1 mt-4">
@@ -64,10 +64,10 @@ const MarketingPage = () => {
             <p className="text-muted-foreground">This feature is coming soon.</p>
           </div>
         </TabsContent>
-         <TabsContent value="content-generator" className="flex-1 mt-4">
+         <TabsContent value="content-templates" className="flex-1 mt-4">
           <div className="text-center py-16">
-            <PenTool size={48} className="mx-auto text-muted-foreground mb-4" />
-            <h3 className="text-xl font-semibold">AI Content Generator</h3>
+            <FileSignature size={48} className="mx-auto text-muted-foreground mb-4" />
+            <h3 className="text-xl font-semibold">Content Templates</h3>
             <p className="text-muted-foreground">This feature is coming soon.</p>
           </div>
         </TabsContent>

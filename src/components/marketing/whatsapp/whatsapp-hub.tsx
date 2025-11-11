@@ -7,6 +7,7 @@ import { WhatsappMetrics } from './whatsapp-metrics';
 import { CampaignsTab } from './campaigns-tab';
 import { TemplatesTab } from './templates-tab';
 import { BulkMessagingTab } from './bulk-messaging-tab';
+import { AnalyticsTab } from './analytics-tab';
 import { MessageSquare, LayoutTemplate, Send, BarChart } from 'lucide-react';
 
 export const WhatsappHub = () => {
@@ -36,11 +37,7 @@ export const WhatsappHub = () => {
                     <BulkMessagingTab />
                 </TabsContent>
                 <TabsContent value="analytics" className="mt-4">
-                     <div className="text-center py-16">
-                        <BarChart size={48} className="mx-auto text-muted-foreground mb-4" />
-                        <h3 className="text-xl font-semibold">WhatsApp Analytics</h3>
-                        <p className="text-muted-foreground">This feature is coming soon.</p>
-                    </div>
+                     <AnalyticsTab />
                 </TabsContent>
             </Tabs>
         </div>
