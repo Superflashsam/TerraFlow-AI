@@ -95,7 +95,10 @@ import {
   History,
   MailOpen,
   MousePointer,
-  FileSignature
+  FileSignature,
+  Upload,
+  ListFilter,
+  Bot
 } from 'lucide-react';
 
 const iconMap: { [key: string]: React.ElementType } = {
@@ -192,7 +195,10 @@ const iconMap: { [key: string]: React.ElementType } = {
   History,
   MailOpen,
   MousePointer,
-  FileSignature
+  FileSignature,
+  Upload,
+  ListFilter,
+  Bot
 };
 
 const AppIcon = ({ name, size, color, className }: { name: string; size?: number; color?: string; className?: string }) => {
