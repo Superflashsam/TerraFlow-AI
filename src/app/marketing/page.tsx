@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ContentGenerator } from '@/components/marketing/content-generator';
 import { WhatsappHub } from '@/components/marketing/whatsapp/whatsapp-hub';
+import { EmailMarketingHub } from '@/components/marketing/email/email-hub';
 
 const MarketingPage = () => {
   const [activeTab, setActiveTab] = useState("whatsapp");
@@ -44,11 +45,7 @@ const MarketingPage = () => {
           <WhatsappHub />
         </TabsContent>
         <TabsContent value="email" className="flex-1 mt-4">
-           <div className="text-center py-16">
-            <Mail size={48} className="mx-auto text-muted-foreground mb-4" />
-            <h3 className="text-xl font-semibold">Email Marketing Studio</h3>
-            <p className="text-muted-foreground">This feature is coming soon.</p>
-          </div>
+           <EmailMarketingHub />
         </TabsContent>
         <TabsContent value="offline" className="flex-1 mt-4">
           <div className="text-center py-16">

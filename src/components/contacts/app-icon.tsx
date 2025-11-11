@@ -1,3 +1,4 @@
+
 "use client";
 
 import React from 'react';
@@ -74,6 +75,7 @@ import {
   LayoutGrid,
   Map,
   Package,
+  Activity,
   AlertTriangle,
   Shield,
   ZoomIn,
@@ -91,8 +93,6 @@ import {
   FolderPlus,
   MoreVertical,
   History,
-  MessageCircle,
-  Send,
   MailOpen,
   MousePointer,
   FileSignature
@@ -173,7 +173,7 @@ const iconMap: { [key: string]: React.ElementType } = {
   LayoutGrid,
   Map,
   Package,
-  Activity: TrendingUp,
+  Activity,
   AlertTriangle,
   Shield,
   ZoomIn,
@@ -190,8 +190,6 @@ const iconMap: { [key: string]: React.ElementType } = {
   FolderPlus,
   MoreVertical,
   History,
-  MessageCircle,
-  Send,
   MailOpen,
   MousePointer,
   FileSignature
