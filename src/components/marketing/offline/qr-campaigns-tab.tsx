@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState } from 'react';
@@ -7,6 +8,7 @@ import { PlusCircle, MoreVertical, Edit, Copy, BarChart, Trash2, List, LayoutGri
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { CreateQrCampaignModal } from './create-qr-campaign-modal';
 
 const mockCampaigns = [
   {
@@ -156,6 +158,7 @@ const CampaignCard = ({ campaign }: { campaign: any }) => (
 )
 
 export const QrCampaignsTab = () => {
+    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
     return (
         <div className="space-y-4">
@@ -165,7 +168,7 @@ export const QrCampaignsTab = () => {
                     <Input placeholder="Search campaigns..." className="pl-10" />
                 </div>
                 <div className="flex items-center gap-2">
-                    <Button>
+                    <Button onClick={() => setIsCreateModalOpen(true)}>
                         <PlusCircle className="mr-2 h-4 w-4" />
                         Create QR Campaign
                     </Button>
@@ -176,6 +179,7 @@ export const QrCampaignsTab = () => {
                     <CampaignCard key={campaign.id} campaign={campaign} />
                 ))}
             </div>
+            <CreateQrCampaignModal isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)} />
         </div>
     )
 }
