@@ -97,7 +97,7 @@ export const UploadModal = ({ isOpen, onClose, onUpload }: UploadModalProps) => 
               id="file-upload"
               onChange={handleFileSelect}
             />
-            <Button variant="outline" asChild>
+             <Button variant="outline">
                 <Label htmlFor="file-upload" className="cursor-pointer">Browse Files</Label>
             </Button>
           </div>
