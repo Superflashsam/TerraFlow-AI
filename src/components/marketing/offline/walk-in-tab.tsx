@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState } from 'react';
@@ -11,6 +12,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { PlusCircle, Smartphone, FileText, Check } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { getImagePlaceholder } from '@/lib/placeholder-images';
+import { CreateWalkInTemplateModal } from './create-walkin-template-modal';
 
 const walkInLeaderboard = [
   { rank: 1, agent: 'Priya Sharma', walkins: 28, conversion: 15.2, avatarId: 'avatar-priya' },
@@ -33,6 +35,13 @@ const rankMedals: { [key: number]: string } = {
 
 export const WalkInTab = () => {
     const [selectedTemplate, setSelectedTemplate] = useState('quick');
+    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+
+    const handleCreateTemplate = (templateData: any) => {
+        console.log("New template created:", templateData);
+        // Here you would typically update a state with the new template
+    };
+
     return (
         <div className="space-y-6">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -50,7 +59,7 @@ export const WalkInTab = () => {
                                 </div>
                             </button>
                          ))}
-                         <Button variant="outline" className="w-full">
+                         <Button variant="outline" className="w-full" onClick={() => setIsCreateModalOpen(true)}>
                             <PlusCircle className="mr-2 h-4 w-4" /> Create Custom Template
                         </Button>
                     </CardContent>
@@ -80,6 +89,16 @@ export const WalkInTab = () => {
                                             <Label htmlFor="walkin-email">Email (Optional)</Label>
                                             <Input id="walkin-email" type="email" placeholder="Email Address" />
                                         </div>
+                                    </>
+                                )}
+                                {(selectedTemplate === 'detailed' || selectedTemplate === 'event') && (
+                                     <div className="space-y-1">
+                                        <Label htmlFor="walkin-company">Company</Label>
+                                        <Input id="walkin-company" placeholder="Company Name" />
+                                     </div>
+                                )}
+                                 {selectedTemplate === 'detailed' && (
+                                     <>
                                          <div className="space-y-1">
                                             <Label>Source</Label>
                                             <Select>
@@ -100,8 +119,8 @@ export const WalkInTab = () => {
                                                 <div className="flex items-center space-x-2"><Checkbox id="int-comm" /><Label htmlFor="int-comm" className="font-normal">Commercial</Label></div>
                                             </div>
                                         </div>
-                                    </>
-                                )}
+                                     </>
+                                 )}
                                 <Button className="w-full">
                                     <Check className="mr-2 h-4 w-4" /> Submit Lead
                                 </Button>
@@ -147,6 +166,12 @@ export const WalkInTab = () => {
                     </Table>
                 </CardContent>
             </Card>
+
+            <CreateWalkInTemplateModal 
+                isOpen={isCreateModalOpen} 
+                onClose={() => setIsCreateModalOpen(false)}
+                onSave={handleCreateTemplate}
+            />
         </div>
     );
 };
