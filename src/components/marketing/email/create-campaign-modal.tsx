@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Check, ChevronLeft, ChevronRight, Mail, Users, HardDrive, Share2, Move, Image as ImageIcon, Type, Divide, AppWindow, Smartphone, Sun, Moon, Eye, Send, Code, Rows, Plus, GripVertical, Trash2 } from 'lucide-react';
+import { Check, ChevronLeft, ChevronRight, Mail, Users, HardDrive, Share2, Move, Image as ImageIcon, Type, Divide, AppWindow, Smartphone, Sun, Moon, Eye, Send, Code, Rows, Plus, GripVertical, Trash2, LayoutGrid } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Slider } from '@/components/ui/slider';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -138,8 +138,10 @@ const Step2 = () => {
     return (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <div className="space-y-6">
-                 <Card>
-                    <CardHeader><CardTitle className="text-base">Lead Attributes</CardTitle></CardHeader>
+                <Card>
+                    <CardHeader>
+                        <CardTitle className="text-base">Lead Attributes</CardTitle>
+                    </CardHeader>
                     <CardContent className="space-y-4">
                         <div className="space-y-2">
                             <Label>Lead Score</Label>
@@ -402,7 +404,7 @@ const Step3 = () => {
                                         Drag components here
                                     </div>
                                 ) : (
-                                    emailContent.map((item, index) => (
+                                    emailContent.filter(item => item).map((item, index) => (
                                         <DroppedComponent key={item.id} item={item} index={index} moveComponent={moveComponent} removeComponent={removeComponent} />
                                     ))
                                 )}
@@ -422,7 +424,7 @@ const Step3 = () => {
                     <div className="flex-1 border rounded-lg p-2 bg-background overflow-hidden">
                         <div className={cn("mx-auto transition-all", view === 'mobile' ? 'max-w-[320px] h-full' : 'w-full h-full')}>
                              <div className={cn("w-full h-full overflow-y-auto rounded-md p-4", view === 'dark' ? 'bg-gray-900 text-white' : 'bg-white text-black')}>
-                                {emailContent.map((item, index) => {
+                                {emailContent.filter(item => item).map((item, index) => {
                                     switch (item.type) {
                                         case 'Text': return <p key={index} className="text-sm">This is a sample text block.</p>;
                                         case 'Image': return <img key={index} src="https://picsum.photos/seed/mail/500/200" alt="placeholder" className="rounded-md my-2" />;
