@@ -24,7 +24,7 @@ import { Progress } from "@/components/ui/progress";
 interface UploadModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onUpload: (files: File[]) => void;
+  onUpload?: (files: File[]) => void;
 }
 
 export const UploadModal = ({ isOpen, onClose, onUpload }: UploadModalProps) => {
@@ -50,7 +50,9 @@ export const UploadModal = ({ isOpen, onClose, onUpload }: UploadModalProps) => 
   };
   
   const handleUpload = () => {
-    onUpload(files);
+    if (onUpload) {
+      onUpload(files);
+    }
     setFiles([]);
     onClose();
   };
@@ -95,10 +97,8 @@ export const UploadModal = ({ isOpen, onClose, onUpload }: UploadModalProps) => 
               id="file-upload"
               onChange={handleFileSelect}
             />
-            <Button asChild>
-              <label htmlFor="file-upload" className="cursor-pointer">
-                Browse Files
-              </label>
+            <Button variant="outline" asChild>
+                <Label htmlFor="file-upload" className="cursor-pointer">Browse Files</Label>
             </Button>
           </div>
 
