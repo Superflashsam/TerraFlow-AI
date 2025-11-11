@@ -75,6 +75,35 @@ export default function TasksPage() {
   const [isAddPanelOpen, setIsAddPanelOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
 
+  const [metrics, setMetrics] = useState({
+    total: 0,
+    dueToday: 0,
+    overdue: 0,
+    completedThisWeek: 0,
+  });
+
+  useEffect(() => {
+    const today = new Date();
+    const startOfWeek = new Date(today.setDate(today.getDate() - today.getDay()));
+
+    setMetrics({
+      total: tasks.length,
+      dueToday: tasks.filter(
+        (t) => new Date(t.dueDate).toDateString() === new Date().toDateString() && t.status !== "done"
+      ).length,
+      overdue: tasks.filter(
+        (t) => new Date(t.dueDate) < new Date() && t.status !== "done"
+      ).length,
+      completedThisWeek: tasks.filter((t) => {
+        if(t.status === "done" && t.completedAt) {
+            const completedDate = new Date(t.completedAt);
+            return completedDate >= startOfWeek;
+        }
+        return false;
+      }).length,
+    });
+  }, [tasks]);
+
   const handleAddTask = (newTask: Omit<Task, 'id' | 'createdDate'>) => {
     const fullTask: Task = {
       ...newTask,
@@ -104,10 +133,16 @@ export default function TasksPage() {
 
     if (over && active.id !== over.id) {
         const activeTask = tasks.find(t => t.id === active.id);
-        const overStatus = over.id as TaskStatus;
+        const overId = over.id as string;
+        
+        // This is a check to ensure we're dropping on a valid column
+        const validStatuses: TaskStatus[] = ["todo", "in-progress", "done"];
 
-        if (activeTask && activeTask.status !== overStatus) {
-            handleTaskMove(active.id as string, overStatus);
+        if (activeTask && validStatuses.includes(overId as TaskStatus)) {
+            const overStatus = overId as TaskStatus;
+            if(activeTask.status !== overStatus) {
+                handleTaskMove(active.id as string, overStatus);
+            }
         }
     }
   };
@@ -115,7 +150,7 @@ export default function TasksPage() {
   const handleTaskMove = (taskId: string, newStatus: TaskStatus) => {
     setTasks(prev =>
       prev.map(task =>
-        task.id === taskId ? { ...task, status: newStatus } : task
+        task.id === taskId ? { ...task, status: newStatus, completedAt: newStatus === 'done' ? new Date().toISOString() : undefined } : task
       )
     );
   };
@@ -173,17 +208,6 @@ export default function TasksPage() {
 
     return filtered;
   })();
-
-  const metrics = {
-    total: tasks.length,
-    dueToday: tasks.filter(
-      (t) => new Date(t.dueDate).toDateString() === new Date().toDateString() && t.status !== "done"
-    ).length,
-    overdue: tasks.filter(
-      (t) => new Date(t.dueDate) < new Date() && t.status !== "done"
-    ).length,
-    completedThisWeek: tasks.filter((t) => t.status === "done").length, // Simplified for now
-  };
 
   const assignees = [...new Set(tasks.map((t) => t.assignee.name))];
   
