@@ -7,7 +7,12 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Check, ChevronLeft, ChevronRight, Mail } from 'lucide-react';
+import { Check, ChevronLeft, ChevronRight, Mail, Users } from 'lucide-react';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Slider } from '@/components/ui/slider';
+import { Card, CardContent } from '@/components/ui/card';
+import { Table, TableBody, TableCell, TableHeader, TableHead, TableRow } from '@/components/ui/table';
+
 
 const steps = [
     { id: 1, title: 'Campaign Setup' },
@@ -25,7 +30,7 @@ export const CreateCampaignModal = ({ isOpen, onClose }: { isOpen: boolean, onCl
     const StepContent = () => {
         switch(currentStep) {
             case 1: return <Step1 />;
-            case 2: return <div className="text-center py-8 text-muted-foreground">Audience selection builder coming soon.</div>;
+            case 2: return <Step2 />;
             case 3: return <div className="text-center py-8 text-muted-foreground">Drag-and-drop email designer coming soon.</div>;
             case 4: return <div className="text-center py-8 text-muted-foreground">Review and scheduling options coming soon.</div>;
             default: return null;
@@ -115,3 +120,102 @@ const Step1 = () => (
         </div>
     </div>
 );
+
+const Step2 = () => {
+    const [score, setScore] = useState(80);
+    const sampleLeads = [
+        { name: 'Rajesh Kumar', email: 'rajesh.k@example.com', score: 95 },
+        { name: 'Priya Sharma', email: 'priya.s@example.com', score: 92 },
+        { name: 'Amit Patel', email: 'amit.p@example.com', score: 88 },
+        { name: 'Sunita Reddy', email: 'sunita.r@example.com', score: 85 },
+        { name: 'Vikram Singh', email: 'vikram.s@example.com', score: 82 },
+    ];
+    return (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="space-y-6">
+                <h3 className="font-semibold text-lg">Audience Segment Builder</h3>
+                <div className="space-y-2">
+                    <Label>Lead Score</Label>
+                    <div className="flex items-center gap-4">
+                        <Slider value={[score]} onValueChange={(val) => setScore(val[0])} max={100} step={1} />
+                        <span className="text-sm font-medium w-20 text-right">{score} and above</span>
+                    </div>
+                </div>
+                <div className="space-y-2">
+                    <Label>Lead Stage</Label>
+                    <div className="grid grid-cols-3 gap-2">
+                        {['New', 'Contacted', 'Qualified', 'Proposal', 'Negotiation'].map(stage => (
+                            <div key={stage} className="flex items-center space-x-2">
+                                <Checkbox id={`stage-${stage}`} />
+                                <Label htmlFor={`stage-${stage}`}>{stage}</Label>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                        <Label>Property Interest</Label>
+                        <Input placeholder="e.g. 3BHK, Villa" />
+                    </div>
+                    <div className="space-y-2">
+                        <Label>Location</Label>
+                        <Input placeholder="e.g. Whitefield, KR Puram" />
+                    </div>
+                </div>
+                 <div className="space-y-2">
+                    <Label>Engagement Level</Label>
+                    <RadioGroup defaultValue="active" className="flex space-x-4">
+                        <div className="flex items-center space-x-2"><RadioGroupItem value="active" id="active" /><Label htmlFor="active">Active</Label></div>
+                        <div className="flex items-center space-x-2"><RadioGroupItem value="inactive-30" id="inactive-30" /><Label htmlFor="inactive-30">Inactive (30d)</Label></div>
+                        <div className="flex items-center space-x-2"><RadioGroupItem value="inactive-90" id="inactive-90" /><Label htmlFor="inactive-90">Inactive (90d+)</Label></div>
+                    </RadioGroup>
+                </div>
+                <div className="space-y-2">
+                    <Label>Lead Source</Label>
+                    <Input placeholder="e.g. 99acres, Website" />
+                </div>
+                 <div className="space-y-2">
+                    <Label>Exclusions</Label>
+                    <div className="space-y-1">
+                        <div className="flex items-center space-x-2"><Checkbox id="exclude-previous" /><Label htmlFor="exclude-previous">Exclude recipients of last 3 campaigns</Label></div>
+                        <div className="flex items-center space-x-2"><Checkbox id="exclude-unsubscribed" defaultChecked disabled /><Label htmlFor="exclude-unsubscribed">Exclude unsubscribed contacts</Label></div>
+                    </div>
+                </div>
+            </div>
+            <div className="space-y-4">
+                <Card>
+                    <CardContent className="p-6 text-center">
+                        <Users className="mx-auto h-10 w-10 text-primary mb-2" />
+                        <p className="text-3xl font-bold">892</p>
+                        <p className="text-muted-foreground">leads match your criteria</p>
+                    </CardContent>
+                </Card>
+                <div className="space-y-2">
+                    <Label>Audience Preview</Label>
+                     <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Name</TableHead>
+                                <TableHead>Email</TableHead>
+                                <TableHead className="text-right">Score</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {sampleLeads.map(lead => (
+                                <TableRow key={lead.email}>
+                                    <TableCell>{lead.name}</TableCell>
+                                    <TableCell>{lead.email}</TableCell>
+                                    <TableCell className="text-right">{lead.score}</TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </div>
+                 <div className="flex items-center space-x-2 pt-4">
+                    <Checkbox id="save-segment" />
+                    <Label htmlFor="save-segment">Save this audience as a new segment</Label>
+                </div>
+            </div>
+        </div>
+    );
+};
