@@ -85,6 +85,7 @@ import {
   Clipboard,
   AlertCircle,
   CheckCircle,
+  Report,
 } from 'lucide-react';
 
 const iconMap: { [key: string]: React.ElementType } = {
@@ -174,6 +175,7 @@ const iconMap: { [key: string]: React.ElementType } = {
   Clipboard,
   AlertCircle,
   CheckCircle,
+  Report,
 };
 
 const AppIcon = ({ name, size, color, className }: { name: string; size?: number; color?: string; className?: string }) => {
