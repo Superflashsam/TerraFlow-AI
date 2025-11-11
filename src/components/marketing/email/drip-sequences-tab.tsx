@@ -7,6 +7,7 @@ import { PlusCircle, MoreVertical, Edit, Copy, BarChart, Trash2, Search, Play, P
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { CreateDripSequenceModal } from './create-drip-sequence-modal';
 
 const mockSequences = [
   {
@@ -141,6 +142,8 @@ const DripSequenceCard = ({ sequence }: { sequence: any }) => {
 };
 
 export const DripSequencesTab = () => {
+    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+
     return (
         <div className="space-y-4">
             <div className="flex justify-between items-center">
@@ -148,7 +151,7 @@ export const DripSequencesTab = () => {
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <Input placeholder="Search sequences..." className="pl-10" />
                 </div>
-                <Button>
+                <Button onClick={() => setIsCreateModalOpen(true)}>
                     <PlusCircle className="mr-2 h-4 w-4" />
                     Create Drip Sequence
                 </Button>
@@ -158,6 +161,7 @@ export const DripSequencesTab = () => {
                     <DripSequenceCard key={sequence.id} sequence={sequence} />
                 ))}
             </div>
+            <CreateDripSequenceModal isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)} />
         </div>
     )
 }
