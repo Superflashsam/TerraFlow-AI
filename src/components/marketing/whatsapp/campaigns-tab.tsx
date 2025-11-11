@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState } from 'react';
@@ -9,6 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { CreateCampaignModal } from './create-campaign-modal';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { useRouter } from 'next/navigation';
 
 const mockCampaigns = [
   {
@@ -57,12 +59,14 @@ const mockCampaigns = [
 const StatusBadge = ({ status }: { status: string }) => {
   const colors: { [key: string]: string } = {
     Active: 'bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300',
+    Paused: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/50 dark:text-yellow-300',
     Scheduled: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/50 dark:text-yellow-300',
     Completed: 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300',
     Draft: 'bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300',
   };
   const dotColors: { [key: string]: string } = {
     Active: 'bg-green-500',
+    Paused: 'bg-yellow-500',
     Scheduled: 'bg-yellow-500',
     Completed: 'bg-gray-500',
     Draft: 'bg-blue-500',
@@ -78,13 +82,66 @@ const StatusBadge = ({ status }: { status: string }) => {
 
 export const CampaignsTab = () => {
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+    const [editingCampaign, setEditingCampaign] = useState<any | null>(null);
     const [viewMode, setViewMode] = useState('grid');
     const [campaigns, setCampaigns] = useState(mockCampaigns);
+    const router = useRouter();
+
+    const handleCreate = () => {
+        setEditingCampaign(null);
+        setIsCreateModalOpen(true);
+    };
+
+    const handleEdit = (campaign: any) => {
+        setEditingCampaign(campaign);
+        setIsCreateModalOpen(true);
+    };
+
+    const handleDuplicate = (campaignId: number) => {
+        const campaignToDuplicate = campaigns.find(c => c.id === campaignId);
+        if (campaignToDuplicate) {
+            const newCampaign = {
+                ...campaignToDuplicate,
+                id: Date.now(),
+                name: `${campaignToDuplicate.name} (Copy)`,
+                status: 'Draft',
+                schedule: 'Not Scheduled',
+                performance: { sent: 'N/A', sent_perc: '', delivered: 'N/A', delivered_perc: '', read: 'N/A', read_perc: '', replied: 'N/A', replied_perc: '', converted: 'N/A', converted_perc: '' }
+            };
+            setCampaigns([newCampaign, ...campaigns]);
+        }
+    };
+
+    const handleDelete = (campaignId: number) => {
+        if (window.confirm("Are you sure you want to delete this campaign?")) {
+            setCampaigns(campaigns.filter(c => c.id !== campaignId));
+        }
+    };
+
+    const handleViewReport = (campaign: any) => {
+        // For now, let's just log it or navigate to a general analytics page
+        console.log("Viewing report for:", campaign.name);
+        router.push('/marketing/analytics');
+    };
 
     const toggleStatus = (id: number) => {
-        setCampaigns(campaigns.map(c => 
-            c.id === id ? {...c, status: c.status === 'Active' ? 'Paused' : 'Active'} : c
-        ));
+        setCampaigns(campaigns.map(c => {
+            if (c.id === id) {
+                if(c.status === 'Active') return {...c, status: 'Paused'};
+                if(c.status === 'Paused') return {...c, status: 'Active'};
+            }
+            return c;
+        }));
+    };
+
+    const handleSaveCampaign = (campaignData: any) => {
+        if (editingCampaign) {
+            setCampaigns(campaigns.map(c => c.id === editingCampaign.id ? { ...c, ...campaignData, id: c.id } : c));
+        } else {
+            setCampaigns([{ ...campaignData, id: Date.now(), status: 'Draft' }, ...campaigns]);
+        }
+        setIsCreateModalOpen(false);
+        setEditingCampaign(null);
     };
 
     return (
@@ -99,7 +156,7 @@ export const CampaignsTab = () => {
                         <Button variant={viewMode === 'grid' ? 'secondary' : 'ghost'} size="sm" onClick={() => setViewMode('grid')}><LayoutGrid className="h-4 w-4" /></Button>
                         <Button variant={viewMode === 'list' ? 'secondary' : 'ghost'} size="sm" onClick={() => setViewMode('list')}><List className="h-4 w-4" /></Button>
                     </div>
-                    <Button onClick={() => setIsCreateModalOpen(true)}>
+                    <Button onClick={handleCreate}>
                         <PlusCircle className="mr-2 h-4 w-4" />
                         Create Campaign
                     </Button>
@@ -121,14 +178,14 @@ export const CampaignsTab = () => {
                                         </Button>
                                       </DropdownMenuTrigger>
                                       <DropdownMenuContent align="end">
-                                        <DropdownMenuItem><Edit className="mr-2 h-4 w-4" />Edit</DropdownMenuItem>
-                                        <DropdownMenuItem><Copy className="mr-2 h-4 w-4" />Duplicate</DropdownMenuItem>
-                                        <DropdownMenuItem><BarChart className="mr-2 h-4 w-4" />View Report</DropdownMenuItem>
+                                        <DropdownMenuItem onClick={() => handleEdit(campaign)}><Edit className="mr-2 h-4 w-4" />Edit</DropdownMenuItem>
+                                        <DropdownMenuItem onClick={() => handleDuplicate(campaign.id)}><Copy className="mr-2 h-4 w-4" />Duplicate</DropdownMenuItem>
+                                        <DropdownMenuItem onClick={() => handleViewReport(campaign)}><BarChart className="mr-2 h-4 w-4" />View Report</DropdownMenuItem>
                                         <DropdownMenuItem onClick={() => toggleStatus(campaign.id)}>
                                             {campaign.status === 'Active' ? <Pause className="mr-2 h-4 w-4"/> : <Play className="mr-2 h-4 w-4"/>}
                                             {campaign.status === 'Active' ? 'Pause' : 'Resume'}
                                         </DropdownMenuItem>
-                                        <DropdownMenuItem className="text-destructive"><Trash2 className="mr-2 h-4 w-4" />Delete</DropdownMenuItem>
+                                        <DropdownMenuItem className="text-destructive" onClick={() => handleDelete(campaign.id)}><Trash2 className="mr-2 h-4 w-4" />Delete</DropdownMenuItem>
                                       </DropdownMenuContent>
                                     </DropdownMenu>
                                   </div>
@@ -179,10 +236,7 @@ export const CampaignsTab = () => {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {campaigns.map((campaign) => {
-                       const openRate = campaign.performance.sent > 0 ? (campaign.performance.opened / campaign.performance.sent * 100).toFixed(1) : 0;
-                       const clickRate = campaign.performance.opened > 0 ? (campaign.performance.clicked / campaign.performance.opened * 100).toFixed(1) : 0;
-                       return (
+                    {campaigns.map((campaign) => (
                       <TableRow key={campaign.id}>
                         <TableCell className="font-medium">{campaign.name}</TableCell>
                         <TableCell><StatusBadge status={campaign.status} /></TableCell>
@@ -201,24 +255,29 @@ export const CampaignsTab = () => {
                               <Button variant="ghost" size="icon" className="h-8 w-8"><MoreVertical className="text-muted-foreground" /></Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
-                              <DropdownMenuItem><Edit className="mr-2 h-4 w-4" />Edit</DropdownMenuItem>
-                              <DropdownMenuItem><Copy className="mr-2 h-4 w-4" />Duplicate</DropdownMenuItem>
-                              <DropdownMenuItem><BarChart className="mr-2 h-4 w-4" />View Report</DropdownMenuItem>
+                              <DropdownMenuItem onClick={() => handleEdit(campaign)}><Edit className="mr-2 h-4 w-4" />Edit</DropdownMenuItem>
+                              <DropdownMenuItem onClick={() => handleDuplicate(campaign.id)}><Copy className="mr-2 h-4 w-4" />Duplicate</DropdownMenuItem>
+                              <DropdownMenuItem onClick={() => handleViewReport(campaign)}><BarChart className="mr-2 h-4 w-4" />View Report</DropdownMenuItem>
                               <DropdownMenuItem onClick={() => toggleStatus(campaign.id)}>
                                 {campaign.status === 'Active' ? <Pause className="mr-2 h-4 w-4"/> : <Play className="mr-2 h-4 w-4"/>}
                                 {campaign.status === 'Active' ? 'Pause' : 'Resume'}
                               </DropdownMenuItem>
-                              <DropdownMenuItem className="text-destructive"><Trash2 className="mr-2 h-4 w-4" />Delete</DropdownMenuItem>
+                              <DropdownMenuItem className="text-destructive" onClick={() => handleDelete(campaign.id)}><Trash2 className="mr-2 h-4 w-4" />Delete</DropdownMenuItem>
                             </DropdownMenuContent>
                           </DropdownMenu>
                         </TableCell>
                       </TableRow>
-                    )})}
+                    ))}
                   </TableBody>
                 </Table>
               </Card>
             )}
-            <CreateCampaignModal isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)} />
+            <CreateCampaignModal 
+                isOpen={isCreateModalOpen} 
+                onClose={() => setIsCreateModalOpen(false)} 
+                campaign={editingCampaign}
+                onSave={handleSaveCampaign}
+            />
         </div>
     )
 }

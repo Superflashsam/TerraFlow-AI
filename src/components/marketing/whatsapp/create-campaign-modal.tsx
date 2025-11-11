@@ -1,6 +1,7 @@
+
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -18,27 +19,44 @@ const steps = [
     { id: 4, title: 'Review & Send' }
 ];
 
-export const CreateCampaignModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) => {
+export const CreateCampaignModal = ({ isOpen, onClose, campaign, onSave }: { isOpen: boolean, onClose: () => void, campaign?: any, onSave: (data: any) => void }) => {
     const [currentStep, setCurrentStep] = useState(1);
+    const [formData, setFormData] = useState<any>({});
+
+    useEffect(() => {
+        if(campaign) {
+            setFormData(campaign);
+        } else {
+             setFormData({
+                name: '',
+                goal: '',
+                schedule: 'now',
+             });
+        }
+    }, [campaign]);
     
     const handleNext = () => setCurrentStep(prev => Math.min(prev + 1, steps.length));
     const handlePrev = () => setCurrentStep(prev => Math.max(prev - 1, 1));
     
     const StepContent = () => {
         switch(currentStep) {
-            case 1: return <Step1 />;
-            case 2: return <Step2 />;
-            case 3: return <Step3 />;
-            case 4: return <Step4 />;
+            case 1: return <Step1 formData={formData} setFormData={setFormData} />;
+            case 2: return <Step2 formData={formData} setFormData={setFormData} />;
+            case 3: return <Step3 formData={formData} setFormData={setFormData} />;
+            case 4: return <Step4 formData={formData} />;
             default: return null;
         }
     }
+
+    const handleSave = () => {
+        onSave(formData);
+    };
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
             <DialogContent className="max-w-4xl max-h-[90vh] flex flex-col">
                 <DialogHeader>
-                    <DialogTitle className="flex items-center gap-2"><MessageSquare /> Create WhatsApp Campaign</DialogTitle>
+                    <DialogTitle className="flex items-center gap-2"><MessageSquare /> {campaign ? "Edit" : "Create"} WhatsApp Campaign</DialogTitle>
                     <DialogDescription>Step {currentStep} of {steps.length}: {steps[currentStep-1].title}</DialogDescription>
                 </DialogHeader>
                 
@@ -67,7 +85,7 @@ export const CreateCampaignModal = ({ isOpen, onClose }: { isOpen: boolean, onCl
                         <ChevronLeft className="mr-2 h-4 w-4" /> Previous
                     </Button>
                     {currentStep === steps.length ? (
-                        <Button onClick={onClose}>Confirm & Launch</Button>
+                        <Button onClick={handleSave}>{campaign ? "Save Changes" : "Confirm & Launch"}</Button>
                     ) : (
                         <Button onClick={handleNext}>
                             Next <ChevronRight className="ml-2 h-4 w-4" />
@@ -79,15 +97,15 @@ export const CreateCampaignModal = ({ isOpen, onClose }: { isOpen: boolean, onCl
     );
 }
 
-const Step1 = () => (
+const Step1 = ({ formData, setFormData }: { formData: any, setFormData: (data: any) => void }) => (
     <div className="space-y-4">
         <div className="space-y-2">
             <Label htmlFor="campaign-name">Campaign Name</Label>
-            <Input id="campaign-name" placeholder="e.g., Q4 Festive Offer" />
+            <Input id="campaign-name" placeholder="e.g., Q4 Festive Offer" value={formData.name || ''} onChange={(e) => setFormData({...formData, name: e.target.value})} />
         </div>
         <div className="space-y-2">
             <Label htmlFor="campaign-goal">Campaign Goal</Label>
-             <Select>
+             <Select value={formData.goal} onValueChange={(value) => setFormData({...formData, goal: value})}>
               <SelectTrigger><SelectValue placeholder="Select a goal" /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="brand_awareness">Brand Awareness</SelectItem>
@@ -101,14 +119,14 @@ const Step1 = () => (
         <div className="space-y-2">
             <Label>Schedule</Label>
             <div className="flex items-center space-x-4">
-                <div className="flex items-center space-x-2"><input type="radio" name="schedule" defaultChecked /> <Label>Send Now</Label></div>
-                <div className="flex items-center space-x-2"><input type="radio" name="schedule" /> <Label>Schedule for Later</Label></div>
+                <div className="flex items-center space-x-2"><input type="radio" name="schedule" checked={formData.schedule === 'now'} onChange={() => setFormData({...formData, schedule: 'now'})} /> <Label>Send Now</Label></div>
+                <div className="flex items-center space-x-2"><input type="radio" name="schedule" checked={formData.schedule !== 'now'} onChange={() => setFormData({...formData, schedule: 'later'})} /> <Label>Schedule for Later</Label></div>
             </div>
         </div>
     </div>
 );
 
-const Step2 = () => (
+const Step2 = ({ formData, setFormData }: { formData: any, setFormData: (data: any) => void }) => (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="space-y-4">
              <div className="space-y-2">
@@ -148,7 +166,7 @@ const Step2 = () => (
     </div>
 );
 
-const Step3 = () => (
+const Step3 = ({ formData, setFormData }: { formData: any, setFormData: (data: any) => void }) => (
      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="space-y-4">
              <div className="space-y-2">
@@ -196,14 +214,14 @@ const Step3 = () => (
     </div>
 );
 
-const Step4 = () => (
+const Step4 = ({formData}: {formData: any}) => (
     <div className="space-y-4">
         <h3 className="font-semibold text-lg">Review Campaign</h3>
         <div className="bg-muted p-4 rounded-lg space-y-2">
-            <p><strong>Campaign:</strong> Q4 Festive Offer</p>
-            <p><strong>Audience:</strong> 247 hot leads</p>
+            <p><strong>Campaign:</strong> {formData.name || 'Q4 Festive Offer'}</p>
+            <p><strong>Audience:</strong> {formData.audience || '247 hot leads'}</p>
             <p><strong>Message:</strong> Using template "Property Launch"</p>
-            <p><strong>Schedule:</strong> Send Now</p>
+            <p><strong>Schedule:</strong> {formData.schedule === 'now' ? 'Send Now' : 'Scheduled'}</p>
             <p><strong>Estimated Cost:</strong> ₹2,470 (₹10 per message)</p>
             <div className="flex items-center space-x-4 pt-2">
                 <p className="flex items-center gap-1 text-green-600"><Check size={16}/>WABA approved</p>
