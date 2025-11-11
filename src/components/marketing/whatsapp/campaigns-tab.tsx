@@ -8,6 +8,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { CreateCampaignModal } from './create-campaign-modal';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
 const mockCampaigns = [
   {
@@ -97,73 +98,134 @@ export const CampaignsTab = () => {
                     </Button>
                 </div>
             </div>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {mockCampaigns.map(campaign => (
-                    <Card key={campaign.id} className="flex flex-col">
-                        <CardContent className="p-6 flex-1 flex flex-col">
-                           <div className="flex justify-between items-start mb-4">
-                                <h3 className="font-semibold text-lg">{campaign.name}</h3>
-                                <div className="flex items-center gap-2">
-                                  <StatusBadge status={campaign.status} />
-                                  <DropdownMenu>
-                                    <DropdownMenuTrigger asChild>
-                                      <Button variant="ghost" size="icon" className="h-8 w-8">
-                                        <MoreVertical className="text-muted-foreground" />
-                                      </Button>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent align="end">
-                                      <DropdownMenuItem>
-                                        <Edit className="mr-2 h-4 w-4" />
-                                        Edit
-                                      </DropdownMenuItem>
-                                      <DropdownMenuItem>
-                                        <Copy className="mr-2 h-4 w-4" />
-                                        Duplicate
-                                      </DropdownMenuItem>
-                                      <DropdownMenuItem>
-                                        <BarChart className="mr-2 h-4 w-4" />
-                                        View Report
-                                      </DropdownMenuItem>
-                                      <DropdownMenuItem className="text-destructive">
-                                        <Trash2 className="mr-2 h-4 w-4" />
-                                        Delete
-                                      </DropdownMenuItem>
-                                    </DropdownMenuContent>
-                                  </DropdownMenu>
+            {viewMode === 'grid' ? (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  {mockCampaigns.map(campaign => (
+                      <Card key={campaign.id} className="flex flex-col">
+                          <CardContent className="p-6 flex-1 flex flex-col">
+                            <div className="flex justify-between items-start mb-4">
+                                  <h3 className="font-semibold text-lg">{campaign.name}</h3>
+                                  <div className="flex items-center gap-2">
+                                    <StatusBadge status={campaign.status} />
+                                    <DropdownMenu>
+                                      <DropdownMenuTrigger asChild>
+                                        <Button variant="ghost" size="icon" className="h-8 w-8">
+                                          <MoreVertical className="text-muted-foreground" />
+                                        </Button>
+                                      </DropdownMenuTrigger>
+                                      <DropdownMenuContent align="end">
+                                        <DropdownMenuItem>
+                                          <Edit className="mr-2 h-4 w-4" />
+                                          Edit
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem>
+                                          <Copy className="mr-2 h-4 w-4" />
+                                          Duplicate
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem>
+                                          <BarChart className="mr-2 h-4 w-4" />
+                                          View Report
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem className="text-destructive">
+                                          <Trash2 className="mr-2 h-4 w-4" />
+                                          Delete
+                                        </DropdownMenuItem>
+                                      </DropdownMenuContent>
+                                    </DropdownMenu>
+                                  </div>
+                            </div>
+                            <div className="text-sm text-muted-foreground space-y-1 mb-4">
+                                <p><strong>Audience:</strong> {campaign.audience}</p>
+                                <p><strong>Schedule:</strong> {campaign.schedule}</p>
+                            </div>
+                            <div className="grid grid-cols-5 gap-2 text-center text-xs text-muted-foreground mt-auto pt-4 border-t">
+                                <div>
+                                  <p>Sent</p>
+                                  <p className="font-medium text-foreground text-sm">{campaign.performance.sent}</p>
+                                  <p className="text-green-500">{campaign.performance.sent_perc}</p>
                                 </div>
-                           </div>
-                           <div className="text-sm text-muted-foreground space-y-1 mb-4">
-                               <p><strong>Audience:</strong> {campaign.audience}</p>
-                               <p><strong>Schedule:</strong> {campaign.schedule}</p>
-                           </div>
-                           <div className="grid grid-cols-5 gap-2 text-center text-xs text-muted-foreground mt-auto pt-4 border-t">
-                               <div>
-                                 <p>Sent</p>
-                                 <p className="font-medium text-foreground text-sm">{campaign.performance.sent}</p>
-                                 <p className="text-green-500">{campaign.performance.sent_perc}</p>
-                               </div>
-                               <div>
-                                 <p>Delivered</p>
-                                 <p className="font-medium text-foreground text-sm">{campaign.performance.delivered}</p>
-                                 <p className="text-green-500">{campaign.performance.delivered_perc}</p>
-                               </div>
-                               <div><p>Read</p>
-                                 <p className="font-medium text-foreground text-sm">{campaign.performance.read}</p>
-                                 <p className="text-green-500">{campaign.performance.read_perc}</p>
-                               </div>
-                               <div><p>Replied</p>
-                                 <p className="font-medium text-foreground text-sm">{campaign.performance.replied}</p>
-                                 <p className="text-green-500">{campaign.performance.replied_perc}</p>
-                               </div>
-                               <div><p>Converted</p>
-                                 <p className="font-medium text-foreground text-sm">{campaign.performance.converted}</p>
-                                 <p className="text-green-500">{campaign.performance.converted_perc}</p>
-                               </div>
-                           </div>
-                        </CardContent>
-                    </Card>
-                ))}
-            </div>
+                                <div>
+                                  <p>Delivered</p>
+                                  <p className="font-medium text-foreground text-sm">{campaign.performance.delivered}</p>
+                                  <p className="text-green-500">{campaign.performance.delivered_perc}</p>
+                                </div>
+                                <div><p>Read</p>
+                                  <p className="font-medium text-foreground text-sm">{campaign.performance.read}</p>
+                                  <p className="text-green-500">{campaign.performance.read_perc}</p>
+                                </div>
+                                <div><p>Replied</p>
+                                  <p className="font-medium text-foreground text-sm">{campaign.performance.replied}</p>
+                                  <p className="text-green-500">{campaign.performance.replied_perc}</p>
+                                </div>
+                                <div><p>Converted</p>
+                                  <p className="font-medium text-foreground text-sm">{campaign.performance.converted}</p>
+                                  <p className="text-green-500">{campaign.performance.converted_perc}</p>
+                                </div>
+                            </div>
+                          </CardContent>
+                      </Card>
+                  ))}
+              </div>
+            ) : (
+              <Card>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Campaign</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead>Audience</TableHead>
+                      <TableHead>Schedule</TableHead>
+                      <TableHead>Performance</TableHead>
+                      <TableHead className="text-right">Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {mockCampaigns.map((campaign) => (
+                      <TableRow key={campaign.id}>
+                        <TableCell className="font-medium">{campaign.name}</TableCell>
+                        <TableCell><StatusBadge status={campaign.status} /></TableCell>
+                        <TableCell>{campaign.audience}</TableCell>
+                        <TableCell>{campaign.schedule}</TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-2 text-xs">
+                            <span>Read: {campaign.performance.read_perc}</span>
+                            <span>Reply: {campaign.performance.replied_perc}</span>
+                            <span>Conv: {campaign.performance.converted_perc}</span>
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-right">
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button variant="ghost" size="icon" className="h-8 w-8">
+                                <MoreVertical className="text-muted-foreground" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                              <DropdownMenuItem>
+                                <Edit className="mr-2 h-4 w-4" />
+                                Edit
+                              </DropdownMenuItem>
+                              <DropdownMenuItem>
+                                <Copy className="mr-2 h-4 w-4" />
+                                Duplicate
+                              </DropdownMenuItem>
+                              <DropdownMenuItem>
+                                <BarChart className="mr-2 h-4 w-4" />
+                                View Report
+                              </DropdownMenuItem>
+                              <DropdownMenuItem className="text-destructive">
+                                <Trash2 className="mr-2 h-4 w-4" />
+                                Delete
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </Card>
+            )}
             <CreateCampaignModal isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)} />
         </div>
     )
