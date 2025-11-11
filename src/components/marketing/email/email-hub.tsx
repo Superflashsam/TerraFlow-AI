@@ -1,10 +1,10 @@
-
 "use client";
 
 import React, { useState } from 'react';
 import { PageHeader } from '@/components/shared/page-header';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { EmailMetrics } from './email-metrics';
+import { CampaignsTab } from './campaigns-tab';
 import { Mail, Send, Repeat, LayoutTemplate, BarChart } from 'lucide-react';
 
 export const EmailMarketingHub = () => {
@@ -25,11 +25,7 @@ export const EmailMarketingHub = () => {
                     <TabsTrigger value="analytics"><BarChart className="mr-2 h-4 w-4" />Analytics</TabsTrigger>
                 </TabsList>
                 <TabsContent value="campaigns" className="mt-4">
-                    <div className="text-center py-16">
-                        <Mail size={48} className="mx-auto text-muted-foreground mb-4" />
-                        <h3 className="text-xl font-semibold">Campaigns Dashboard</h3>
-                        <p className="text-muted-foreground">This feature is coming soon.</p>
-                    </div>
+                    <CampaignsTab />
                 </TabsContent>
                 <TabsContent value="sequences" className="mt-4">
                     <div className="text-center py-16">
