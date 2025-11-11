@@ -3,11 +3,12 @@
 import React, { useState } from 'react';
 import { PageHeader } from '@/components/shared/page-header';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { QrCode, Scan, UserPlus, Calendar } from 'lucide-react';
+import { QrCode, Scan, UserPlus, Calendar, BarChart, Shield } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { QrCampaignsTab } from './qr-campaigns-tab';
 import { WalkInTab } from './walk-in-tab';
+import { AnalyticsTab } from './analytics-tab';
 
 const kpiData = [
   { title: "Active QR Campaigns", value: "12", icon: QrCode, change: "3 events, 9 print", changeType: 'neutral' },
@@ -46,10 +47,10 @@ export const OfflineHub = () => {
             </div>
             <Tabs value={activeTab} onValueChange={setActiveTab}>
                 <TabsList>
-                    <TabsTrigger value="campaigns">QR Campaigns</TabsTrigger>
-                    <TabsTrigger value="walk-in">Walk-in Forms</TabsTrigger>
-                    <TabsTrigger value="analytics">Analytics</TabsTrigger>
-                    <TabsTrigger value="settings">Settings</TabsTrigger>
+                    <TabsTrigger value="campaigns" className="flex items-center gap-2"><QrCode size={14}/>QR Campaigns</TabsTrigger>
+                    <TabsTrigger value="walk-in" className="flex items-center gap-2"><UserPlus size={14}/>Walk-in Forms</TabsTrigger>
+                    <TabsTrigger value="analytics" className="flex items-center gap-2"><BarChart size={14}/>Analytics</TabsTrigger>
+                    <TabsTrigger value="settings" className="flex items-center gap-2"><Shield size={14}/>Settings</TabsTrigger>
                 </TabsList>
                 <TabsContent value="campaigns" className="mt-4">
                     <QrCampaignsTab />
@@ -58,7 +59,7 @@ export const OfflineHub = () => {
                     <WalkInTab />
                 </TabsContent>
                 <TabsContent value="analytics" className="mt-4">
-                    <div className="text-center py-16"><p className="text-muted-foreground">Offline analytics dashboard coming soon.</p></div>
+                    <AnalyticsTab />
                 </TabsContent>
                  <TabsContent value="settings" className="mt-4">
                     <div className="text-center py-16"><p className="text-muted-foreground">Offline settings coming soon.</p></div>
