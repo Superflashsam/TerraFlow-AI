@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowLeft, ArrowRight, X } from 'lucide-react';
-import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 
 export const PhotoGallery = ({ images }: { images: any[] }) => {
   const [selectedImage, setSelectedImage] = useState<number | null>(null);
@@ -55,6 +55,10 @@ export const PhotoGallery = ({ images }: { images: any[] }) => {
       {selectedImage !== null && (
         <Dialog open={selectedImage !== null} onOpenChange={closeLightbox}>
             <DialogContent className="max-w-4xl p-0 border-0 bg-transparent">
+                <DialogHeader className="sr-only">
+                  <DialogTitle>Image Gallery: {images[selectedImage].title}</DialogTitle>
+                  <DialogDescription>{images[selectedImage].alt || 'Enlarged view of property image'}</DialogDescription>
+                </DialogHeader>
                 <Image
                     src={images[selectedImage].url}
                     alt={images[selectedImage].alt || images[selectedImage].title}
