@@ -1,6 +1,7 @@
+
 "use client"
 
-import { Line, LineChart, CartesianGrid, XAxis, YAxis } from "recharts"
+import { Line, LineChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend } from "recharts"
 import {
   Card,
   CardContent,
@@ -72,8 +73,11 @@ export function LeadTrendChart() {
               tickMargin={8}
               tickCount={6}
             />
-            <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
-             <ChartLegend content={<ChartLegendContent />} />
+            <Tooltip
+              cursor={false}
+              content={<ChartTooltipContent indicator="dot" />}
+            />
+             <Legend content={<ChartLegendContent />} />
             <Line
               dataKey="total"
               type="monotone"

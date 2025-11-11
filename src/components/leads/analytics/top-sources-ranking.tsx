@@ -1,6 +1,6 @@
 
 "use client";
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Facebook, Globe, Linkedin, Mail, Search, TrendingDown, TrendingUp, Users } from 'lucide-react';
 import { LucideIcon } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -17,8 +17,7 @@ const iconMap: { [key: string]: LucideIcon } = {
     TrendingDown,
 };
 
-export const TopSourcesRanking = () => {
-  const sourceData = [
+const sourceData = [
     {
       id: 1,
       name: 'Google Ads',
@@ -81,6 +80,18 @@ export const TopSourcesRanking = () => {
     }
   ];
 
+export const TopSourcesRanking = () => {
+    const [trends, setTrends] = useState<{[key: number]: number}>({});
+
+    useEffect(() => {
+        const newTrends: {[key: number]: number} = {};
+        sourceData.forEach(source => {
+            newTrends[source.id] = Math.floor(Math.random() * 15 + 5);
+        });
+        setTrends(newTrends);
+    }, []);
+
+
   const getTrendIcon = (trend: 'up' | 'down') => {
     return trend === 'up' ? TrendingUp : TrendingDown;
   };
@@ -137,7 +148,7 @@ export const TopSourcesRanking = () => {
                         <TrendIcon size={16} />
                         <span className="text-sm font-medium">
                         {source.trend === 'up' ? '+' : '-'}
-                        {Math.floor(Math.random() * 15 + 5)}%
+                        {trends[source.id] || 0}%
                         </span>
                     </div>
                     </div>

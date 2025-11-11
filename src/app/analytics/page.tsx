@@ -11,6 +11,8 @@ import { ConversionFunnel } from "@/components/leads/analytics/conversion-funnel
 import { LeadScoringChart } from "@/components/leads/analytics/lead-scoring-chart";
 import { TopSourcesRanking } from "@/components/leads/analytics/top-sources-ranking";
 import { TaskAnalytics } from "@/components/analytics/task-analytics";
+import { AgentLeaderboard } from "@/components/analytics/agent-leaderboard";
+import { LeadTrendChart } from "@/components/analytics/lead-trend-chart";
 
 export default function AnalyticsPage() {
   const [filters, setFilters] = useState({});
@@ -87,6 +89,7 @@ export default function AnalyticsPage() {
                     />
                 ))}
             </div>
+            <LeadTrendChart />
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div className="lg:col-span-2">
                     <ConversionFunnel />
@@ -96,10 +99,11 @@ export default function AnalyticsPage() {
                     <TopSourcesRanking />
                 </div>
             </div>
+            <AgentLeaderboard />
             <TaskAnalytics />
         </TabsContent>
         <TabsContent value="agents" className="mt-4">
-            <p>Agent performance analytics will be displayed here.</p>
+           <AgentLeaderboard />
         </TabsContent>
          <TabsContent value="properties" className="mt-4">
             <p>Property analytics will be displayed here.</p>
