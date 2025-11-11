@@ -19,8 +19,11 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { ThemeToggle } from "@/components/shared/theme-toggle";
+import { initialTasks } from "@/lib/placeholder-data";
 
 export function MainHeader() {
+  const overdueTasks = initialTasks.filter(task => new Date(task.dueDate) < new Date() && task.status !== 'done');
+
   return (
     <header className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-4 border-b bg-background px-4 md:px-8">
       {/* This can be a trigger for mobile sidebar if needed */}
@@ -53,49 +56,37 @@ export function MainHeader() {
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon" className="rounded-full">
+          <Button variant="ghost" size="icon" className="relative rounded-full">
             <Bell className="h-5 w-5" />
+            {overdueTasks.length > 0 && <span className="absolute top-0 right-0 flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-destructive opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-destructive"></span>
+              </span>}
             <span className="sr-only">Toggle notifications</span>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-80">
           <DropdownMenuLabel>Notifications</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>
-            <div className="flex items-start gap-3">
-              <Avatar className="h-9 w-9">
-                <AvatarImage src={getImagePlaceholder("avatar-1")?.imageUrl} />
-                <AvatarFallback>JL</AvatarFallback>
-              </Avatar>
-              <div>
-                <p className="font-medium">New lead assigned</p>
-                <p className="text-xs text-muted-foreground">John Doe is interested in Downtown Lofts.</p>
-              </div>
+           {overdueTasks.length > 0 ? overdueTasks.slice(0, 3).map(task => (
+            <DropdownMenuItem key={task.id} asChild>
+              <Link href="/tasks">
+                <div className="flex items-start gap-3">
+                    <div className="h-9 w-9 flex items-center justify-center">
+                        <CheckSquare className="h-5 w-5 text-destructive" />
+                    </div>
+                    <div>
+                        <p className="font-medium">Overdue Task</p>
+                        <p className="text-xs text-muted-foreground truncate">{task.title}</p>
+                    </div>
+                </div>
+              </Link>
+            </DropdownMenuItem>
+          )) : (
+            <div className="px-2 py-4 text-center text-sm text-muted-foreground">
+              No new notifications
             </div>
-          </DropdownMenuItem>
-           <DropdownMenuItem>
-            <div className="flex items-start gap-3">
-              <Avatar className="h-9 w-9">
-                 <AvatarImage src={getImagePlaceholder("avatar-2")?.imageUrl} />
-                <AvatarFallback>SM</AvatarFallback>
-              </Avatar>
-              <div>
-                <p className="font-medium">Site visit confirmed</p>
-                <p className="text-xs text-muted-foreground">Sara Miller confirmed for tomorrow at 2 PM.</p>
-              </div>
-            </div>
-          </DropdownMenuItem>
-           <DropdownMenuItem>
-            <div className="flex items-start gap-3">
-              <div className="h-9 w-9 flex items-center justify-center">
-                <CheckSquare className="h-5 w-5 text-primary" />
-              </div>
-              <div>
-                <p className="font-medium">Task Due Today</p>
-                <p className="text-xs text-muted-foreground">Follow up with the client from last week.</p>
-              </div>
-            </div>
-          </DropdownMenuItem>
+          )}
         </DropdownMenuContent>
       </DropdownMenu>
 

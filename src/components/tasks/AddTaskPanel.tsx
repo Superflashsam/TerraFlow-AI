@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import type { Task, TaskPriority } from "@/types/task";
+import type { Task, TaskPriority, TaskRepetition } from "@/types/task";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { X } from "lucide-react";
+import { X, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
   Select,
@@ -16,6 +16,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
+import { teamMembers } from "@/lib/placeholder-data";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { getImagePlaceholder } from "@/lib/placeholder-images";
 
 interface AddTaskPanelProps {
   isOpen: boolean;
@@ -34,9 +37,13 @@ export const AddTaskPanel = ({ isOpen, onClose, onAdd }: AddTaskPanelProps) => {
   const [linkedType, setLinkedType] = useState<"lead" | "deal">("lead");
   const [linkedName, setLinkedName] = useState("");
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [assignee, setAssignee] = useState('me');
+  const [repetition, setRepetition] = useState<TaskRepetition>('none');
 
   const handleSubmit = () => {
     if (!title || !dueDate || !linkedName) return;
+
+    const selectedAssignee = teamMembers.find(m => m.id === assignee);
 
     onAdd({
       title,
@@ -50,10 +57,11 @@ export const AddTaskPanel = ({ isOpen, onClose, onAdd }: AddTaskPanelProps) => {
         name: linkedName,
       },
       assignee: {
-        name: "You",
-        avatar: "",
+        name: selectedAssignee?.name || 'Me',
+        avatarId: selectedAssignee?.avatarId || 'user-avatar',
       },
       tags: selectedTags,
+      repetition,
     });
 
     // Reset form
@@ -64,6 +72,8 @@ export const AddTaskPanel = ({ isOpen, onClose, onAdd }: AddTaskPanelProps) => {
     setDueTime("");
     setLinkedName("");
     setSelectedTags([]);
+    setAssignee('me');
+    setRepetition('none');
   };
 
   const toggleTag = (tag: string) => {
@@ -116,20 +126,33 @@ export const AddTaskPanel = ({ isOpen, onClose, onAdd }: AddTaskPanelProps) => {
                 className="bg-background resize-none"
               />
             </div>
-
-            <div className="space-y-2">
-              <Label>Priority</Label>
-              <Select value={priority} onValueChange={(v) => setPriority(v as TaskPriority)}>
-                <SelectTrigger className="bg-background">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="high">High</SelectItem>
-                  <SelectItem value="medium">Medium</SelectItem>
-                  <SelectItem value="low">Low</SelectItem>
-                </SelectContent>
-              </Select>
+            
+            <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                    <Label>Priority</Label>
+                    <Select value={priority} onValueChange={(v) => setPriority(v as TaskPriority)}>
+                        <SelectTrigger className="bg-background"><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                        <SelectItem value="high">High</SelectItem>
+                        <SelectItem value="medium">Medium</SelectItem>
+                        <SelectItem value="low">Low</SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
+                <div className="space-y-2">
+                    <Label>Repeat</Label>
+                    <Select value={repetition} onValueChange={(v) => setRepetition(v as TaskRepetition)}>
+                        <SelectTrigger className="bg-background"><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="none">Never</SelectItem>
+                            <SelectItem value="daily">Daily</SelectItem>
+                            <SelectItem value="weekly">Weekly</SelectItem>
+                            <SelectItem value="monthly">Monthly</SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
             </div>
+
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
@@ -153,6 +176,28 @@ export const AddTaskPanel = ({ isOpen, onClose, onAdd }: AddTaskPanelProps) => {
                   className="bg-background"
                 />
               </div>
+            </div>
+
+             <div className="space-y-2">
+              <Label>Assign to</Label>
+              <Select value={assignee} onValueChange={setAssignee}>
+                <SelectTrigger className="bg-background">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                    {teamMembers.map(member => (
+                        <SelectItem key={member.id} value={member.id}>
+                            <div className="flex items-center gap-2">
+                                <Avatar className="h-6 w-6">
+                                    <AvatarImage src={getImagePlaceholder(member.avatarId)?.imageUrl} />
+                                    <AvatarFallback>{member.name.charAt(0)}</AvatarFallback>
+                                </Avatar>
+                                {member.name}
+                            </div>
+                        </SelectItem>
+                    ))}
+                </SelectContent>
+              </Select>
             </div>
 
             <div className="space-y-2">

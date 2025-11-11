@@ -1,8 +1,11 @@
 import { PageHeader } from "@/components/shared/page-header";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { FileDown } from "lucide-react";
 import { analyticsReports } from "@/lib/placeholder-data";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { TaskAnalytics } from "@/components/analytics/task-analytics";
+import { BarChart, CheckSquare } from "lucide-react";
 
 function ReportCard({ report }: { report: any }) {
     return (
@@ -22,7 +25,7 @@ export default function AnalyticsPage() {
   return (
     <div className="flex flex-col gap-8">
       <PageHeader
-        title="Analytics &amp; Reports"
+        title="Analytics & Reports"
         description="Gain deep insights into your business performance."
       >
         <Button>
@@ -30,9 +33,27 @@ export default function AnalyticsPage() {
             Export All
         </Button>
       </PageHeader>
-      <div className="grid gap-4 md:grid-cols-2">
-        {analyticsReports.map(report => <ReportCard key={report.id} report={report} />)}
-      </div>
+      
+       <Tabs defaultValue="reports" className="w-full">
+        <TabsList>
+          <TabsTrigger value="reports">
+            <BarChart className="mr-2 h-4 w-4" />
+            Standard Reports
+          </TabsTrigger>
+          <TabsTrigger value="tasks">
+            <CheckSquare className="mr-2 h-4 w-4" />
+            Task Analytics
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent value="reports" className="mt-4">
+            <div className="grid gap-4 md:grid-cols-2">
+                {analyticsReports.map(report => <ReportCard key={report.id} report={report} />)}
+            </div>
+        </TabsContent>
+        <TabsContent value="tasks" className="mt-4">
+            <TaskAnalytics />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
