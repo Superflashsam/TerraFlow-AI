@@ -280,6 +280,15 @@ export const analyticsReports = [
   { id: 4, title: "Q3 Revenue Report", description: "Detailed financial report for the third quarter.", icon: DollarSign },
 ];
 
+export const teamMembers = [
+    { id: 'me', name: 'Me', avatarId: 'user-avatar' },
+    { id: 'priya-sharma', name: 'Priya Sharma', avatarId: 'avatar-priya' },
+    { id: 'rajesh-kumar', name: 'Rajesh Kumar', avatarId: 'avatar-rajesh' },
+    { id: 'amit-patel', name: 'Amit Patel', avatarId: 'avatar-amit' },
+    { id: 'deepa-nair', name: 'Deepa Nair', avatarId: 'avatar-sunita' },
+    { id: 'vikram-rao', name: 'Vikram Rao', avatarId: 'avatar-1' }
+];
+
 export const initialTasks = [
   {
     id: '1',
@@ -291,7 +300,7 @@ export const initialTasks = [
     createdDate: '2025-10-30T09:00:00Z',
     linkedTo: { type: 'lead', name: 'Rajesh Kumar' },
     tags: ['Follow-up', 'High-Priority'],
-    assignee: { name: 'Priya Sharma', avatar: 'https://images.unsplash.com/photo-1590649880765-91b1956b8276?w=100&h=100&fit=crop' }
+    assignee: { name: 'Priya Sharma', avatarId: 'avatar-priya' }
   },
   {
     id: '2',
@@ -303,7 +312,7 @@ export const initialTasks = [
     createdDate: '2025-10-30T11:00:00Z',
     linkedTo: { type: 'lead', name: 'Priya Sharma' },
     tags: ['Site Visit'],
-    assignee: { name: 'Rajesh Kumar', avatar: 'https://images.unsplash.com/photo-1653566031535-bcf33e1c2893?w=100&h=100&fit=crop' }
+    assignee: { name: 'Rajesh Kumar', avatarId: 'avatar-rajesh' }
   },
   {
     id: '3',
@@ -315,7 +324,7 @@ export const initialTasks = [
     createdDate: '2025-10-29T14:00:00Z',
     linkedTo: { type: 'deal', name: 'Whitefield Villa' },
     tags: ['Legal', 'Documentation'],
-    assignee: { name: 'Amit Patel', avatar: 'https://images.unsplash.com/photo-1580130379601-1a28f2e8df4a?w=100&h=100&fit=crop' }
+    assignee: { name: 'Amit Patel', avatarId: 'avatar-amit' }
   },
   {
     id: '4',
@@ -327,7 +336,7 @@ export const initialTasks = [
     createdDate: '2025-10-31T10:00:00Z',
     linkedTo: { type: 'lead', name: 'Amit Patel' },
     tags: ['Site Visit'],
-    assignee: { name: 'Me', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop' }
+    assignee: { name: 'Me', avatarId: 'user-avatar' }
   },
   {
     id: '5',
@@ -339,7 +348,7 @@ export const initialTasks = [
     createdDate: '2025-10-28T16:00:00Z',
     linkedTo: { type: 'deal', name: 'Prestige Lakeside' },
     tags: ['Finance'],
-    assignee: { name: 'Deepa Nair', avatar: 'https://images.unsplash.com/photo-1498200705497-2c9e717e5ab8?w=100&h=100&fit=crop' }
+    assignee: { name: 'Deepa Nair', avatarId: 'avatar-sunita' }
   },
   {
     id: '6',
@@ -351,7 +360,7 @@ export const initialTasks = [
     createdDate: '2025-10-30T18:00:00Z',
     linkedTo: { type: 'lead', name: 'Anjali Singh' },
     tags: ['Follow-up'],
-    assignee: { name: 'Vikram Rao', avatar: 'https://images.unsplash.com/photo-1564564321837-a57b7070ac4f?w=100&h=100&fit=crop' }
+    assignee: { name: 'Vikram Rao', avatarId: 'avatar-1' }
   },
    {
     id: '7',
@@ -363,7 +372,7 @@ export const initialTasks = [
     createdDate: '2025-10-31T12:00:00Z',
     linkedTo: { type: 'deal', name: 'BKC Office Deal' },
     tags: ['Legal', 'Documentation'],
-    assignee: { name: 'Amit Patel', avatar: 'https://images.unsplash.com/photo-1580130379601-1a28f2e8df4a?w=100&h=100&fit=crop' }
+    assignee: { name: 'Amit Patel', avatarId: 'avatar-amit' }
   },
   {
     id: '8',
@@ -375,7 +384,7 @@ export const initialTasks = [
     createdDate: '2025-10-30T17:00:00Z',
     linkedTo: { type: 'lead', name: 'Suresh Iyer' },
     tags: ['Negotiation'],
-    assignee: { name: 'Me', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop' }
+    assignee: { name: 'Me', avatarId: 'user-avatar' }
   },
   {
     id: '9',
@@ -387,7 +396,7 @@ export const initialTasks = [
     createdDate: '2025-10-31T09:30:00Z',
     linkedTo: { type: 'lead', name: 'Neha Gupta' },
     tags: ['Follow-up'],
-    assignee: { name: 'Priya Sharma', avatar: 'https://images.unsplash.com/photo-1590649880765-91b1956b8276?w=100&h=100&fit=crop' }
+    assignee: { name: 'Priya Sharma', avatarId: 'avatar-priya' }
   },
   {
     id: '10',
@@ -399,6 +408,6 @@ export const initialTasks = [
     createdDate: '2025-10-28T10:00:00Z',
     linkedTo: null,
     tags: ['Internal'],
-    assignee: { name: 'Me', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop' }
+    assignee: { name: 'Me', avatarId: 'user-avatar' }
   }
 ];
