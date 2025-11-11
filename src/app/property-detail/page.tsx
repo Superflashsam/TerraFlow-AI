@@ -1,3 +1,4 @@
+
 "use client";
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
@@ -68,8 +69,10 @@ const PropertyDetailPage = () => {
             <PropertySummaryCard property={property} />
             <PhotoGallery images={property.images} />
             <PropertyDetails property={property} />
-            <LocationMap location={property.address} />
-            <SimilarProperties currentPropertyId={property.id} />
+             <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+                <LocationMap location={property.address} />
+                <SimilarProperties currentPropertyId={property.id} />
+            </div>
         </div>
         <div className="space-y-6">
             <TerraScribePanel property={property} />
