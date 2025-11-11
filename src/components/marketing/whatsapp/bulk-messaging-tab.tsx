@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -28,6 +28,7 @@ const mockBroadcasts = [
 
 export const BulkMessagingTab = () => {
     const [fileName, setFileName] = useState('');
+    const fileInputRef = useRef<HTMLInputElement>(null);
     
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {
@@ -36,6 +37,10 @@ export const BulkMessagingTab = () => {
             setFileName('');
         }
     };
+
+    const handleUploadClick = () => {
+        fileInputRef.current?.click();
+    }
 
     return (
         <div className="space-y-6">
@@ -71,16 +76,14 @@ export const BulkMessagingTab = () => {
                     <div className="space-y-2">
                         <Label>Upload Contact List with Variables (CSV)</Label>
                         <div className="flex items-center gap-2">
-                            <Input id="csv-upload-text" readOnly placeholder={fileName || "No file chosen"} className="cursor-pointer flex-1" />
-                            <Label htmlFor="csv-upload" className="cursor-pointer">
-                                <Button variant="outline" asChild>
-                                    <span className="flex items-center">
-                                        <Upload className="mr-2 h-4 w-4" />
-                                        Upload
-                                    </span>
-                                </Button>
-                            </Label>
-                            <input type="file" id="csv-upload" className="hidden" onChange={handleFileChange} accept=".csv" />
+                            <Input id="csv-upload-text" readOnly placeholder={fileName || "No file chosen"} className="cursor-pointer flex-1" onClick={handleUploadClick} />
+                            <Button variant="outline" onClick={handleUploadClick}>
+                                <span className="flex items-center">
+                                    <Upload className="mr-2 h-4 w-4" />
+                                    Upload
+                                </span>
+                            </Button>
+                            <input type="file" id="csv-upload" ref={fileInputRef} className="hidden" onChange={handleFileChange} accept=".csv" />
                         </div>
                         <p className="text-xs text-muted-foreground">CSV should include columns: phone, name, property, etc.</p>
                     </div>
