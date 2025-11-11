@@ -16,9 +16,10 @@ import { Table, TableBody, TableCell, TableHeader, TableHead, TableRow } from '@
 import { Textarea } from '@/components/ui/textarea';
 import { generatePropertyDescription } from '@/ai/flows/generate-property-description'; // We'll adapt this for email generation
 import { useToast } from '@/hooks/use-toast';
-import { cn } from '@/lib/utils';
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import { cn } from '@/lib/utils';
+
 
 const steps = [
     { id: 1, title: 'Campaign Setup' },
@@ -142,6 +143,7 @@ const Step2 = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Left Side - Filters */}
             <div className="space-y-6">
+                 <h3 className="text-lg font-semibold">Audience Segment Builder</h3>
                 <Card>
                     <CardHeader><CardTitle className="text-base">Lead Attributes</CardTitle></CardHeader>
                     <CardContent className="space-y-4">
@@ -242,7 +244,40 @@ const Step2 = () => {
     );
 };
 
-const DroppedComponent = ({ item, index, removeComponent }: any) => {
+const DraggableComponent = ({ type, icon: Icon, label, onDragStart }: any) => (
+    <div
+        draggable
+        onDragStart={onDragStart}
+        className="flex flex-col items-center p-2 rounded-md bg-muted hover:bg-muted/80 cursor-grab"
+    >
+        <Icon className="h-6 w-6 mb-1 text-muted-foreground" />
+        <span className="text-xs font-medium text-foreground">{label}</span>
+    </div>
+);
+
+const DroppedComponent = ({ item, index, moveComponent, removeComponent }: any) => {
+    const ref = useRef<HTMLDivElement>(null);
+
+    const [, drop] = useDrop({
+        accept: 'component',
+        hover(draggedItem: { index: number }) {
+            if (draggedItem.index !== index) {
+                moveComponent(draggedItem.index, index);
+                draggedItem.index = index;
+            }
+        },
+    });
+
+    const [{ isDragging }, drag] = useDrag({
+        type: 'component',
+        item: { id: item.id, index },
+        collect: (monitor) => ({
+            isDragging: monitor.isDragging(),
+        }),
+    });
+
+    drag(drop(ref));
+
     const renderContent = () => {
         switch(item.type) {
             case 'text': return <Textarea defaultValue={item.content} className="w-full" />;
@@ -255,8 +290,9 @@ const DroppedComponent = ({ item, index, removeComponent }: any) => {
     }
   
     return (
-      <div className="relative bg-background p-2 rounded group">
-        <div className="absolute top-1 right-1 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+      <div ref={ref} className={cn("relative bg-background p-2 rounded group", isDragging && "opacity-50")}>
+        <div className="absolute top-1 right-1 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+            <Button variant="ghost" size="icon" className="h-6 w-6 cursor-move"><GripVertical size={14}/></Button>
             <Button variant="ghost" size="icon" className="h-6 w-6 text-destructive" onClick={() => removeComponent(index)}><Trash2 size={14} /></Button>
         </div>
         {renderContent()}
@@ -287,11 +323,18 @@ const Step3 = () => {
     ];
     
     const addComponent = (type: string, defaultContent?: string) => {
-      setEmailContent(prev => [...prev, { id: Date.now(), type, content: defaultContent || '' }]);
+      setEmailContent(prev => [...prev, { id: Date.now() + Math.random(), type, content: defaultContent || '' }]);
     };
 
     const removeComponent = (index: number) => {
         setEmailContent(prev => prev.filter((_, i) => i !== index));
+    };
+    
+    const moveComponent = (fromIndex: number, toIndex: number) => {
+        const updatedContent = [...emailContent];
+        const [movedItem] = updatedContent.splice(fromIndex, 1);
+        updatedContent.splice(toIndex, 0, movedItem);
+        setEmailContent(updatedContent);
     };
 
     const handleGenerate = async () => {
@@ -332,7 +375,7 @@ const Step3 = () => {
     return (
         <div className="grid grid-cols-12 gap-6 h-full">
             {/* Left: Editor */}
-            <div className="col-span-8 space-y-4 flex flex-col">
+            <div className="col-span-8 space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                         <Label htmlFor="template-selector">Email Template</Label>
@@ -381,7 +424,7 @@ const Step3 = () => {
                                 </div>
                              ) : (
                                 emailContent.filter(item => item).map((item, index) => (
-                                   <DroppedComponent key={item.id} item={item} index={index} removeComponent={removeComponent} />
+                                   <DroppedComponent key={item.id} item={item} index={index} moveComponent={moveComponent} removeComponent={removeComponent} />
                                 ))
                              )}
                         </div>
@@ -446,8 +489,12 @@ const Step3 = () => {
             </div>
             {showFullPreview && (
                 <Dialog open onOpenChange={() => setShowFullPreview(false)}>
-                    <DialogContent className="max-w-4xl p-0 border-0">
-                         <div className={cn("w-full h-full overflow-y-auto rounded-md p-8", isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-black')}>
+                    <DialogContent className="max-w-4xl p-0 border-0 bg-transparent">
+                         <DialogHeader className="sr-only">
+                          <DialogTitle>Email Preview: {subject}</DialogTitle>
+                          <DialogDescription>A full-screen preview of the email.</DialogDescription>
+                        </DialogHeader>
+                         <div className={cn("w-full h-[80vh] overflow-y-auto rounded-md p-8", isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-black')}>
                             <p className="text-sm text-gray-500">To: &#123;John Doe&#125;</p>
                             <h3 className="text-xl font-bold border-b pb-2 mb-4">{subject}</h3>
                             {emailContent.filter(item => item).map((item, index) => renderPreviewContent(item, index))}
