@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { WhatsappMetrics } from './whatsapp-metrics';
 import { CampaignsTab } from './campaigns-tab';
 import { TemplatesTab } from './templates-tab';
+import { BulkMessagingTab } from './bulk-messaging-tab';
 import { MessageSquare, LayoutTemplate, Send, BarChart } from 'lucide-react';
 
 export const WhatsappHub = () => {
@@ -32,11 +33,7 @@ export const WhatsappHub = () => {
                     <TemplatesTab />
                 </TabsContent>
                 <TabsContent value="bulk-messaging" className="mt-4">
-                     <div className="text-center py-16">
-                        <Send size={48} className="mx-auto text-muted-foreground mb-4" />
-                        <h3 className="text-xl font-semibold">Bulk Messaging</h3>
-                        <p className="text-muted-foreground">This feature is coming soon.</p>
-                    </div>
+                    <BulkMessagingTab />
                 </TabsContent>
                 <TabsContent value="analytics" className="mt-4">
                      <div className="text-center py-16">

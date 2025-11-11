@@ -23,7 +23,7 @@ const MarketingPage = () => {
   return (
     <div className="flex flex-col h-full">
       <PageHeader
-        title="Marketing & Automation"
+        title="Marketing Hub"
         description="Manage campaigns, automate workflows, and track performance."
       />
 
