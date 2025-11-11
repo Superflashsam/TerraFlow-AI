@@ -21,8 +21,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useDraggable, useDroppable } from "@dnd-kit/core";
-import { cn } from "@/lib/utils";
+import { useDraggable } from "@dnd-kit/core";
+import { CSS } from "@dnd-kit/utilities";
 
 interface DocumentListProps {
   documents: Document[];
@@ -50,7 +50,7 @@ const getTypeColor = (type: string) => {
   }
 };
 
-const DraggableRow = ({ doc, selectedDocumentIds, onCheckboxToggle, onDocumentSelect }: { doc: Document, selectedDocumentIds: string[], onCheckboxToggle: any, onDocumentSelect: any }) => {
+const DraggableRow = ({ doc, selectedDocumentIds, onCheckboxToggle, onDocumentSelect, isMounted }: { doc: Document, selectedDocumentIds: string[], onCheckboxToggle: any, onDocumentSelect: any, isMounted: boolean }) => {
     const { attributes, listeners, setNodeRef, transform } = useDraggable({
         id: doc.id,
         data: { document: doc }
@@ -60,13 +60,13 @@ const DraggableRow = ({ doc, selectedDocumentIds, onCheckboxToggle, onDocumentSe
         transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
     } : undefined;
 
+    const dndProps = isMounted ? { ...listeners, ...attributes } : {};
+
     return (
         <TableRow
             ref={setNodeRef}
             style={style}
-            {...listeners}
-            {...attributes}
-            key={doc.id}
+            {...dndProps}
             className="border-border hover:bg-card/50 cursor-pointer group touch-none"
             onClick={() => onDocumentSelect(doc)}
         >
@@ -149,6 +149,11 @@ export const DocumentList = ({
   selectedDocumentIds,
   onCheckboxToggle,
 }: DocumentListProps) => {
+    const [isMounted, setIsMounted] = useState(false);
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
+
   return (
     <div className="p-6">
       <Table>
@@ -177,6 +182,7 @@ export const DocumentList = ({
                 selectedDocumentIds={selectedDocumentIds}
                 onCheckboxToggle={onCheckboxToggle}
                 onDocumentSelect={onDocumentSelect}
+                isMounted={isMounted}
             />
           ))}
         </TableBody>
