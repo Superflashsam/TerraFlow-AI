@@ -72,15 +72,15 @@ export const BulkMessagingTab = () => {
                     <div className="space-y-2">
                         <Label>Upload Contact List with Variables (CSV)</Label>
                         <div className="flex items-center gap-2">
-                             <Label htmlFor="csv-upload" className="w-full">
-                                <Input id="csv-upload-text" readOnly placeholder={fileName || "No file chosen"} className="cursor-pointer flex-1" />
+                            <Input id="csv-upload-text" readOnly placeholder={fileName || "No file chosen"} className="cursor-pointer flex-1" />
+                            <Label htmlFor="csv-upload">
+                                <Button asChild variant="outline" className="cursor-pointer flex items-center">
+                                    <span>
+                                        <Upload className="mr-2 h-4 w-4" />
+                                        Upload
+                                    </span>
+                                </Button>
                             </Label>
-                            <Button variant="outline" asChild>
-                                <Label htmlFor="csv-upload" className="cursor-pointer flex items-center">
-                                    <Upload className="mr-2 h-4 w-4" />
-                                    Upload
-                                </Label>
-                            </Button>
                             <input type="file" id="csv-upload" className="hidden" onChange={handleFileChange} accept=".csv" />
                         </div>
                         <p className="text-xs text-muted-foreground">CSV should include columns: phone, name, property, etc.</p>
