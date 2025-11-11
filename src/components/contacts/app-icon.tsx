@@ -99,7 +99,10 @@ import {
   ListFilter,
   Bot,
   RefreshCw,
-  ToggleLeft
+  ToggleLeft,
+  QrCode,
+  Scan,
+  UserPlus
 } from 'lucide-react';
 
 const iconMap: { [key: string]: React.ElementType } = {
@@ -194,14 +197,17 @@ const iconMap: { [key: string]: React.ElementType } = {
   FolderPlus,
   MoreVertical,
   History,
-  MailOpen,
+MailOpen,
   MousePointer,
   FileSignature,
   Upload,
   ListFilter,
   Bot,
   RefreshCw,
-  ToggleLeft
+  ToggleLeft,
+  QrCode,
+  Scan,
+  UserPlus
 };
 
 const AppIcon = ({ name, size, color, className }: { name: string; size?: number; color?: string; className?: string }) => {
