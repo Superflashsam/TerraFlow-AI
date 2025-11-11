@@ -137,9 +137,70 @@ export const automationWorkflows = [
 ];
 
 export const documents = [
-  { id: 1, name: 'Oceanview-Penthouse-Agreement.pdf', type: 'Sales Agreement', size: '2.4MB', linkedTo: 'DEAL-006', icon: FileText },
-  { id: 2, name: 'RERA-Compliance-Form-A.pdf', type: 'RERA Form', size: '800KB', linkedTo: 'DEAL-006', icon: FileText },
-  { id: 3, name: 'Greenwood-Villa-Brochure.pdf', type: 'Brochure', size: '5.1MB', linkedTo: 'PROP-001', icon: FileText },
+    { 
+        id: '1', name: 'Prestige-Lakeside-Brochure.pdf', type: 'PDF', size: '3.2 MB', modified: '2 hours ago', 
+        uploadedBy: { name: 'Priya Sharma', avatarId: 'avatar-priya' }, 
+        linkedTo: { name: 'Prestige Deal', type: 'deal' },
+        thumbnail: 'https://res.cloudinary.com/dvic0tda9/image/upload/v1721949573/pdf_i2yvte.png',
+        tags: ['Brochure', 'Prestige', 'Q4'],
+        sharedWith: [
+            { name: 'Rajesh Kumar', avatarId: 'avatar-rajesh', role: 'Viewer'},
+            { name: 'Amit Patel', avatarId: 'avatar-amit', role: 'Viewer'},
+        ],
+        versions: [
+            { version: 2, date: 'Oct 17, 4:15 PM', user: 'Priya Sharma' },
+            { version: 1, date: 'Oct 15, 2:30 PM', user: 'Priya Sharma' },
+        ]
+    },
+    { 
+        id: '2', name: 'Floor-Plan-3BHK.jpg', type: 'JPG', size: '1.8 MB', modified: 'Yesterday', 
+        uploadedBy: { name: 'Rajesh Kumar', avatarId: 'avatar-rajesh' }, 
+        linkedTo: { name: 'Brigade Property', type: 'property' },
+        thumbnail: 'https://res.cloudinary.com/dvic0tda9/image/upload/v1721950485/floorplan_a6g9yq.png',
+        tags: ['Floor Plan', '3BHK'],
+        sharedWith: [
+            { name: 'Priya Sharma', avatarId: 'avatar-priya', role: 'Editor'},
+        ],
+        versions: [
+            { version: 1, date: 'Oct 16, 11:20 AM', user: 'Rajesh Kumar' },
+        ]
+    },
+    { 
+        id: '3', name: 'Sale-Agreement-Draft.docx', type: 'DOCX', size: '245 KB', modified: '3 days ago', 
+        uploadedBy: { name: 'Amit Patel', avatarId: 'avatar-amit' }, 
+        linkedTo: { name: 'Whitefield Deal', type: 'deal' },
+        thumbnail: 'https://res.cloudinary.com/dvic0tda9/image/upload/v1721949573/doc_p9qjng.png',
+        tags: ['Legal', 'Draft', 'Agreement'],
+         sharedWith: [
+            { name: 'Priya Sharma', avatarId: 'avatar-priya', role: 'Viewer'},
+            { name: 'Legal Team', avatarId: 'bot-avatar', role: 'Editor'},
+        ],
+        versions: [
+            { version: 1, date: 'Oct 14, 9:00 AM', user: 'Amit Patel' },
+        ]
+    },
+    { 
+        id: '4', name: 'KYC-Aadhar-Rajesh.pdf', type: 'PDF', size: '890 KB', modified: '1 week ago', 
+        uploadedBy: { name: 'Kavya Reddy', avatarId: 'avatar-2' }, 
+        linkedTo: { name: 'Rajesh Kumar Lead', type: 'lead' },
+        thumbnail: 'https://res.cloudinary.com/dvic0tda9/image/upload/v1721949573/pdf_i2yvte.png',
+        tags: ['KYC', 'Aadhar'],
+        sharedWith: [],
+        versions: [
+            { version: 1, date: 'Oct 10, 3:00 PM', user: 'Kavya Reddy' },
+        ]
+    },
+     { 
+        id: '5', name: 'Property-Comparison.xlsx', type: 'XLSX', size: '456 KB', modified: '2 weeks ago', 
+        uploadedBy: { name: 'Neha Gupta', avatarId: 'avatar-sunita' }, 
+        linkedTo: { name: 'Multiple', type: 'general' },
+        thumbnail: 'https://res.cloudinary.com/dvic0tda9/image/upload/v1721949573/xls_y2n5d6.png',
+        tags: ['Analysis', 'Comparison', 'Q4'],
+        sharedWith: [],
+        versions: [
+            { version: 1, date: 'Oct 3, 5:00 PM', user: 'Neha Gupta' },
+        ]
+    }
 ];
 
 export const properties = [
