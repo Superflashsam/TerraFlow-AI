@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   FileText,
   Image,
@@ -59,6 +59,11 @@ export const DocumentCard = ({
 }: DocumentCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isStarred, setIsStarred] = useState(document.starred);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
   
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id: document.id,
@@ -69,12 +74,13 @@ export const DocumentCard = ({
     transform: CSS.Translate.toString(transform),
   };
 
+  const dndProps = isMounted ? { ...listeners, ...attributes } : {};
+
   return (
     <div
       ref={setNodeRef}
       style={style}
-      {...listeners}
-      {...attributes}
+      {...dndProps}
       className="relative bg-card border border-border rounded-lg p-4 hover:border-primary/50 transition-all cursor-pointer group touch-none"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}

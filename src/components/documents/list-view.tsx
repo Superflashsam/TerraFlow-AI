@@ -1,6 +1,7 @@
 
 "use client";
 
+import React from 'react';
 import { Download, Share2, Star, MoreVertical, Link2 } from "lucide-react";
 import type { Document } from "@/app/documents/page";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
