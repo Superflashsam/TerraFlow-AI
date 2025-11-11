@@ -1,7 +1,7 @@
 
 "use client";
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Download, Share2, Star, MoreVertical, Link2 } from "lucide-react";
 import type { Document } from "@/app/documents/page";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -28,7 +28,7 @@ interface DocumentListProps {
   documents: Document[];
   onDocumentSelect: (doc: Document) => void;
   selectedDocumentIds: string[];
-  onCheckboxToggle: (docId: string) => void;
+  onCheckboxToggle: (docId: string | string[]) => void;
 }
 
 const getTypeColor = (type: string) => {
