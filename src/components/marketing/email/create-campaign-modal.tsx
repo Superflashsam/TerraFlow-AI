@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState, useRef } from 'react';
@@ -8,13 +7,13 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Check, ChevronLeft, ChevronRight, Mail, Users, HardDrive, Share2, Move, ImageIcon, Type, Divide, AppWindow, Smartphone, Sun, Moon, Eye, Send, Code, Rows, Plus, GripVertical, Trash2, Sparkles } from 'lucide-react';
+import { Check, ChevronLeft, ChevronRight, Mail, Users, HardDrive, Share2, Move, ImageIcon, Type, Divide, AppWindow, Smartphone, Sun, Moon, Eye, Send, Code, Rows, Plus, GripVertical, Trash2, Sparkles, Calendar, Clock, Bot } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Slider } from '@/components/ui/slider';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHeader, TableHead, TableRow } from '@/components/ui/table';
 import { Textarea } from '@/components/ui/textarea';
-import { generatePropertyDescription } from '@/ai/flows/generate-property-description'; // We'll adapt this for email generation
+import { generatePropertyDescription } from '@/ai/flows/generate-property-description';
 import { useToast } from '@/hooks/use-toast';
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -39,7 +38,7 @@ export const CreateCampaignModal = ({ isOpen, onClose }: { isOpen: boolean, onCl
             case 1: return <Step1 />;
             case 2: return <Step2 />;
             case 3: return <Step3 />;
-            case 4: return <div className="text-center py-8 text-muted-foreground">Review and scheduling options coming soon.</div>;
+            case 4: return <Step4 />;
             default: return null;
         }
     }
@@ -243,17 +242,6 @@ const Step2 = () => {
         </div>
     );
 };
-
-const DraggableComponent = ({ type, icon: Icon, label, onDragStart }: any) => (
-    <div
-        draggable
-        onDragStart={onDragStart}
-        className="flex flex-col items-center p-2 rounded-md bg-muted hover:bg-muted/80 cursor-grab"
-    >
-        <Icon className="h-6 w-6 mb-1 text-muted-foreground" />
-        <span className="text-xs font-medium text-foreground">{label}</span>
-    </div>
-);
 
 const DroppedComponent = ({ item, index, moveComponent, removeComponent }: any) => {
     const ref = useRef<HTMLDivElement>(null);
@@ -490,7 +478,7 @@ const Step3 = () => {
             {showFullPreview && (
                 <Dialog open onOpenChange={() => setShowFullPreview(false)}>
                     <DialogContent className="max-w-4xl p-0 border-0 bg-transparent">
-                         <DialogHeader className="sr-only">
+                        <DialogHeader className="sr-only">
                           <DialogTitle>Email Preview: {subject}</DialogTitle>
                           <DialogDescription>A full-screen preview of the email.</DialogDescription>
                         </DialogHeader>
@@ -504,4 +492,82 @@ const Step3 = () => {
             )}
         </div>
     );
+};
+
+const Step4 = () => {
+    const [scheduleOption, setScheduleOption] = useState('now');
+
+    return (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* Left: Review */}
+            <div className="space-y-6">
+                <h3 className="text-lg font-semibold">Review Campaign</h3>
+                <Card>
+                    <CardHeader><CardTitle className="text-base">Campaign Details</CardTitle></CardHeader>
+                    <CardContent className="space-y-2 text-sm">
+                        <div className="flex justify-between"><span className="text-muted-foreground">Campaign Name:</span><span className="font-medium">Q4 Festive Offer</span></div>
+                        <div className="flex justify-between"><span className="text-muted-foreground">Goal:</span><span className="font-medium">Promotion</span></div>
+                    </CardContent>
+                </Card>
+                <Card>
+                    <CardHeader><CardTitle className="text-base">Audience</CardTitle></CardHeader>
+                    <CardContent className="space-y-2 text-sm">
+                        <div className="flex justify-between"><span className="text-muted-foreground">Segment:</span><span className="font-medium">Hot Leads (Pune)</span></div>
+                        <div className="flex justify-between"><span className="text-muted-foreground">Total Recipients:</span><span className="font-medium">892</span></div>
+                    </CardContent>
+                </Card>
+                 <Card>
+                    <CardHeader><CardTitle className="text-base">Email Details</CardTitle></CardHeader>
+                    <CardContent className="space-y-2 text-sm">
+                        <div className="flex justify-between"><span className="text-muted-foreground">Subject:</span><span className="font-medium">Exclusive NEO 3BHK Launch...</span></div>
+                        <div className="flex justify-between"><span className="text-muted-foreground">From:</span><span className="font-medium">TerraFlow Realty &lt;info@terraflow.ai&gt;</span></div>
+                    </CardContent>
+                </Card>
+            </div>
+
+            {/* Right: Scheduling */}
+            <div className="space-y-6">
+                <h3 className="text-lg font-semibold">Schedule & Send</h3>
+                 <Card>
+                    <CardHeader><CardTitle className="text-base">Sending Time</CardTitle></CardHeader>
+                    <CardContent>
+                        <RadioGroup value={scheduleOption} onValueChange={setScheduleOption} className="space-y-4">
+                            <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="now" id="now" />
+                                <Label htmlFor="now" className="font-normal flex items-center gap-2"><Send size={16}/>Send Immediately</Label>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="schedule" id="schedule" />
+                                <Label htmlFor="schedule" className="font-normal flex items-center gap-2"><Calendar size={16}/>Schedule for Later</Label>
+                            </div>
+                            {scheduleOption === 'schedule' && (
+                                <div className="pl-6 flex items-center gap-2">
+                                    <Input type="date" className="w-1/2"/>
+                                    <Input type="time" className="w-1/2"/>
+                                </div>
+                            )}
+                            <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="smart" id="smart" />
+                                <Label htmlFor="smart" className="font-normal flex items-center gap-2"><Bot size={16}/>Smart Send (AI-Optimized)</Label>
+                            </div>
+                            <p className="pl-6 text-xs text-muted-foreground">Terra AI will analyze each recipient's past behavior to send the email at the optimal time for engagement.</p>
+                        </RadioGroup>
+                    </CardContent>
+                </Card>
+                 <Card>
+                    <CardHeader><CardTitle className="text-base">Advanced Settings</CardTitle></CardHeader>
+                    <CardContent className="space-y-4">
+                       <div className="flex items-center space-x-2">
+                           <Checkbox id="frequency-cap" />
+                           <Label htmlFor="frequency-cap">Enable Frequency Capping</Label>
+                       </div>
+                       <div className="space-y-2">
+                           <Label>Max emails per lead per week</Label>
+                           <Input type="number" defaultValue="3" className="w-24" />
+                       </div>
+                    </CardContent>
+                </Card>
+            </div>
+        </div>
+    )
 };
