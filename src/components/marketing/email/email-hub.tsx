@@ -33,11 +33,7 @@ export const EmailMarketingHub = () => {
                     <DripSequencesTab />
                 </TabsContent>
                 <TabsContent value="templates" className="mt-4">
-                    <div className="text-center py-16">
-                        <LayoutTemplate size={48} className="mx-auto text-muted-foreground mb-4" />
-                        <h3 className="text-xl font-semibold">Email Templates</h3>
-                        <p className="text-muted-foreground">This feature is coming soon.</p>
-                    </div>
+                    <TemplatesTab />
                 </TabsContent>
                 <TabsContent value="analytics" className="mt-4">
                      <div className="text-center py-16">
