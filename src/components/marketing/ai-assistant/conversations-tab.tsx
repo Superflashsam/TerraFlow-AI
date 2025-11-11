@@ -1,15 +1,17 @@
+
 "use client";
 
 import React, { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
-import { Search, SlidersHorizontal, Check, Clock, X, MessageSquare, Bot, User } from 'lucide-react';
+import { Search, SlidersHorizontal, Check, Clock, X, MessageSquare, Bot, User, CheckCircle, Calendar, MessageCircleQuestion, Share } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
+import { cn } from '@/lib/utils';
 
 const mockConversations = [
   {
@@ -44,11 +46,28 @@ const mockConversations = [
     lastMessage: "Terra: Just following up, were you still interested in learning more about the properties in Bandra?",
     time: "1 hour ago",
     channel: "SMS"
+  },
+  {
+    id: 4,
+    name: "Sunita Reddy",
+    avatar: "https://i.pravatar.cc/150?u=sunita",
+    status: "Scheduled",
+    sentiment: "Positive",
+    score: 88,
+    lastMessage: "You: Confirmed for Saturday at 11 AM. See you then!",
+    time: "3 hours ago",
+    channel: "WhatsApp"
   }
 ];
 
 const mockSelectedConversation = {
     ...mockConversations[0],
+    phone: "+91 98765 43210",
+    email: "rajesh.kumar@example.com",
+    stage: "Qualified",
+    propertyInterest: "3BHK in Whitefield",
+    budget: "₹80L-1Cr",
+    timeline: "Immediate",
     history: [
         { sender: 'lead', text: "Hi, I'm interested in the 3BHK in Whitefield." },
         { sender: 'ai', text: "Hello Rajesh! It's a great choice. It has a fantastic view and is close to the metro. What's your budget like?" },
@@ -69,13 +88,19 @@ const mockSelectedConversation = {
 };
 
 const StatusBadge = ({ status }: { status: string }) => {
-    const colors: { [key: string]: string } = {
-        Active: 'bg-green-100 text-green-800',
-        Qualified: 'bg-blue-100 text-blue-800',
-        Scheduled: 'bg-purple-100 text-purple-800',
-        Unresponsive: 'bg-gray-100 text-gray-800',
-    };
-    return <Badge variant="outline" className={`border-0 ${colors[status]}`}>{status}</Badge>;
+    const config = {
+      Active: { color: 'bg-green-100 text-green-800', dot: 'bg-green-500 animate-pulse', icon: MessageSquare },
+      Qualified: { color: 'bg-blue-100 text-blue-800', dot: 'bg-blue-500', icon: CheckCircle },
+      Scheduled: { color: 'bg-purple-100 text-purple-800', dot: 'bg-purple-500', icon: Calendar },
+      Unresponsive: { color: 'bg-gray-100 text-gray-800', dot: 'bg-gray-500', icon: Clock },
+    }[status] || { color: 'bg-gray-100 text-gray-800', dot: 'bg-gray-500', icon: MessageCircleQuestion };
+  
+    return (
+      <Badge variant="outline" className={`border-0 ${config.color} flex items-center gap-1.5`}>
+        <div className={`w-2 h-2 rounded-full ${config.dot}`}></div>
+        {status}
+      </Badge>
+    );
 };
 
 const SentimentEmoji = ({ sentiment }: { sentiment: string }) => {
@@ -91,7 +116,7 @@ export const ConversationsTab = () => {
     return (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[calc(100vh-20rem)]">
             {/* Left: Conversation List */}
-            <div className="lg:col-span-1 flex flex-col h-full">
+            <div className="lg:col-span-1 flex flex-col h-full bg-card border rounded-lg">
                 <div className="p-4 border-b">
                     <div className="relative">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -139,49 +164,66 @@ export const ConversationsTab = () => {
                                     <p className="text-xs text-muted-foreground">{mockSelectedConversation.channel}</p>
                                 </div>
                             </div>
-                            <Button variant="outline" size="sm" onClick={() => setSelectedConvoId(null)}>Close</Button>
+                             <div className="flex items-center gap-2">
+                                <Button variant="outline">Schedule Follow-up</Button>
+                                <Button>Take Over</Button>
+                                <Button variant="ghost" size="icon" onClick={() => setSelectedConvoId(null)}><X className="h-4 w-4"/></Button>
+                            </div>
                         </div>
                         <div className="flex-1 grid grid-cols-3 overflow-hidden">
-                            <ScrollArea className="col-span-2 border-r">
-                                <div className="p-6 space-y-6">
-                                    {mockSelectedConversation.history.map((msg, index) => (
-                                        <div key={index} className={`flex items-end gap-3 ${msg.sender === 'ai' ? '' : 'justify-end'}`}>
-                                            {msg.sender === 'ai' && <Avatar className="h-8 w-8"><Bot/></Avatar>}
-                                            {msg.sender === 'system' ? (
-                                                <p className="text-xs text-muted-foreground text-center w-full py-2">-- {msg.text} --</p>
-                                            ) : (
-                                                <div className={`rounded-lg p-3 max-w-md shadow-sm text-sm ${msg.sender === 'ai' ? 'bg-muted' : 'bg-primary text-primary-foreground'}`}>
-                                                    <p>{msg.text}</p>
-                                                </div>
-                                            )}
-                                            {msg.sender === 'lead' && <Avatar className="h-8 w-8"><User/></Avatar>}
-                                        </div>
-                                    ))}
+                             <div className="col-span-2 border-r flex flex-col">
+                                <ScrollArea className="flex-1">
+                                    <div className="p-6 space-y-6">
+                                        {mockSelectedConversation.history.map((msg, index) => (
+                                            <div key={index} className={cn("flex items-end gap-3", {'justify-end': msg.sender === 'lead'})}>
+                                                {msg.sender === 'ai' && <Avatar className="h-8 w-8 border"><AvatarFallback><Bot/></AvatarFallback></Avatar>}
+                                                {msg.sender === 'system' ? (
+                                                    <p className="text-xs text-muted-foreground text-center w-full py-2">-- {msg.text} --</p>
+                                                ) : (
+                                                    <div className={cn("rounded-lg p-3 max-w-md shadow-sm text-sm", {
+                                                        'bg-muted': msg.sender === 'ai',
+                                                        'bg-primary text-primary-foreground': msg.sender === 'lead'
+                                                    })}>
+                                                        <p>{msg.text}</p>
+                                                    </div>
+                                                )}
+                                                {msg.sender === 'lead' && <Avatar className="h-8 w-8"><AvatarImage src={mockSelectedConversation.avatar} /><AvatarFallback><User/></AvatarFallback></Avatar>}
+                                            </div>
+                                        ))}
+                                    </div>
+                                </ScrollArea>
+                                <div className="p-4 border-t">
+                                     <Input placeholder="Type a message to take over..."/>
+                                </div>
+                             </div>
+                            <ScrollArea className="col-span-1">
+                                <div className="p-4 space-y-4">
+                                    <Card>
+                                        <CardContent className="p-4 space-y-2">
+                                             <h4 className="font-semibold text-sm">Lead Snapshot</h4>
+                                            <div className="text-xs space-y-1 text-muted-foreground">
+                                                <p><strong>Score:</strong> {mockSelectedConversation.score}/100</p>
+                                                <p><strong>Stage:</strong> {mockSelectedConversation.stage}</p>
+                                                <p><strong>Interest:</strong> {mockSelectedConversation.propertyInterest}</p>
+                                                <p><strong>Budget:</strong> {mockSelectedConversation.budget}</p>
+                                                <p><strong>Timeline:</strong> {mockSelectedConversation.timeline}</p>
+                                            </div>
+                                            <Button variant="link" size="sm" className="p-0 h-auto">View Full Profile</Button>
+                                        </CardContent>
+                                    </Card>
+                                    <Card>
+                                        <CardContent className="p-4 space-y-2">
+                                            <h4 className="font-semibold text-sm">Terra's AI Insights</h4>
+                                            <div className="text-xs space-y-1 text-muted-foreground">
+                                                <p><strong>Intent:</strong> {mockSelectedConversation.insights.intent}</p>
+                                                <p><strong>Objections:</strong> {mockSelectedConversation.insights.objections}</p>
+                                                <p><strong>Recommendation:</strong> {mockSelectedConversation.insights.action}</p>
+                                                <p><strong>Conversion Chance:</strong> {mockSelectedConversation.insights.conversion}</p>
+                                            </div>
+                                        </CardContent>
+                                    </Card>
                                 </div>
                             </ScrollArea>
-                            <div className="col-span-1 p-4 space-y-4">
-                                <h4 className="font-semibold">Lead Snapshot</h4>
-                                <div className="text-sm space-y-1 text-muted-foreground">
-                                    <p><strong>Score:</strong> {mockSelectedConversation.score}/100</p>
-                                    <p><strong>Stage:</strong> {mockSelectedConversation.status}</p>
-                                    <p><strong>Interest:</strong> 3BHK in Whitefield</p>
-                                    <p><strong>Budget:</strong> ₹80L-1Cr</p>
-                                    <p><strong>Timeline:</strong> Immediate</p>
-                                </div>
-                                <Separator />
-                                <h4 className="font-semibold">Terra's AI Insights</h4>
-                                <div className="text-sm space-y-1 text-muted-foreground">
-                                    <p><strong>Intent:</strong> {mockSelectedConversation.insights.intent}</p>
-                                    <p><strong>Objections:</strong> {mockSelectedConversation.insights.objections}</p>
-                                    <p><strong>Recommendation:</strong> {mockSelectedConversation.insights.action}</p>
-                                    <p><strong>Conversion Chance:</strong> {mockSelectedConversation.insights.conversion}</p>
-                                </div>
-                                <Separator />
-                                <div className="space-y-2">
-                                     <Button className="w-full">Take Over Conversation</Button>
-                                     <Button variant="outline" className="w-full">View Lead Profile</Button>
-                                </div>
-                            </div>
                         </div>
                     </>
                 ) : (
