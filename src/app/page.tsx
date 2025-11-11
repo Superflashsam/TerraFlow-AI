@@ -163,97 +163,93 @@ const Dashboard = () => {
     });
   };
 
-  if (typeof window !== 'undefined') {
-    return (
-      <>
-        <div className="flex flex-col gap-8">
-          <PageHeader
-            title="Welcome back, Sarah! 👋"
-            description={currentTime ? formatDateTime(currentTime) : "Loading..."}
-          >
-            <div className="flex items-center space-x-2">
-              {quickActions.map((action) => (
-                <Button key={action.id} onClick={action.onClick} variant={action.color as any} size="sm">
-                  <action.icon className="mr-2 h-4 w-4" />
-                  {action.title}
-                </Button>
-              ))}
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="sm">
-                    <MoreHorizontal className="h-4 w-4" />
-                    <span className="ml-2">More Actions</span>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuLabel>Quick Actions</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  {moreActions.map((action) => (
-                    <DropdownMenuItem key={action.id} onClick={action.onClick}>
-                      <action.icon className="mr-2 h-4 w-4" />
-                      <span>{action.title}</span>
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-          </PageHeader>
-  
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {kpiData.map((kpi, index) => (
-              <Link href={kpi.href} key={index}>
-                <KPICard
-                  title={kpi.title}
-                  value={kpi.value}
-                  change={kpi.change}
-                  changeType={kpi.changeType}
-                  icon={kpi.icon}
-                  color={kpi.color}
-                />
-              </Link>
+  return (
+    <>
+      <div className="flex flex-col gap-8">
+        <PageHeader
+          title="Welcome back, Sarah! 👋"
+          description={currentTime ? formatDateTime(currentTime) : "Loading..."}
+        >
+          <div className="flex items-center space-x-2">
+            {quickActions.map((action) => (
+              <Button key={action.id} onClick={action.onClick} variant={action.color as any} size="sm">
+                <action.icon className="mr-2 h-4 w-4" />
+                {action.title}
+              </Button>
             ))}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm">
+                  <MoreHorizontal className="h-4 w-4" />
+                  <span className="ml-2">More Actions</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuLabel>Quick Actions</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                {moreActions.map((action) => (
+                  <DropdownMenuItem key={action.id} onClick={action.onClick}>
+                    <action.icon className="mr-2 h-4 w-4" />
+                    <span>{action.title}</span>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
-  
-          <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
-            <div className="xl:col-span-2">
-              <ActivityFeed />
-            </div>
-  
-            <div className="xl:col-span-1">
-              <QuickAccessWidget />
-            </div>
+        </PageHeader>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {kpiData.map((kpi, index) => (
+            <Link href={kpi.href} key={index}>
+              <KPICard
+                title={kpi.title}
+                value={kpi.value}
+                change={kpi.change}
+                changeType={kpi.changeType}
+                icon={kpi.icon}
+                color={kpi.color}
+              />
+            </Link>
+          ))}
+        </div>
+
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
+          <div className="xl:col-span-2">
+            <ActivityFeed />
           </div>
-  
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2">
-              <PerformanceChart />
-            </div>
-            <div className="lg:col-span-1 flex flex-col gap-8">
-              <MarketIntelligenceCard />
-            </div>
-          </div>
-          <div className="grid grid-cols-1 gap-8">
-              <TerraAiSuggestions />
+
+          <div className="xl:col-span-1">
+            <QuickAccessWidget />
           </div>
         </div>
-  
-        <AddLeadModal
-          isOpen={isAddLeadModalOpen}
-          onClose={() => setIsAddLeadModalOpen(false)}
-          onAddLead={handleAddNewLead}
-        />
-  
-        <AddPropertyModal
-          isOpen={isAddPropertyModalOpen}
-          onClose={() => setIsAddPropertyModalOpen(false)}
-          onSubmit={handleAddProperty}
-          property={null}
-        />
-      </>
-    );
-  }
 
-  return null;
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-2">
+            <PerformanceChart />
+          </div>
+          <div className="lg:col-span-1 flex flex-col gap-8">
+            <MarketIntelligenceCard />
+          </div>
+        </div>
+        <div className="grid grid-cols-1 gap-8">
+            <TerraAiSuggestions />
+        </div>
+      </div>
+
+      <AddLeadModal
+        isOpen={isAddLeadModalOpen}
+        onClose={() => setIsAddLeadModalOpen(false)}
+        onAddLead={handleAddNewLead}
+      />
+
+      <AddPropertyModal
+        isOpen={isAddPropertyModalOpen}
+        onClose={() => setIsAddPropertyModalOpen(false)}
+        onSubmit={handleAddProperty}
+        property={null}
+      />
+    </>
+  );
 };
 
 export default Dashboard;
