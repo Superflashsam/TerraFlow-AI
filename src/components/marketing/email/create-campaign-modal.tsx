@@ -16,7 +16,6 @@ import { Slider } from '@/components/ui/slider';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHeader, TableHead, TableRow } from '@/components/ui/table';
 import { Textarea } from '@/components/ui/textarea';
-import { cn } from "@/lib/utils"
 
 
 const steps = [
@@ -36,7 +35,7 @@ export const CreateCampaignModal = ({ isOpen, onClose }: { isOpen: boolean, onCl
         switch(currentStep) {
             case 1: return <Step1 />;
             case 2: return <Step2 />;
-            case 3: return <DndProvider backend={HTML5Backend}><Step3 /></DndProvider>;
+            case 3: return <Step3 />;
             case 4: return <div className="text-center py-8 text-muted-foreground">Review and scheduling options coming soon.</div>;
             default: return null;
         }
@@ -44,7 +43,7 @@ export const CreateCampaignModal = ({ isOpen, onClose }: { isOpen: boolean, onCl
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent className="max-w-7xl h-[95vh] flex flex-col">
+            <DialogContent className="max-w-4xl max-h-[90vh] flex flex-col">
                 <DialogHeader>
                     <DialogTitle className="flex items-center gap-2"><Mail /> Create Email Campaign</DialogTitle>
                     <DialogDescription>Step {currentStep} of {steps.length}: {steps[currentStep-1].title}</DialogDescription>
@@ -137,7 +136,7 @@ const Step2 = () => {
     ];
     return (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <div className="space-y-6">
+             <div className="space-y-6">
                 <Card>
                     <CardHeader>
                         <CardTitle className="text-base">Lead Attributes</CardTitle>
@@ -160,6 +159,14 @@ const Step2 = () => {
                                     </div>
                                 ))}
                             </div>
+                        </div>
+                         <div className="space-y-2">
+                            <Label>Property Interest</Label>
+                            <Input placeholder="e.g. 3BHK, Villa" />
+                        </div>
+                        <div className="space-y-2">
+                            <Label>Location</Label>
+                            <Input placeholder="e.g. Whitefield, KR Puram" />
                         </div>
                     </CardContent>
                 </Card>
@@ -192,7 +199,7 @@ const Step2 = () => {
             </div>
 
             <div className="space-y-4">
-                <Card className="bg-muted/50">
+                 <Card className="bg-muted/50">
                     <CardHeader className="flex-row items-center justify-between">
                         <CardTitle className="text-base">Audience Preview</CardTitle>
                         <div className="flex items-center gap-2">
@@ -231,216 +238,57 @@ const Step2 = () => {
     );
 };
 
-const ItemTypes = {
-  COMPONENT: 'component',
-};
-
-const DraggableComponent = ({ item }: { item: { name: string; icon: React.ElementType } }) => {
-  const [{ isDragging }, drag] = useDrag(() => ({
-    type: ItemTypes.COMPONENT,
-    item: { type: item.name },
-    collect: (monitor) => ({
-      isDragging: !!monitor.isDragging(),
-    }),
-  }));
-
-  const Icon = item.icon;
-  return (
-    <div
-      ref={drag}
-      className="flex items-center p-2 rounded-md bg-background border hover:bg-accent cursor-grab"
-      style={{ opacity: isDragging ? 0.5 : 1 }}
-    >
-      <Icon className="w-4 h-4 mr-2 text-muted-foreground" />
-      <span className="text-sm">{item.name}</span>
-    </div>
-  );
-};
-
-const DroppedComponent = ({ item, index, moveComponent, removeComponent }: { item: any, index: number, moveComponent: any, removeComponent: any }) => {
-    const ref = React.useRef<HTMLDivElement>(null);
-
-    const [, drop] = useDrop({
-        accept: ItemTypes.COMPONENT,
-        hover(draggedItem: { index: number }, monitor) {
-            if (!ref.current) return;
-            const dragIndex = draggedItem.index;
-            const hoverIndex = index;
-            if (dragIndex === hoverIndex) return;
-            
-            const hoverBoundingRect = ref.current?.getBoundingClientRect();
-            const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
-            const clientOffset = monitor.getClientOffset();
-            const hoverClientY = clientOffset!.y - hoverBoundingRect.top;
-
-            if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) return;
-            if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) return;
-
-            moveComponent(dragIndex, hoverIndex);
-            draggedItem.index = hoverIndex;
-        },
-    });
-
-     const [{ isDragging }, drag] = useDrag({
-        type: ItemTypes.COMPONENT,
-        item: { type: item.type, index },
-        collect: (monitor) => ({
-            isDragging: monitor.isDragging(),
-        }),
-    });
-    
-    drag(drop(ref));
-
-    const renderContent = () => {
-        switch (item.type) {
-            case 'Text': return <p className="text-sm text-gray-600 dark:text-gray-400">This is a sample text block. You can edit this content.</p>;
-            case 'Image': return <img src="https://picsum.photos/seed/mail/500/200" alt="placeholder" className="rounded-md" />;
-            case 'Button': return <Button className="w-full">Call to Action</Button>;
-            default: return <div>{item.type}</div>;
-        }
-    };
-    
-    return (
-        <div ref={ref} style={{ opacity: isDragging ? 0 : 1 }} className="relative group p-2 border border-dashed border-transparent hover:border-primary rounded-md">
-            <div className="absolute top-2 right-2 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => removeComponent(index)}>
-                    <Trash2 className="h-4 w-4 text-destructive"/>
-                </Button>
-                 <Button variant="ghost" size="icon" className="h-6 w-6 cursor-move">
-                    <GripVertical className="h-4 w-4"/>
-                </Button>
-            </div>
-            {renderContent()}
-        </div>
-    )
-}
-
 const Step3 = () => {
-    const [view, setView] = useState('desktop');
-    const [emailContent, setEmailContent] = useState<{ id: number; type: string }[]>([]);
-
-    const [, drop] = useDrop(() => ({
-        accept: ItemTypes.COMPONENT,
-        drop: (item: { type: string }, monitor) => {
-            if (monitor.didDrop()) return;
-            addComponent(item.type);
-        },
-    }));
-
-    const addComponent = (type: string) => {
-        setEmailContent(prev => [...prev, { id: Date.now(), type }]);
-    };
-    
-    const removeComponent = (index: number) => {
-        setEmailContent(prev => prev.filter((_, i) => i !== index));
-    }
-    
-    const moveComponent = (dragIndex: number, hoverIndex: number) => {
-        const draggedItem = emailContent[dragIndex];
-        setEmailContent(prev => {
-            const newContent = [...prev];
-            newContent.splice(dragIndex, 1);
-            newContent.splice(hoverIndex, 0, draggedItem);
-            return newContent;
-        })
-    }
-
-    const builderComponents = [
-        { name: 'Text', icon: Type },
-        { name: 'Image', icon: ImageIcon },
-        { name: 'Button', icon: AppWindow },
-        { name: 'Divider', icon: Divide },
-        { name: 'Socials', icon: Share2 },
-        { name: 'Property Card', icon: HardDrive },
-        { name: 'Spacer', icon: Rows },
-    ];
-
     return (
-        <div className="space-y-4">
-            <div className="space-y-2">
-                <Label htmlFor="template-selector">Start with a template</Label>
-                <Select>
-                    <SelectTrigger id="template-selector">
-                        <SelectValue placeholder="Select a template" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="blank">Blank Canvas</SelectItem>
-                        <SelectItem value="showcase">Property Showcase</SelectItem>
-                        <SelectItem value="newsletter">Newsletter</SelectItem>
-                        <SelectItem value="promotional">Promotional Offer</SelectItem>
-                    </SelectContent>
-                </Select>
-            </div>
-            <div className="flex gap-6 h-[65vh]">
-                {/* Components Sidebar */}
-                <div className="w-56 bg-muted/50 p-4 rounded-lg flex-shrink-0">
-                    <h4 className="font-semibold mb-4 text-sm">Components</h4>
-                    <div className="space-y-2">
-                        {builderComponents.map(comp => (
-                            <DraggableComponent key={comp.name} item={comp} />
-                        ))}
-                    </div>
-                </div>
-
-                {/* Email Canvas */}
-                <div className="flex-1 flex flex-col gap-4">
-                    <Card>
-                        <CardContent className="p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div className="space-y-2">
-                                <Label>Subject Line</Label>
-                                <Input placeholder="Your amazing email subject" />
-                            </div>
-                            <div className="space-y-2">
-                                <Label>Preview Text</Label>
-                                <Input placeholder="A catchy preview to grab attention" />
-                            </div>
-                        </CardContent>
-                    </Card>
-                    <Card className="flex-1">
-                        <CardContent ref={drop} className="p-4 bg-gray-100 dark:bg-gray-900 h-full overflow-y-auto">
-                            <div className="bg-white dark:bg-black p-6 mx-auto max-w-2xl shadow-lg space-y-4">
-                                {emailContent.length === 0 ? (
-                                    <div className="border-2 border-dashed border-border rounded-lg p-8 text-center text-muted-foreground">
-                                        Drag components here
-                                    </div>
-                                ) : (
-                                    emailContent.filter(item => item).map((item, index) => (
-                                        <DroppedComponent key={item.id} item={item} index={index} moveComponent={moveComponent} removeComponent={removeComponent} />
-                                    ))
-                                )}
-                            </div>
-                        </CardContent>
-                    </Card>
-                </div>
-
-                {/* Preview & Settings Sidebar */}
-                <div className="w-80 bg-muted/50 p-4 rounded-lg flex-shrink-0 flex flex-col">
-                    <h4 className="font-semibold mb-4 text-sm">Preview</h4>
-                    <div className="flex items-center justify-center gap-2 mb-4 bg-background p-1 rounded-md">
-                        <Button size="sm" variant={view === 'desktop' ? 'secondary' : 'ghost'} onClick={() => setView('desktop')}><AppWindow className="h-4 w-4" /></Button>
-                        <Button size="sm" variant={view === 'mobile' ? 'secondary' : 'ghost'} onClick={() => setView('mobile')}><Smartphone className="h-4 w-4" /></Button>
-                        <Button size="sm" variant={view === 'dark' ? 'secondary' : 'ghost'} onClick={() => setView('dark')}><Moon className="h-4 w-4" /></Button>
-                    </div>
-                    <div className="flex-1 border rounded-lg p-2 bg-background overflow-hidden">
-                        <div className={cn("mx-auto transition-all", view === 'mobile' ? 'max-w-[320px] h-full' : 'w-full h-full')}>
-                             <div className={cn("w-full h-full overflow-y-auto rounded-md p-4", view === 'dark' ? 'bg-gray-900 text-white' : 'bg-white text-black')}>
-                                {emailContent.filter(item => item).map((item, index) => {
-                                    switch (item.type) {
-                                        case 'Text': return <p key={index} className="text-sm">This is a sample text block.</p>;
-                                        case 'Image': return <img key={index} src="https://picsum.photos/seed/mail/500/200" alt="placeholder" className="rounded-md my-2" />;
-                                        case 'Button': return <Button key={index} className="my-2">Call to Action</Button>;
-                                        default: return <div key={index}>{item.type}</div>;
-                                    }
-                                })}
-                                 {emailContent.length === 0 && <p className="text-xs text-center text-muted-foreground">Live email preview</p>}
-                            </div>
-                        </div>
-                    </div>
-                    <div className="mt-4">
-                        <Button variant="outline" className="w-full"><Send className="mr-2 h-4 w-4" /> Send Test Email</Button>
-                    </div>
-                </div>
-            </div>
+      <div className="max-w-2xl mx-auto space-y-6">
+        <div className="space-y-2">
+          <Label htmlFor="template-selector">Email Template</Label>
+          <Select defaultValue="showcase">
+            <SelectTrigger id="template-selector">
+              <SelectValue placeholder="Select a template" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="blank">Blank Canvas</SelectItem>
+              <SelectItem value="showcase">Property Showcase</SelectItem>
+              <SelectItem value="newsletter">Newsletter</SelectItem>
+              <SelectItem value="promotional">Promotional Offer</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
+  
+        <div className="space-y-2">
+          <Label htmlFor="subject-line">Subject Line</Label>
+          <Input id="subject-line" placeholder="Exclusive NEO 3PHK launch in white field." />
+        </div>
+  
+        <div className="space-y-2">
+          <Label htmlFor="preview-text">Preview Text</Label>
+          <Input id="preview-text" placeholder="How are you feeling? Can you please go and go and" />
+        </div>
+  
+        <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label htmlFor="from-name">From Name</Label>
+            <Input id="from-name" placeholder="TerraFlow reality." />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="from-email">From Email</Label>
+            <Input id="from-email" placeholder="Or reply at Trae.ai." />
+          </div>
+        </div>
+  
+        <div className="space-y-2">
+          <Label htmlFor="email-content">Email Content</Label>
+          <Textarea
+            id="email-content"
+            rows={10}
+            placeholder="Write your email content here... Use {{first_name}}, {{property_name}}, etc. for personalization"
+          />
+          <p className="text-xs text-muted-foreground">
+            Tip: Use double curly braces for dynamic content like &#123;&#123;first_name&#125;&#125; or &#123;&#123;property_name&#125;&#125;
+          </p>
+        </div>
+      </div>
     );
 };
+
