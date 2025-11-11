@@ -8,6 +8,7 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ConversationsTab } from './conversations-tab';
+import { InsightsTab } from './insights-tab';
 
 const kpiData = [
     { title: "Total Conversations", value: "3,847", change: "+42%", icon: MessageCircle },
@@ -88,7 +89,7 @@ export const AiAssistantHub = () => {
                     <ConversationsTab />
                 </TabsContent>
                 <TabsContent value="insights" className="mt-4">
-                    <p>Insights tab content coming soon.</p>
+                    <InsightsTab />
                 </TabsContent>
                 <TabsContent value="scheduling" className="mt-4">
                     <p>Scheduling tab content coming soon.</p>
