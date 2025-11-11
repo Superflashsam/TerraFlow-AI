@@ -7,6 +7,7 @@ import { PlusCircle, MoreVertical, Edit, Copy, BarChart, Trash2, List, LayoutGri
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { CreateCampaignModal } from './create-campaign-modal';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 
 const mockCampaigns = [
   {
@@ -104,7 +105,31 @@ export const CampaignsTab = () => {
                                 <h3 className="font-semibold text-lg">{campaign.name}</h3>
                                 <div className="flex items-center gap-2">
                                   <StatusBadge status={campaign.status} />
-                                  <MoreVertical className="text-muted-foreground cursor-pointer" />
+                                  <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                      <Button variant="ghost" size="icon" className="h-8 w-8">
+                                        <MoreVertical className="text-muted-foreground" />
+                                      </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent align="end">
+                                      <DropdownMenuItem>
+                                        <Edit className="mr-2 h-4 w-4" />
+                                        Edit
+                                      </DropdownMenuItem>
+                                      <DropdownMenuItem>
+                                        <Copy className="mr-2 h-4 w-4" />
+                                        Duplicate
+                                      </DropdownMenuItem>
+                                      <DropdownMenuItem>
+                                        <BarChart className="mr-2 h-4 w-4" />
+                                        View Report
+                                      </DropdownMenuItem>
+                                      <DropdownMenuItem className="text-destructive">
+                                        <Trash2 className="mr-2 h-4 w-4" />
+                                        Delete
+                                      </DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                  </DropdownMenu>
                                 </div>
                            </div>
                            <div className="text-sm text-muted-foreground space-y-1 mb-4">
