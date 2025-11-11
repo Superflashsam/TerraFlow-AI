@@ -23,6 +23,7 @@ import {
   Search,
   LayoutGrid,
   List,
+  Plus,
 } from "lucide-react";
 import { TaskColumn } from "@/components/tasks/TaskColumn";
 import { CalendarView } from "@/components/tasks/CalendarView";
@@ -194,7 +195,7 @@ export default function TasksPage() {
 
   return (
     <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-      <div className="flex flex-col h-full bg-task-charcoal text-task-text-primary">
+      <div className="flex flex-col h-full bg-background text-foreground">
         <div className="p-6 flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-foreground">Tasks</h1>
@@ -203,12 +204,11 @@ export default function TasksPage() {
             </p>
           </div>
           <div className="flex items-center gap-2">
-            <div className="flex items-center bg-task-surface p-1 rounded-lg">
+            <div className="flex items-center bg-muted p-1 rounded-lg">
                <Button
                 variant={viewMode === "board" ? "secondary" : "ghost"}
                 size="sm"
                 onClick={() => setViewMode("board")}
-                className={cn(viewMode === 'board' && 'bg-task-primary/20 text-task-primary')}
               >
                 <LayoutGrid className="mr-2 h-4 w-4" />
                 Board View
@@ -217,13 +217,13 @@ export default function TasksPage() {
                 variant={viewMode === "calendar" ? "secondary" : "ghost"}
                 size="sm"
                 onClick={() => setViewMode("calendar")}
-                className={cn(viewMode === 'calendar' && 'bg-task-primary/20 text-task-primary')}
               >
                 <Calendar className="mr-2 h-4 w-4" />
                 Calendar View
               </Button>
             </div>
-            <Button onClick={() => setIsAddPanelOpen(true)} className="bg-task-primary hover:bg-task-primary/90 text-white">
+            <Button onClick={() => setIsAddPanelOpen(true)}>
+              <Plus className="mr-2 h-4 w-4" />
               Add Task
             </Button>
           </div>

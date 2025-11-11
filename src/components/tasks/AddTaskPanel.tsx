@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -248,7 +249,7 @@ export const AddTaskPanel = ({ isOpen, onClose, onAdd }: AddTaskPanelProps) => {
             <Button
               onClick={handleSubmit}
               disabled={!title || !dueDate || !linkedName}
-              className="flex-1 bg-task-primary hover:bg-task-primary/90"
+              className="flex-1"
             >
               Create Task
             </Button>
