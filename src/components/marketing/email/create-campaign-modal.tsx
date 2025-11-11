@@ -11,12 +11,14 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Check, ChevronLeft, ChevronRight, Mail, Users, HardDrive, Share2, Move, ImageIcon, Type, Divide, AppWindow, Smartphone, Sun, Moon, Eye, Send, Code, Rows, Plus, GripVertical, Trash2, Sparkles } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Slider } from '@/components/ui/slider';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHeader, TableHead, TableRow } from '@/components/ui/table';
 import { Textarea } from '@/components/ui/textarea';
 import { generatePropertyDescription } from '@/ai/flows/generate-property-description'; // We'll adapt this for email generation
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
+import { DndProvider, useDrag, useDrop } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 
 const steps = [
     { id: 1, title: 'Campaign Setup' },
@@ -66,7 +68,9 @@ export const CreateCampaignModal = ({ isOpen, onClose }: { isOpen: boolean, onCl
                 </div>
 
                 <div className="p-6 flex-1 overflow-y-auto">
-                    <StepContent />
+                    <DndProvider backend={HTML5Backend}>
+                        <StepContent />
+                    </DndProvider>
                 </div>
 
                 <DialogFooter className="justify-between">
@@ -376,8 +380,8 @@ const Step3 = () => {
                                     Click a component to start building your email.
                                 </div>
                              ) : (
-                                emailContent.map((item, index) => (
-                                   item ? <DroppedComponent key={item.id} item={item} index={index} removeComponent={removeComponent} /> : null
+                                emailContent.filter(item => item).map((item, index) => (
+                                   <DroppedComponent key={item.id} item={item} index={index} removeComponent={removeComponent} />
                                 ))
                              )}
                         </div>
@@ -430,7 +434,7 @@ const Step3 = () => {
                              <div className={cn("w-full h-full overflow-y-auto rounded-md p-4", isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-black')}>
                                 <p className="text-xs text-gray-500">To: &#123;John Doe&#125;</p>
                                 <h3 className="text-lg font-bold border-b pb-2 mb-2">{subject}</h3>
-                                {emailContent.map((item, index) => renderPreviewContent(item, index))}
+                                {emailContent.filter(item => item).map((item, index) => renderPreviewContent(item, index))}
                              </div>
                         </div>
                     </CardContent>
@@ -446,7 +450,7 @@ const Step3 = () => {
                          <div className={cn("w-full h-full overflow-y-auto rounded-md p-8", isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-black')}>
                             <p className="text-sm text-gray-500">To: &#123;John Doe&#125;</p>
                             <h3 className="text-xl font-bold border-b pb-2 mb-4">{subject}</h3>
-                            {emailContent.map((item, index) => renderPreviewContent(item, index))}
+                            {emailContent.filter(item => item).map((item, index) => renderPreviewContent(item, index))}
                          </div>
                     </DialogContent>
                 </Dialog>
