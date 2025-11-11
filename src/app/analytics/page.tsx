@@ -10,9 +10,12 @@ import { KPICard } from "@/components/leads/analytics/kpi-card";
 import { ConversionFunnel } from "@/components/leads/analytics/conversion-funnel";
 import { LeadScoringChart } from "@/components/leads/analytics/lead-scoring-chart";
 import { TopSourcesRanking } from "@/components/leads/analytics/top-sources-ranking";
-import { TaskAnalytics } from "@/components/analytics/task-analytics";
 import { AgentLeaderboard } from "@/components/analytics/agent-leaderboard";
 import { LeadTrendChart } from "@/components/analytics/lead-trend-chart";
+import { PropertyPerformanceChart } from "@/components/analytics/property-performance-chart";
+import { ResponseTimeChart } from "@/components/analytics/response-time-chart";
+import { AiInsights } from "@/components/analytics/ai-insights";
+import { CustomReports } from "@/components/analytics/custom-reports";
 
 export default function AnalyticsPage() {
   const [filters, setFilters] = useState({});
@@ -89,6 +92,7 @@ export default function AnalyticsPage() {
                     />
                 ))}
             </div>
+             <AiInsights />
             <LeadTrendChart />
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div className="lg:col-span-2">
@@ -99,20 +103,24 @@ export default function AnalyticsPage() {
                     <TopSourcesRanking />
                 </div>
             </div>
+             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <PropertyPerformanceChart />
+                <ResponseTimeChart />
+            </div>
             <AgentLeaderboard />
-            <TaskAnalytics />
         </TabsContent>
-        <TabsContent value="agents" className="mt-4">
+        <TabsContent value="agents" className="mt-4 space-y-6">
            <AgentLeaderboard />
+           <ResponseTimeChart />
         </TabsContent>
-         <TabsContent value="properties" className="mt-4">
-            <p>Property analytics will be displayed here.</p>
+         <TabsContent value="properties" className="mt-4 space-y-6">
+            <PropertyPerformanceChart />
         </TabsContent>
          <TabsContent value="leads" className="mt-4">
             <p>Detailed lead analytics will be displayed here.</p>
         </TabsContent>
          <TabsContent value="custom" className="mt-4">
-            <p>Custom report builder and saved reports will be here.</p>
+            <CustomReports />
         </TabsContent>
       </Tabs>
     </div>
