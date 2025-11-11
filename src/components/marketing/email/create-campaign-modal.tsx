@@ -17,8 +17,6 @@ import { Textarea } from '@/components/ui/textarea';
 import { generatePropertyDescription } from '@/ai/flows/generate-property-description'; // We'll adapt this for email generation
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
-import { DndProvider, useDrag, useDrop } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
 
 const steps = [
     { id: 1, title: 'Campaign Setup' },
@@ -37,7 +35,7 @@ export const CreateCampaignModal = ({ isOpen, onClose }: { isOpen: boolean, onCl
         switch(currentStep) {
             case 1: return <Step1 />;
             case 2: return <Step2 />;
-            case 3: return <DndProvider backend={HTML5Backend}><Step3 /></DndProvider>;
+            case 3: return <Step3 />;
             case 4: return <div className="text-center py-8 text-muted-foreground">Review and scheduling options coming soon.</div>;
             default: return null;
         }
@@ -240,58 +238,7 @@ const Step2 = () => {
     );
 };
 
-const DraggableComponent = ({ type, icon: Icon, label, addComponent }: any) => {
-    const [{ isDragging }, drag] = useDrag(() => ({
-      type: 'component',
-      item: { type, defaultContent: `This is a new ${type} block.` },
-      collect: (monitor) => ({
-        isDragging: !!monitor.isDragging(),
-      }),
-    }));
-  
-    return (
-      <Button ref={drag} variant="outline" className="flex flex-col h-auto p-2" onClick={() => addComponent(type, `This is a new ${type} block.`)}>
-        <Icon className="h-6 w-6 mb-1" />
-        <span className="text-xs">{label}</span>
-      </Button>
-    );
-};
-
-const DroppedComponent = ({ item, index, moveComponent, removeComponent }: any) => {
-    const ref = useRef(null);
-    const [{ handlerId }, drop] = useDrop({
-      accept: 'component',
-      collect(monitor) {
-        return {
-          handlerId: monitor.getHandlerId(),
-        };
-      },
-      hover(draggedItem: any, monitor) {
-        if (!ref.current) return;
-        const dragIndex = draggedItem.index;
-        const hoverIndex = index;
-        if (dragIndex === hoverIndex) return;
-        const hoverBoundingRect = (ref.current as any)?.getBoundingClientRect();
-        const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
-        const clientOffset = monitor.getClientOffset();
-        const hoverClientY = clientOffset!.y - hoverBoundingRect.top;
-        if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) return;
-        if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) return;
-        moveComponent(dragIndex, hoverIndex);
-        draggedItem.index = hoverIndex;
-      },
-    });
-  
-    const [{ isDragging }, drag] = useDrag({
-      type: 'component',
-      item: () => ({ id: item.id, index }),
-      collect: (monitor) => ({
-        isDragging: monitor.isDragging(),
-      }),
-    });
-  
-    drag(drop(ref));
-
+const DroppedComponent = ({ item, index, removeComponent }: any) => {
     const renderContent = () => {
         switch(item.type) {
             case 'text': return <Textarea defaultValue={item.content} className="w-full" />;
@@ -304,9 +251,8 @@ const DroppedComponent = ({ item, index, moveComponent, removeComponent }: any) 
     }
   
     return (
-      <div ref={ref} data-handler-id={handlerId} className="relative bg-background p-2 rounded group" style={{ opacity: isDragging ? 0 : 1 }}>
+      <div className="relative bg-background p-2 rounded group">
         <div className="absolute top-1 right-1 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-            <Button variant="ghost" size="icon" className="h-6 w-6 cursor-move"><GripVertical size={14} /></Button>
             <Button variant="ghost" size="icon" className="h-6 w-6 text-destructive" onClick={() => removeComponent(index)}><Trash2 size={14} /></Button>
         </div>
         {renderContent()}
@@ -319,15 +265,19 @@ const Step3 = () => {
     const { toast } = useToast();
     const [emailContent, setEmailContent] = useState<any[]>([]);
     const [subject, setSubject] = useState("Exclusive NEO 3BHK Launch in Whitefield");
+    const [previewText, setPreviewText] = useState("Don't miss out on our exclusive pre-launch offer!");
+    const [fromName, setFromName] = useState("TerraFlow Realty");
+    const [fromEmail, setFromEmail] = useState("info@terraflow.ai");
     const [view, setView] = useState('desktop');
+    const [isDarkMode, setIsDarkMode] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [template, setTemplate] = useState('blank');
-    const [isDarkMode, setIsDarkMode] = useState(false);
+    const [showFullPreview, setShowFullPreview] = useState(false);
 
     const components = [
-        { id: 'text', type: 'text', icon: Type, label: 'Text', defaultContent: 'This is a new text block.' },
-        { id: 'image', type: 'image', icon: ImageIcon, label: 'Image', defaultContent: 'https://picsum.photos/600/300' },
-        { id: 'button', type: 'button', icon: AppWindow, label: 'Button', defaultContent: 'Click Me' },
+        { id: 'text', type: 'text', icon: Type, label: 'Text', defaultContent: 'This is a new text block. You can personalize it using {{first_name}}.' },
+        { id: 'image', type: 'image', icon: ImageIcon, label: 'Image', defaultContent: 'https://picsum.photos/seed/realestate/600/300' },
+        { id: 'button', type: 'button', icon: AppWindow, label: 'Button', defaultContent: 'View Property' },
         { id: 'divider', type: 'divider', icon: Divide, label: 'Divider' },
         { id: 'property', type: 'property', icon: Rows, label: 'Property Card' },
     ];
@@ -338,14 +288,6 @@ const Step3 = () => {
 
     const removeComponent = (index: number) => {
         setEmailContent(prev => prev.filter((_, i) => i !== index));
-    };
-
-    const moveComponent = (dragIndex: number, hoverIndex: number) => {
-        const dragItem = emailContent[dragIndex];
-        const newItems = [...emailContent];
-        newItems.splice(dragIndex, 1);
-        newItems.splice(hoverIndex, 0, dragItem);
-        setEmailContent(newItems);
     };
 
     const handleGenerate = async () => {
@@ -374,7 +316,7 @@ const Step3 = () => {
     
     const renderPreviewContent = (item: any, index: number) => {
         switch(item.type) {
-            case 'text': return <p key={index} className="text-sm my-2">{item.content.replace(/{{(.*?)}}/g, (match: string, p1: string) => `<span class="text-blue-500 font-medium">{${p1}}</span>`)}</p>;
+            case 'text': return <p key={index} className="text-sm my-2" dangerouslySetInnerHTML={{ __html: item.content.replace(/{{(.*?)}}/g, `<span class="text-blue-500 font-medium">{<!-- -->{{\$1}}<!-- -->}</span>`) }}></p>;
             case 'image': return <img key={index} src={item.content} alt="preview" className="w-full rounded my-2"/>;
             case 'button': return <div key={index} className="my-4 text-center"><a href="#" className="bg-blue-600 text-white px-6 py-3 rounded-md text-sm no-underline">{item.content}</a></div>;
             case 'divider': return <hr key={index} className="my-4"/>;
@@ -383,53 +325,38 @@ const Step3 = () => {
         }
     }
     
-    const [, drop] = useDrop(() => ({ accept: 'component' }));
-    
     return (
         <div className="grid grid-cols-12 gap-6 h-full">
             {/* Left: Editor */}
-            <div className="col-span-4 space-y-4">
-                 <div className="space-y-2">
-                    <Label htmlFor="template-selector">Email Template</Label>
-                    <Select onValueChange={setTemplate} defaultValue={template}>
-                        <SelectTrigger id="template-selector"><SelectValue /></SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="blank">Blank Canvas</SelectItem>
-                            <SelectItem value="property-showcase">Property Showcase</SelectItem>
-                            <SelectItem value="newsletter">Newsletter</SelectItem>
-                            <SelectItem value="promotional">Promotional</SelectItem>
-                        </SelectContent>
-                    </Select>
+            <div className="col-span-8 space-y-4 flex flex-col">
+                <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                        <Label htmlFor="template-selector">Email Template</Label>
+                        <Select onValueChange={setTemplate} defaultValue={template}>
+                            <SelectTrigger id="template-selector"><SelectValue /></SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="blank">Blank Canvas</SelectItem>
+                                <SelectItem value="property-showcase">Property Showcase</SelectItem>
+                                <SelectItem value="newsletter">Newsletter</SelectItem>
+                                <SelectItem value="promotional">Promotional</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
+                     <div className="space-y-2">
+                        <Label>Components</Label>
+                        <div className="grid grid-cols-5 gap-2">
+                            {components.map(c => {
+                                const CompIcon = c.icon;
+                                return <Button key={c.id} variant="outline" className="flex flex-col h-auto p-2" onClick={() => addComponent(c.type, c.defaultContent)}>
+                                    <CompIcon className="h-6 w-6 mb-1" />
+                                    <span className="text-xs">{c.label}</span>
+                                </Button>
+                            })}
+                        </div>
+                    </div>
                 </div>
-
-                <div className="space-y-2">
-                    <Label htmlFor="subject-line">Subject & Preview Text</Label>
-                    <Input id="subject-line" value={subject} onChange={(e) => setSubject(e.target.value)} placeholder="Subject line" />
-                    <Input id="preview-text" placeholder="Short preview text..." />
-                </div>
-                 <div className="space-y-2">
-                    <Label>Sender Information</Label>
-                     <Input id="from-name" placeholder="From Name (e.g. TerraFlow Realty)" />
-                     <Input id="from-email" placeholder="From Email (e.g. info@terraflow.ai)" />
-                </div>
-                 
-                <Card>
-                    <CardHeader>
-                        <CardTitle className="text-base flex justify-between items-center">
-                            <span>Components</span>
-                        </CardTitle>
-                        <p className="text-xs text-muted-foreground">Click or drag components to the canvas.</p>
-                    </CardHeader>
-                    <CardContent className="grid grid-cols-3 gap-2">
-                        {components.map(c => (
-                           <DraggableComponent key={c.id} {...c} addComponent={addComponent} />
-                        ))}
-                    </CardContent>
-                </Card>
-            </div>
-             {/* Center: Canvas */}
-            <div className="col-span-8 space-y-4">
-                <Card>
+                
+                <Card className="flex-1 flex flex-col">
                     <CardHeader>
                         <CardTitle className="text-base flex justify-between items-center">
                             <span>Email Body</span>
@@ -442,33 +369,88 @@ const Step3 = () => {
                             Use &#123;&#123;first_name&#125;&#125; for personalization.
                         </p>
                     </CardHeader>
-                    <CardContent className="border-t pt-4">
-                        <div ref={drop} className="bg-muted min-h-[400px] rounded-lg p-4 space-y-4">
+                    <CardContent className="border-t pt-4 flex-1">
+                        <div className="bg-muted min-h-[400px] rounded-lg p-4 space-y-4">
                              {emailContent.length === 0 ? (
                                 <div className="text-center text-muted-foreground py-10">
-                                    Click or drag a component to start building your email.
+                                    Click a component to start building your email.
                                 </div>
                              ) : (
                                 emailContent.map((item, index) => (
-                                    item ? <DroppedComponent key={item.id} item={item} index={index} moveComponent={moveComponent} removeComponent={removeComponent} /> : null
+                                   item ? <DroppedComponent key={item.id} item={item} index={index} removeComponent={removeComponent} /> : null
                                 ))
                              )}
                         </div>
                     </CardContent>
                 </Card>
-                 <div className="flex items-center justify-end gap-2">
-                    <div className="flex items-center bg-muted p-1 rounded-lg">
-                        <Button size="xs" variant={view === 'desktop' ? 'secondary' : 'ghost'} onClick={() => setView('desktop')}><AppWindow/></Button>
-                        <Button size="xs" variant={view === 'mobile' ? 'secondary' : 'ghost'} onClick={() => setView('mobile')}><Smartphone/></Button>
-                    </div>
-                     <div className="flex items-center bg-muted p-1 rounded-lg">
-                        <Button size="xs" variant={!isDarkMode ? 'secondary' : 'ghost'} onClick={() => setIsDarkMode(false)}><Sun/></Button>
-                        <Button size="xs" variant={isDarkMode ? 'secondary' : 'ghost'} onClick={() => setIsDarkMode(true)}><Moon/></Button>
-                    </div>
-                    <Button variant="outline" size="sm"><Eye className="mr-2 h-4 w-4"/>Full Preview</Button>
-                    <Button variant="outline" size="sm"><Send className="mr-2 h-4 w-4"/>Send Test</Button>
-                </div>
             </div>
+             {/* Right: Preview & Settings */}
+            <div className="col-span-4 space-y-4">
+                <Card>
+                    <CardHeader><CardTitle className="text-base">Subject & Sender</CardTitle></CardHeader>
+                    <CardContent className="space-y-4">
+                         <div className="space-y-2">
+                            <Label htmlFor="subject-line">Subject Line</Label>
+                            <Input id="subject-line" value={subject} onChange={(e) => setSubject(e.target.value)} />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="preview-text">Preview Text</Label>
+                            <Input id="preview-text" value={previewText} onChange={(e) => setPreviewText(e.target.value)} />
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                                <Label htmlFor="from-name">From Name</Label>
+                                <Input id="from-name" value={fromName} onChange={(e) => setFromName(e.target.value)} />
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="from-email">From Email</Label>
+                                <Input id="from-email" value={fromEmail} onChange={(e) => setFromEmail(e.target.value)} />
+                            </div>
+                        </div>
+                    </CardContent>
+                </Card>
+                <Card>
+                    <CardHeader>
+                        <CardTitle className="text-base flex justify-between items-center">
+                            <span>Live Preview</span>
+                            <div className="flex items-center justify-end gap-2">
+                                <div className="flex items-center bg-muted p-1 rounded-lg">
+                                    <Button size="xs" variant={view === 'desktop' ? 'secondary' : 'ghost'} onClick={() => setView('desktop')}><AppWindow/></Button>
+                                    <Button size="xs" variant={view === 'mobile' ? 'secondary' : 'ghost'} onClick={() => setView('mobile')}><Smartphone/></Button>
+                                </div>
+                                <div className="flex items-center bg-muted p-1 rounded-lg">
+                                    <Button size="xs" variant={!isDarkMode ? 'secondary' : 'ghost'} onClick={() => setIsDarkMode(false)}><Sun/></Button>
+                                    <Button size="xs" variant={isDarkMode ? 'secondary' : 'ghost'} onClick={() => setIsDarkMode(true)}><Moon/></Button>
+                                </div>
+                            </div>
+                        </CardTitle>
+                    </CardHeader>
+                     <CardContent className="p-2 bg-muted/50 rounded-b-lg">
+                        <div className={cn("mx-auto transition-all", view === 'mobile' ? 'max-w-[320px] h-full' : 'w-full h-full')}>
+                             <div className={cn("w-full h-full overflow-y-auto rounded-md p-4", isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-black')}>
+                                <p className="text-xs text-gray-500">To: &#123;John Doe&#125;</p>
+                                <h3 className="text-lg font-bold border-b pb-2 mb-2">{subject}</h3>
+                                {emailContent.map((item, index) => renderPreviewContent(item, index))}
+                             </div>
+                        </div>
+                    </CardContent>
+                    <CardFooter className="p-4 flex items-center justify-between">
+                         <Button variant="outline" size="sm" onClick={() => setShowFullPreview(true)}><Eye className="mr-2 h-4 w-4"/>Full Preview</Button>
+                         <Button variant="outline" size="sm"><Send className="mr-2 h-4 w-4"/>Send Test</Button>
+                    </CardFooter>
+                </Card>
+            </div>
+            {showFullPreview && (
+                <Dialog open onOpenChange={() => setShowFullPreview(false)}>
+                    <DialogContent className="max-w-4xl p-0 border-0">
+                         <div className={cn("w-full h-full overflow-y-auto rounded-md p-8", isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-black')}>
+                            <p className="text-sm text-gray-500">To: &#123;John Doe&#125;</p>
+                            <h3 className="text-xl font-bold border-b pb-2 mb-4">{subject}</h3>
+                            {emailContent.map((item, index) => renderPreviewContent(item, index))}
+                         </div>
+                    </DialogContent>
+                </Dialog>
+            )}
         </div>
     );
 };
