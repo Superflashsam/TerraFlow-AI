@@ -1,98 +1,88 @@
 "use client";
 
 import React, { useState } from 'react';
-import { Sparkles, Save, PenTool } from 'lucide-react';
+import { Sparkles, Save, Bot, MessageCircle, Mail, BarChart, FileSignature, Settings } from 'lucide-react';
 import { PageHeader } from '@/components/shared/page-header';
 import { Button } from '@/components/ui/button';
-import { ContentTemplates } from '@/components/marketing/ContentTemplates';
-import { AIEditor } from '@/components/marketing/AIEditor';
-import { CustomizationPanel } from '@/components/marketing/CustomizationPanel';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { ContentGenerator } from '@/components/marketing/content-generator';
+import { WhatsappHub } from '@/components/marketing/whatsapp/whatsapp-hub';
 
-export default function TerraScribeStudio() {
-  const [selectedTemplate, setSelectedTemplate] = useState(null);
-  const [currentContent, setCurrentContent] = useState('');
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [editorMode, setEditorMode] = useState('create'); // create, edit, preview
-
-  const handleTemplateSelect = (template: any) => {
-    setSelectedTemplate(template);
-    setEditorMode('create');
-    setCurrentContent('');
-  };
-
-  const handleContentGenerate = async (prompt: any, settings: any) => {
-    setIsGenerating(true);
-    try {
-      // Simulate AI content generation
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      const generatedContent = `Generated content for ${selectedTemplate?.name} with the following prompt: "${prompt}"`;
-      setCurrentContent(generatedContent);
-      setEditorMode('edit');
-    } catch (error) {
-      console.error('Content generation failed:', error);
-    } finally {
-      setIsGenerating(false);
-    }
-  };
-
-  const handleExport = (format: string) => {
-    console.log(`Exporting content in ${format} format:`, currentContent);
-  };
+const MarketingPage = () => {
+  const [activeTab, setActiveTab] = useState("whatsapp");
 
   return (
     <div className="flex flex-col h-full">
-        <PageHeader
-            title="TerraScribe™ Studio"
-            description="AI-powered content generation for marketing copy, emails, and RERA-compliant contracts"
-        >
-            <div className="flex items-center space-x-3">
-              <Button
-                variant="outline"
-                disabled={!currentContent}
-              >
-                <Save className="mr-2 h-4 w-4" />
-                Save Draft
-              </Button>
-              <Button
-                onClick={() => setEditorMode('create')}
-              >
-                <Sparkles className="mr-2 h-4 w-4" />
-                New Content
-              </Button>
-            </div>
-        </PageHeader>
-        
-        <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 flex-1 mt-6">
-        {/* Left Sidebar - Templates */}
-        <div className="xl:col-span-3 h-full">
-            <ContentTemplates
-            selectedTemplate={selectedTemplate}
-            onTemplateSelect={handleTemplateSelect}
-            />
-        </div>
-        
-        {/* Center - AI Editor */}
-        <div className="xl:col-span-6 h-full">
-            <AIEditor
-            selectedTemplate={selectedTemplate}
-            currentContent={currentContent}
-            setCurrentContent={setCurrentContent}
-            isGenerating={isGenerating}
-            onGenerate={handleContentGenerate}
-            mode={editorMode}
-            setMode={setEditorMode}
-            />
-        </div>
-        
-        {/* Right Sidebar - Customization */}
-        <div className="xl:col-span-3 h-full">
-            <CustomizationPanel
-            selectedTemplate={selectedTemplate}
-            currentContent={currentContent}
-            onExport={handleExport}
-            />
-        </div>
-        </div>
+      <PageHeader
+        title="Marketing Hub"
+        description="Your central command for content creation, campaigns, and analytics."
+      />
+
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col mt-6">
+        <TabsList className="grid w-full grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6">
+          <TabsTrigger value="content" className="flex items-center gap-2">
+            <Sparkles size={16} />
+            Content Studio
+          </TabsTrigger>
+          <TabsTrigger value="whatsapp" className="flex items-center gap-2">
+             <MessageCircle size={16} />
+            WhatsApp
+          </TabsTrigger>
+          <TabsTrigger value="email" className="flex items-center gap-2">
+            <Mail size={16} />
+            Email
+          </TabsTrigger>
+           <TabsTrigger value="analytics" className="flex items-center gap-2">
+            <BarChart size={16} />
+            Analytics
+          </TabsTrigger>
+          <TabsTrigger value="assistant" className="flex items-center gap-2">
+            <Bot size={16} />
+            AI Assistant
+          </TabsTrigger>
+           <TabsTrigger value="settings" className="flex items-center gap-2">
+            <Settings size={16} />
+            Settings
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="content" className="flex-1 mt-4">
+          <ContentGenerator />
+        </TabsContent>
+        <TabsContent value="whatsapp" className="flex-1 mt-4">
+          <WhatsappHub />
+        </TabsContent>
+        <TabsContent value="email" className="flex-1 mt-4">
+           <div className="text-center py-16">
+            <Mail size={48} className="mx-auto text-muted-foreground mb-4" />
+            <h3 className="text-xl font-semibold">Email Marketing Studio</h3>
+            <p className="text-muted-foreground">This feature is coming soon.</p>
+          </div>
+        </TabsContent>
+        <TabsContent value="analytics" className="flex-1 mt-4">
+          <div className="text-center py-16">
+            <BarChart size={48} className="mx-auto text-muted-foreground mb-4" />
+            <h3 className="text-xl font-semibold">Campaign Analytics</h3>
+            <p className="text-muted-foreground">This feature is coming soon.</p>
+          </div>
+        </TabsContent>
+        <TabsContent value="assistant" className="flex-1 mt-4">
+          <div className="text-center py-16">
+            <Bot size={48} className="mx-auto text-muted-foreground mb-4" />
+            <h3 className="text-xl font-semibold">Marketing AI Assistant</h3>
+            <p className="text-muted-foreground">This feature is coming soon.</p>
+          </div>
+        </TabsContent>
+        <TabsContent value="settings" className="flex-1 mt-4">
+          <div className="text-center py-16">
+            <Settings size={48} className="mx-auto text-muted-foreground mb-4" />
+            <h3 className="text-xl font-semibold">Marketing Settings</h3>
+            <p className="text-muted-foreground">This feature is coming soon.</p>
+          </div>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };
+
+export default MarketingPage;

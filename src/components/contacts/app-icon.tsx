@@ -90,7 +90,12 @@ import {
   Link2,
   FolderPlus,
   MoreVertical,
-  History
+  History,
+  MessageCircle,
+  Send,
+  MailOpen,
+  MousePointer,
+  FileSignature
 } from 'lucide-react';
 
 const iconMap: { [key: string]: React.ElementType } = {
@@ -184,7 +189,12 @@ const iconMap: { [key: string]: React.ElementType } = {
   Link2,
   FolderPlus,
   MoreVertical,
-  History
+  History,
+  MessageCircle,
+  Send,
+  MailOpen,
+  MousePointer,
+  FileSignature
 };
 
 const AppIcon = ({ name, size, color, className }: { name: string; size?: number; color?: string; className?: string }) => {
