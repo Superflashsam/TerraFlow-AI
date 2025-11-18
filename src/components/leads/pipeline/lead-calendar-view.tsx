@@ -111,7 +111,7 @@ export const LeadCalendarView = ({ leads, onLeadClick }: { leads: any[], onLeadC
                   </time>
                   {dailyLeads && (
                     <div className="flex flex-wrap -space-x-2 mt-2">
-                      {dailyLeads.slice(0, 3).map(lead => (
+                      {dailyLeads.slice(0, 3).map((lead: any) => (
                         <Avatar key={lead.id} className="h-6 w-6 border-2 border-background">
                           <AvatarImage src={lead.profileImage} alt={lead.name} />
                           <AvatarFallback>{lead.name.charAt(0)}</AvatarFallback>
@@ -145,7 +145,7 @@ export const LeadCalendarView = ({ leads, onLeadClick }: { leads: any[], onLeadC
                 <p className="text-muted-foreground text-sm">No activities for this day</p>
               </div>
             ) : (
-              leadsForSelectedDate.map(lead => (
+              leadsForSelectedDate.map((lead: any) => (
                 <div key={lead.id} className="bg-muted/50 rounded-lg p-3 border border-border hover:border-primary/50 cursor-pointer" onClick={() => onLeadClick(lead)}>
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-2">

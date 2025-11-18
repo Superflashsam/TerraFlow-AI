@@ -244,7 +244,7 @@ export function NewSidebar() {
       
        {/* Settings Link */}
         <div className="w-full mt-auto">
-             <MenuItem item={{label: 'Settings', href: '/settings', icon: Settings}} isCollapsed={isCollapsed} isActive={pathname.startsWith('/settings')} />
+             <MenuItem item={{label: 'Settings', href: '/settings', icon: Settings}} isCollapsed={isCollapsed} isActive={(pathname ?? '').startsWith('/settings')} />
         </div>
 
       {/* User Profile */}

@@ -1,4 +1,5 @@
 import { Users, Briefcase, CheckSquare, DollarSign, Percent, BarChart3, FileText, Bot, Building2 } from 'lucide-react';
+import type { Task } from '@/types/task'
 
 // Main Dashboard Data
 export const kpiData = [
@@ -357,7 +358,7 @@ export const teamMembers = [
     { id: 'vikram-rao', name: 'Vikram Rao', avatarId: 'avatar-1' }
 ];
 
-export const initialTasks = [
+export const initialTasks: Task[] = [
   {
     id: '1',
     title: "Follow-up with Rajesh Kumar",

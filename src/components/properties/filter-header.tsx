@@ -25,8 +25,8 @@ export const FilterHeader = ({
   selectedCount: number, 
   viewMode: string, 
   onViewModeChange: (mode: string) => void,
-  onSortChange: (config: {key: string, direction: string}) => void,
-  sortConfig: {key: string, direction: string}
+  onSortChange: (config: {key: 'listingDate'|'price'|'views'|'inquiries'|'showings'|'title'|'status', direction: 'asc'|'desc'}) => void,
+  sortConfig: {key: 'listingDate'|'price'|'views'|'inquiries'|'showings'|'title'|'status', direction: 'asc'|'desc'}
 }) => {
   const [filters, setFilters] = useState({
     status: 'all',
@@ -67,7 +67,7 @@ export const FilterHeader = ({
     { value: '200+', label: 'Above ₹2Cr' }
   ];
 
-  const sortOptions = [
+  const sortOptions: { label: string; key: 'listingDate'|'price'|'views'|'inquiries'|'showings'|'title'|'status'; direction: 'asc'|'desc' }[] = [
     { label: 'Date Listed: Newest', key: 'listingDate', direction: 'desc' },
     { label: 'Date Listed: Oldest', key: 'listingDate', direction: 'asc' },
     { label: 'Price: High to Low', key: 'price', direction: 'desc' },

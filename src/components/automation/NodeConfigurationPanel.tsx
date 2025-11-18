@@ -8,8 +8,10 @@ import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 
-const NodeConfigurationPanel = ({ isOpen, onClose, selectedNode, onUpdateNode }) => {
-  const [nodeConfig, setNodeConfig] = useState({});
+type NodeType = any
+type Props = { isOpen: boolean; onClose: () => void; selectedNode: NodeType | null; onUpdateNode: (id: string, node: NodeType) => void }
+const NodeConfigurationPanel = ({ isOpen, onClose, selectedNode, onUpdateNode }: Props) => {
+  const [nodeConfig, setNodeConfig] = useState<Record<string, any>>({});
   const [activeTab, setActiveTab] = useState('general');
 
   useEffect(() => {
@@ -25,7 +27,7 @@ const NodeConfigurationPanel = ({ isOpen, onClose, selectedNode, onUpdateNode })
     { id: 'advanced', name: 'Advanced', icon: 'Wrench' }
   ];
 
-  const handleConfigChange = (key, value) => {
+  const handleConfigChange = (key: string, value: any) => {
     const updatedConfig = { ...nodeConfig, [key]: value };
     setNodeConfig(updatedConfig);
     
@@ -207,7 +209,7 @@ const NodeConfigurationPanel = ({ isOpen, onClose, selectedNode, onUpdateNode })
   };
 
   const renderVariablesConfig = () => {
-    const variables = nodeConfig.variables || [];
+    const variables: Array<{ name: string; value: string; type: string }> = nodeConfig.variables || [];
 
     return (
       <div className="space-y-4">

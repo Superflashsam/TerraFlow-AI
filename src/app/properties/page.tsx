@@ -38,7 +38,8 @@ export default function PropertiesPage() {
     searchQuery: ''
   });
 
-  const [sortConfig, setSortConfig] = useState({ key: 'listingDate', direction: 'desc' });
+  type SortKey = 'listingDate' | 'price' | 'views' | 'inquiries' | 'showings' | 'title' | 'status';
+  const [sortConfig, setSortConfig] = useState<{ key: SortKey; direction: 'asc' | 'desc' }>({ key: 'listingDate', direction: 'desc' });
 
   useEffect(() => {
     let filtered = [...properties];
@@ -76,8 +77,20 @@ export default function PropertiesPage() {
           aValue = new Date(a.listingDate).getTime();
           bValue = new Date(b.listingDate).getTime();
         } else {
-          aValue = a[sortConfig.key];
-          bValue = b[sortConfig.key];
+          switch (sortConfig.key) {
+            case 'views':
+              aValue = a.views; bValue = b.views; break;
+            case 'inquiries':
+              aValue = a.inquiries; bValue = b.inquiries; break;
+            case 'showings':
+              aValue = a.showings; bValue = b.showings; break;
+            case 'title':
+              aValue = a.title.toLowerCase(); bValue = b.title.toLowerCase(); break;
+            case 'status':
+              aValue = a.status.toLowerCase(); bValue = b.status.toLowerCase(); break;
+            default:
+              aValue = 0; bValue = 0;
+          }
         }
 
         if (aValue < bValue) {

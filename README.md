@@ -5,7 +5,7 @@
 TerraFlow AI is a cutting-edge SaaS platform that revolutionizes real estate operations through intelligent automation and AI-driven insights. Built for real estate professionals who want to streamline their workflow, enhance client engagement, and close deals faster.
 
 [![Firebase Studio](https://img.shields.io/badge/Built%20with-Firebase%20Studio-orange?style=for-the-badge&logo=firebase)](https://firebase.google.com/products/studio)
-[![Next.js](https://img.shields.io/badge/Next.js-14.0-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-15.x-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.0-38bdf8?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
 
@@ -79,15 +79,16 @@ TerraFlow AI transforms real estate management by combining powerful automation 
 - **Icons**: Lucide React
 
 ### Backend & Infrastructure
-- **Platform**: Firebase Studio
-- **Database**: Firebase Firestore
-- **Authentication**: Firebase Auth
-- **Hosting**: Firebase Hosting
+- **Platform**: Firebase App Hosting
+- **Database**: Cloud Firestore
+- **Authentication**: Firebase Auth (email/password)
+- **Hosting**: Firebase Hosting / App Hosting
 - **Storage**: Firebase Storage
 
 ### AI & Integrations
-- **AI Model**: Google Gemini (via AI Studio)
-- **Email**: Resend API
+- **AI Orchestration**: Genkit
+- **Model**: Google Gemini (googleai/gemini-2.5-flash)
+- **Email**: Resend API (planned)
 - **Analytics**: Firebase Analytics
 
 ---
@@ -200,6 +201,48 @@ firebase deploy
 
 ---
 
+## 🧩 API Endpoints
+
+- Admin
+  - `POST /api/admin/claim` — Set admin claim for a user
+- Leads
+  - `GET /api/leads` — List leads (optional filter `ownerUid`)
+  - `POST /api/leads` — Create lead
+  - `GET /api/leads/:id` — Read lead
+  - `PATCH /api/leads/:id` — Update lead
+  - `DELETE /api/leads/:id` — Delete lead
+- Properties
+  - `GET /api/properties`, `POST /api/properties`, `GET/PATCH/DELETE /api/properties/:id`
+- Deals
+  - `GET /api/deals`, `POST /api/deals`, `GET/PATCH/DELETE /api/deals/:id`
+- Tasks
+  - `GET /api/tasks`, `POST /api/tasks`, `GET/PATCH/DELETE /api/tasks/:id`
+- Conversations
+  - `GET/POST /api/conversations`
+  - `GET/POST /api/conversations/:id/messages`
+- Health
+  - `GET /api/health/firestore` — Connectivity check
+
+All write endpoints require an admin ID token via `Authorization: Bearer <idToken>`.
+
+## 🖥 Admin Interfaces
+
+- `/auth/register` — Register admin and request claim
+- `/auth/login` — Sign in
+- `/admin` — Dashboard links
+- `/admin/users` — Admin list
+- `/admin/leads` — Leads management
+- `/admin/properties` — Properties management
+- `/admin/deals` — Deals management
+- `/admin/tasks` — Tasks management
+
+## 🔒 Security Rules & Indexes
+
+- Firestore rules file: `firestore.rules` enforces admin custom claims (`role: 'admin'`) and owner-based access.
+- Composite indexes: `firestore.indexes.json` defines common queries for leads, deals, tasks.
+
+Deploy via Firebase Console or CLI.
+
 ## 🎯 Roadmap
 
 ### Phase 1 (Current) ✅
@@ -210,8 +253,9 @@ firebase deploy
 - [x] Basic analytics
 
 ### Phase 2 (In Progress) 🚧
-- [ ] Mobile responsive optimization
-- [ ] Advanced AI features
+- [x] Firestore-backed CRUD (leads, properties, deals, tasks, conversations)
+- [x] Admin authentication and claims
+- [x] API endpoints with validation
 - [ ] Email automation
 - [ ] Calendar integration
 

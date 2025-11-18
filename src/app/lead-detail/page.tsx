@@ -1,7 +1,9 @@
 "use client";
+export const dynamic = 'force-dynamic'
 
 import React, { useState, useEffect } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { Suspense } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   LayoutDashboard,
   Clock,
@@ -20,8 +22,13 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 const LeadDetail = () => {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const leadId = searchParams.get('leadId');
+  const [leadId, setLeadId] = useState<string | null>(null);
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const sp = new URLSearchParams(window.location.search)
+      setLeadId(sp.get('leadId'))
+    }
+  }, [])
   const [activeTab, setActiveTab] = useState('overview');
   const [lead, setLead] = useState<any>(null);
   const [activities, setActivities] = useState<any[]>([]);
@@ -157,7 +164,7 @@ const LeadDetail = () => {
   const handleDownloadDocument = (id: number) => console.log('Download:', id);
   const handleExecuteAction = (id: number) => setRecommendations(recommendations.filter(r => r.id !== id));
   const handleDismissAction = (id: number) => setRecommendations(recommendations.filter(r => r.id !== id));
-  const handleGenerateContent = async (id: number, type: string) => { console.log('Generate:', type); return new Promise(res => setTimeout(res, 1000))};
+  const handleGenerateContent = async (id: number, type: string): Promise<void> => { console.log('Generate:', type); await new Promise<void>(res => setTimeout(res, 1000)); };
 
   if (!lead) {
     return (
@@ -179,6 +186,7 @@ const LeadDetail = () => {
   }
 
   return (
+    <Suspense fallback={<div />}> 
     <div className="p-6">
       <div className="flex items-center justify-between mb-6">
         <div>
@@ -276,6 +284,7 @@ const LeadDetail = () => {
         </div>
       </div>
     </div>
+    </Suspense>
   );
 };
 

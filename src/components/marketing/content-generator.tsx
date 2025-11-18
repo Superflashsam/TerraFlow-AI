@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { generatePropertyDescription } from "@/ai/flows/generate-property-description";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -73,7 +72,15 @@ export function ContentGenerator() {
     setIsLoading(true);
     setGeneratedDescription("");
     try {
-      const result = await generatePropertyDescription(data);
+      const res = await fetch('/api/ai/property-description', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) {
+        throw new Error(`Request failed: ${res.status}`);
+      }
+      const result: { description: string } = await res.json();
       setGeneratedDescription(result.description);
       toast({
         title: "Content Generated!",

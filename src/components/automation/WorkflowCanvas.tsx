@@ -32,7 +32,7 @@ const WorkflowCanvas = ({
   showGrid: boolean,
   onCanvasClick: (pos: {x: number, y: number}) => void,
   canvasOffset: { x: number, y: number },
-  setCanvasOffset: (offset: { x: number, y: number }) => void
+  setCanvasOffset: React.Dispatch<React.SetStateAction<{ x: number, y: number }>>
 }) => {
   const canvasRef = useRef<HTMLDivElement>(null);
   const [isPanning, setIsPanning] = useState(false);

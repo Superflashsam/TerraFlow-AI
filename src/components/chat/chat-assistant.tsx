@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Bot, Send, X, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,7 +12,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { aiLeadQualification, AiLeadQualificationOutput } from "@/ai/flows/ai-lead-qualification";
+type AiLeadQualificationOutput = {
+  budget: string;
+  location: string;
+  timeline: string;
+  siteVisitBooking?: string;
+  qualified: boolean;
+  summary: string;
+};
 import { useToast } from "@/hooks/use-toast";
 
 type Message = {
@@ -29,6 +36,17 @@ export function ChatAssistant() {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
+  useEffect(() => {
+    const openHandler = () => setIsOpen(true);
+    const closeHandler = () => setIsOpen(false);
+    window.addEventListener('open-terra-chat', openHandler as EventListener);
+    window.addEventListener('close-terra-chat', closeHandler as EventListener);
+    return () => {
+      window.removeEventListener('open-terra-chat', openHandler as EventListener);
+      window.removeEventListener('close-terra-chat', closeHandler as EventListener);
+    };
+  }, []);
+
   const handleSend = async () => {
     if (!input.trim()) return;
 
@@ -39,21 +57,29 @@ export function ChatAssistant() {
 
     try {
         const fullConversation = [...messages, userMessage].map(m => `${m.sender}: ${m.text}`).join('\n');
-        const result: AiLeadQualificationOutput = await aiLeadQualification({ userDetails: fullConversation });
-        
+        const res = await fetch('/api/ai/lead-qualification', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userDetails: fullConversation }),
+        });
+        if (!res.ok) {
+          throw new Error(`Request failed: ${res.status}`);
+        }
+        const result: AiLeadQualificationOutput = await res.json();
+
         let aiResponse = result.summary;
         if (result.siteVisitBooking) {
-            aiResponse += `\n\nSite Visit: ${result.siteVisitBooking}`;
+          aiResponse += `\n\nSite Visit: ${result.siteVisitBooking}`;
         }
-        
+
         const aiMessage: Message = { sender: 'ai', text: aiResponse };
         setMessages(prev => [...prev, aiMessage]);
 
-        if(result.qualified){
-             toast({
-                title: "Lead Qualified!",
-                description: `Budget: ${result.budget}, Location: ${result.location}, Timeline: ${result.timeline}`,
-             });
+        if (result.qualified) {
+          toast({
+            title: 'Lead Qualified!',
+            description: `Budget: ${result.budget}, Location: ${result.location}, Timeline: ${result.timeline}`,
+          });
         }
 
     } catch (error) {

@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 
 
-const VisualCanvasBuilder = ({ onBack }: { onBack: () => void }) => {
+const VisualCanvasBuilder = () => {
   // Canvas state
   const [zoomLevel, setZoomLevel] = useState(1);
   const [showGrid, setShowGrid] = useState(true);
@@ -242,7 +242,7 @@ const VisualCanvasBuilder = ({ onBack }: { onBack: () => void }) => {
         title={workflowName}
         description="Build and manage automated workflows to streamline your process."
       >
-        <Button variant="outline" onClick={onBack}>
+        <Button variant="outline" onClick={() => window.history.back()}>
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Workflows
         </Button>

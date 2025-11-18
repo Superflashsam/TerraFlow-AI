@@ -3,6 +3,20 @@ import React from 'react';
 import AppIcon from '@/components/contacts/app-icon';
 import { Button } from '@/components/ui/button';
 
+type Props = {
+  zoomLevel: number;
+  onZoomIn: () => void;
+  onZoomOut: () => void;
+  onZoomReset: () => void;
+  onFitToScreen: () => void;
+  onToggleGrid: () => void;
+  showGrid?: boolean;
+  onUndo: () => void;
+  onRedo: () => void;
+  canUndo?: boolean;
+  canRedo?: boolean;
+}
+
 const CanvasToolbar = ({ 
   zoomLevel, 
   onZoomIn, 
@@ -15,7 +29,7 @@ const CanvasToolbar = ({
   onRedo,
   canUndo = false,
   canRedo = false
-}) => {
+}: Props) => {
   return (
     <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center space-x-2">
       {/* Zoom Controls */}

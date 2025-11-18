@@ -4,6 +4,18 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import AppIcon from '@/components/contacts/app-icon';
 
+type Point = { x: number; y: number }
+type Props = {
+  id: string;
+  from: Point;
+  to: Point;
+  isSelected?: boolean;
+  onSelect: (id: string) => void;
+  onDelete: (id: string) => void;
+  onAddNode: (at: Point) => void;
+  status?: 'idle' | 'active' | 'error' | 'success';
+}
+
 const ConnectionLine = ({ 
   id, 
   from, 
@@ -12,8 +24,8 @@ const ConnectionLine = ({
   onSelect, 
   onDelete, 
   onAddNode,
-  status = 'idle' // idle, active, error, success
-}) => {
+  status = 'idle'
+}: Props) => {
   const [isHovered, setIsHovered] = useState(false);
 
   const getConnectionPath = () => {

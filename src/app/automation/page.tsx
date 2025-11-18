@@ -234,11 +234,11 @@ const MyWorkflowsDashboard = () => {
     setCurrentView('canvas');
   }
 
-  const hasFilters = searchQuery || statusFilter !== 'all';
+  const hasFilters = Boolean(searchQuery) || statusFilter !== 'all';
   const showEmptyState = filteredWorkflows.length === 0;
 
   if (currentView === 'canvas') {
-    return <VisualCanvasBuilder onBack={() => setCurrentView('dashboard')} />;
+    return <VisualCanvasBuilder />;
   }
   
   if (currentView === 'templates') {
