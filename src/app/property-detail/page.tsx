@@ -1,7 +1,9 @@
 
 "use client";
+export const dynamic = 'force-dynamic'
 import React, { useState, useEffect } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { Suspense } from 'react';
+import { useRouter } from 'next/navigation';
 import { ArrowLeft, Share2, Heart, Edit } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { properties as allProperties } from '@/lib/placeholder-data';
@@ -19,8 +21,13 @@ import { AdditionalDetails } from '@/components/property-detail/additional-detai
 
 const PropertyDetailPage = () => {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const propertyId = searchParams.get('id');
+  const [propertyId, setPropertyId] = useState<string | null>(null);
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const sp = new URLSearchParams(window.location.search)
+      setPropertyId(sp.get('id'))
+    }
+  }, [])
   const [property, setProperty] = useState<any>(null);
 
   useEffect(() => {
@@ -54,6 +61,7 @@ const PropertyDetailPage = () => {
   }
 
   return (
+    <Suspense fallback={<div />}> 
     <div className="p-4 sm:p-6">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
         <div>
@@ -89,6 +97,7 @@ const PropertyDetailPage = () => {
         </div>
       </div>
     </div>
+    </Suspense>
   );
 };
 

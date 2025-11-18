@@ -53,7 +53,10 @@ const BulkActionsDropdown = ({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const bulkActions = [
+  const bulkActions: (
+    | { type: 'divider' }
+    | { label: string; icon: keyof typeof iconMap; action: string; description: string; variant?: 'warning' | 'destructive' }
+  )[] = [
     {
       label: 'Send Email Campaign',
       icon: 'Mail',
@@ -141,41 +144,44 @@ const BulkActionsDropdown = ({
 
           <div className="py-2 max-h-80 overflow-y-auto">
             {bulkActions.map((action, index) => {
-              if (action.type === 'divider') {
+              if ('type' in action && action.type === 'divider') {
                 return (
                   <div key={index} className="my-2 border-t border-border" />
                 );
               }
-              const Icon = iconMap[action.icon as keyof typeof iconMap];
+              const Icon = 'icon' in action ? iconMap[action.icon] : ChevronDown;
 
               const getTextColor = () => {
-                if (action.variant === 'destructive')
+                if ('variant' in action && action.variant === 'destructive')
                   return 'text-destructive hover:text-destructive';
-                if (action.variant === 'warning')
+                if ('variant' in action && action.variant === 'warning')
                   return 'text-yellow-500 hover:text-yellow-500';
                 return 'text-popover-foreground hover:text-primary';
               };
 
-              return (
-                <button
-                  key={index}
-                  onClick={() => handleActionClick(action.action)}
-                  className={`w-full px-4 py-3 text-left hover:bg-muted transition-colors duration-200 ${getTextColor()}`}
-                >
-                  <div className="flex items-start space-x-3">
-                    <Icon
-                      size={16}
-                      className="mt-0.5 flex-shrink-0"
-                    />
-                    <div className="flex-1 min-w-0">
-                      <p className="font-medium text-sm">{action.label}</p>
-                      <p className="text-xs text-muted-foreground mt-0.5">
-                        {action.description}
-                      </p>
+              if ('action' in action) {
+                return (
+                  <button
+                    key={index}
+                    onClick={() => handleActionClick(action.action)}
+                    className={`w-full px-4 py-3 text-left hover:bg-muted transition-colors duration-200 ${getTextColor()}`}
+                  >
+                    <div className="flex items-start space-x-3">
+                      <Icon
+                        size={16}
+                        className="mt-0.5 flex-shrink-0"
+                      />
+                      <div className="flex-1 min-w-0">
+                        <p className="font-medium text-sm">{action.label}</p>
+                        <p className="text-xs text-muted-foreground mt-0.5">
+                          {action.description}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                </button>
-              );
+                  </button>
+                );
+              }
+              return null;
             })}
           </div>
 

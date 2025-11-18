@@ -108,5 +108,5 @@ export default {
       }
     },
   },
-  plugins: [require('tailwindcss-animate'), require('react-dnd'), require('react-dnd-html5-backend'), require('framer-motion')],
+  plugins: [require('tailwindcss-animate')],
 } satisfies Config;

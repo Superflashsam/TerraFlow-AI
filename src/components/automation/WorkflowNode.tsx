@@ -4,6 +4,30 @@ import { motion } from 'framer-motion';
 import AppIcon from '@/components/contacts/app-icon';
 import { Button } from '@/components/ui/button';
 
+type Node = {
+  id: string;
+  position: { x: number; y: number };
+  type: 'trigger' | 'action' | 'condition' | 'delay' | 'integration' | string;
+  name: string;
+  description?: string;
+  service?: string;
+  status?: string;
+  executionTime?: number;
+  serviceIcon?: string;
+  color?: string;
+}
+
+type Props = {
+  node: Node;
+  isSelected?: boolean;
+  onSelect: (id: string) => void;
+  onMove: (id: string, pos: { x: number; y: number }) => void;
+  onDelete: (id: string) => void;
+  onConnect: (id: string) => void;
+  onConfigure: (id: string) => void;
+  zoomLevel?: number;
+}
+
 const WorkflowNode = ({ 
   node, 
   isSelected = false, 
@@ -13,7 +37,7 @@ const WorkflowNode = ({
   onConnect,
   onConfigure,
   zoomLevel = 1
-}) => {
+}: Props) => {
   const [isDragging, setIsDragging] = useState(false);
   const nodeRef = useRef<HTMLDivElement>(null);
   
@@ -50,7 +74,7 @@ const WorkflowNode = ({
     }
   };
 
-  const nodeStyle = nodeTypes[node.type] || nodeTypes.action;
+  const nodeStyle = (nodeTypes as Record<string, { color: string; textColor: string; borderColor: string; icon: string }>)[node.type] || nodeTypes.action;
 
   const handleMouseDown = (e: React.MouseEvent) => {
     // Check if the click is on the node itself and not on a button

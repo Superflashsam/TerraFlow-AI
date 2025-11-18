@@ -1,7 +1,7 @@
 
 "use client";
 import React, { useState } from 'react';
-import { X, User, Clock, FileText, CheckSquare, Mail, Phone, Building } from 'lucide-react';
+import { X, User, Users, Clock, FileText, CheckSquare, Mail, Phone, Building, Circle, Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import Image from 'next/image';

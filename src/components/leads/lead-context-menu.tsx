@@ -81,7 +81,10 @@ const LeadContextMenu = ({
     };
   }, [onClose, position]);
 
-  const menuItems = [
+  const menuItems: (
+    | { type: 'divider' }
+    | { label: string; icon: keyof typeof iconMap; action: string; color: string }
+  )[] = [
     {
       label: 'Call Lead',
       icon: 'Phone',
@@ -165,20 +168,20 @@ const LeadContextMenu = ({
 
       <div className="py-1">
         {menuItems.map((item, index) => {
-          if (item.type === 'divider') {
+          if ('type' in item && item.type === 'divider') {
             return (
               <div key={index} className="my-1 border-t border-border" />
             );
           }
-          const Icon = iconMap[item.icon as keyof typeof iconMap];
+          const Icon = iconMap[(item as { icon: keyof typeof iconMap }).icon];
           return (
             <button
               key={index}
-              onClick={() => handleItemClick(item.action)}
-              className={`w-full px-4 py-2 text-left text-sm flex items-center space-x-3 hover:bg-muted transition-colors duration-200 ${item.color}`}
+              onClick={() => handleItemClick((item as { action: string }).action)}
+              className={`w-full px-4 py-2 text-left text-sm flex items-center space-x-3 hover:bg-muted transition-colors duration-200 ${(item as { color: string }).color}`}
             >
               <Icon size={16} />
-              <span>{item.label}</span>
+              <span>{(item as { label: string }).label}</span>
             </button>
           );
         })}

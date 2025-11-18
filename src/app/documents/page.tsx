@@ -25,7 +25,14 @@ const DocumentsPage = () => {
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const [selectedDocumentIds, setSelectedDocumentIds] = useState<string[]>([]);
 
-  const [filters, setFilters] = useState({
+  type Filters = {
+    searchQuery: string;
+    fileType: string;
+    dateRange: { from: Date | undefined; to: Date | undefined };
+    size: string;
+    sort: { key: 'modified' | 'name' | 'type'; direction: 'asc' | 'desc' };
+  };
+  const [filters, setFilters] = useState<Filters>({
     searchQuery: "",
     fileType: "all",
     dateRange: { from: undefined, to: undefined },
@@ -74,7 +81,11 @@ const DocumentsPage = () => {
     setSelectedDocument(doc);
   };
 
-  const handleCheckboxToggle = (docId: string) => {
+  const handleCheckboxToggle = (docId: string | string[]) => {
+    if (Array.isArray(docId)) {
+      setSelectedDocumentIds(docId)
+      return
+    }
     setSelectedDocumentIds((prev) =>
       prev.includes(docId) ? prev.filter((id) => id !== docId) : [...prev, docId]
     );
